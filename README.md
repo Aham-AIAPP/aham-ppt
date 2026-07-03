@@ -61,6 +61,18 @@
 
 > 历史样张与可编辑 PPTX（11 页示例 + 世界杯十页双配色）存档于 [v2.5.2 tag](https://github.com/li599198347-svg/aham-ppt/tree/v2.5.2/examples)；v3.0 起版式收敛为参数化函数（43 版式），不再随仓库携带示例产物。
 
+## 版式库
+
+**43 个内容版式（7 个叙事系）+ 3 个特殊页**，v3.0 起全部参数化——坐标由函数冻结，不再手画。来源两档如实标注：可考原型注明出处（BCG / Minto / Shostack / Few / Knaflic…），查不到的明确标「通用惯例 / 本库自设计」，不虚构。
+
+<details>
+<summary><b>点开查看全部 43 个版式</b>（ID · 用途 · 来源，长图）</summary>
+<br>
+<img src="assets/shots/layout-catalog.png" alt="Aham PPT 版式总览：43 个版式的 ID、用途与来源" width="100%">
+</details>
+
+> 权威清单与选版决策表见 [`references/layout-library.md`](references/layout-library.md)；图片由 [`tools/layout_catalog.py`](tools/layout_catalog.py) 生成，版式增减后重跑即可。
+
 ## 开始使用
 
 最简单：**把本仓库地址 `https://github.com/li599198347-svg/aham-ppt` 发给 Claude，让它把技能装好**；或下载本仓库后，把技能文件上传给 Claude。
