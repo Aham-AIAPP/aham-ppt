@@ -1,103 +1,47 @@
 # SVG Skeleton · I系版式骨架（震撼（Impact））
 
-> Phase 7 按版式ID读取本文件。使用规则：复制骨架→替换[占位符]→不改坐标。
-> 通用骨架（Chrome框架/卡片/箭头）见 svg-skeleton-common.md。
+> Phase 7 按版式 ID 读取本文件。I 系为**整页型参数化版式**：调 `layouts.py` 函数生成完整页
+> （自带极简页脚），坐标由函数冻结，不手画、不改坐标。
 
 ---
 
-## ### I-01 单数字超大屏
-```svg
-<!-- 极简Chrome -->
-<text x="40" y="40" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B" letter-spacing="2">[section_path]</text>
+## I-01 大数字页（参数化 · layouts.py）
 
-<!-- 大数字 -->
-<text x="140" y="380" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="180" font-weight="bold" fill="#262626">[big_number]</text>
+**用途**：单一核心数字整页锚定注意力——强结论的开场、章节冲击位或收束。
 
-<!-- 细分隔线 -->
-<line x1="140" y1="410" x2="420" y2="410" stroke="#262626" stroke-width="1.2"/>
+**适用场景**：一个数字足以立住论点时（规模/增速/缺口/纪录）。多指标并列 → S-09；数字需要图形证明 → V 系。
 
-<!-- 断言（无衬线 Bold） -->
-<text x="140" y="456" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="30" font-weight="bold" fill="#262626">[assertion]</text>
+**用法**：`layouts.bignumber(sec, big, assertion, source, page, compare_anchor=None, support2=None, warning=None, evidence=None)`
+- 基础变体（`evidence=None`）：大数字 180px + 断言 + **对比锚点（必填，函数强制）** + 可选补充行与红色警示行。
+- 带证据变体（`evidence=(右列标题, [(标签, 说明)×3])`）：大数字 170px 左置 + 右列**固定 3 条**支撑（函数强制）。
+- 示例：`bignumber("PART 01 / I-01", "104", "史上最大规模：单届 104 场", src, "4 / 54", compare_anchor="2022 年 64 场 → +62.5%", evidence=("WHY IT MATTERS", [("48 支参赛队","…"),("39 天赛期","…"),("16 座城市","…")]))`
 
-<!-- 支撑说明 -->
-<text x="140" y="506" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#6E6E6E">[support_1]</text>
-<text x="140" y="530" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#6E6E6E">[support_2]</text>
+**来源**：MBB 通用惯例——"以单一统计做整页主视觉锚定注意力"见诸多家对 McKinsey 公开 deck 的归纳（Analyst Academy 拆解、SketchBubble《McKinsey-Style Guide》"Full-slide graphs…explain a single statistic"、ChatSlide 将 big numbers 列为 bullet 替代首选）；**无单一可考原版**。
 
-<!-- 警示（可选，红色） -->
-<text x="140" y="610" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#9E3D31" letter-spacing="1">[warning]</text>
-
-<!-- 极简页脚 -->
-<text x="40" y="708" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">来源：[source]</text>
-<text x="1240" y="708" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">[page_index]</text>
-```
+**纪律**：对比锚点必填——同比/目标/行业基准三选一，禁止数字悬空（对标评估 P2）；页脚来源必填，大数字页尤其不许省。
 
 ---
 
-## ## I-04 数据冲击（大数字+细节支撑）
-```svg
-<!-- 极简Chrome -->
-<text x="40" y="40" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B" letter-spacing="2">[section_path]</text>
+## I-05 时间窗警告（参数化 · layouts.py）
 
-<!-- 左侧大数字 -->
-<text x="140" y="380" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="170" font-weight="bold" fill="#262626">[big_number]</text>
-<line x1="140" y1="400" x2="440" y2="400" stroke="#262626" stroke-width="1.5"/>
-<text x="140" y="440" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="bold" fill="#262626">[assertion]</text>
+**用途**：用"过去—现在—未来"三节点时间轴 + 大号窗口期制造紧迫感。
 
-<!-- 右侧竖分隔线 -->
-<line x1="800" y1="140" x2="800" y2="610" stroke="#E7E7E7" stroke-width="1"/>
+**适用场景**：决策窗口/倒计时/截止压力叙事。多里程碑排期 → S-03；多泳道 → A-90。
 
-<!-- 右侧三条支撑（每条间距110） -->
-<text x="860" y="170" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#9E3D31" letter-spacing="2">[right_header]</text>
-<line x1="860" y1="192" x2="1000" y2="192" stroke="#9E3D31" stroke-width="1.8"/>
+**用法**：`layouts.time_window(sec, past, now, now_tag, future, warning_title, warning_desc, window, window_label, source, page)`——三节点固定（版式语义即三态）；紧迫性由红色"当前"节点 + 警示标题**双通道**表达，窗口数字保持墨色（brand 禁染红绿）。
 
-<text x="860" y="234" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[reason1_label]</text>
-<text x="860" y="258" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[reason1_desc]</text>
-<line x1="860" y1="290" x2="1200" y2="290" stroke="#E7E7E7" stroke-width="0.5"/>
+**来源**：通用商务惯例（倒计时/机会窗口页型），**无单一可考原版**；三节点轴 + 双通道紧迫表达为本库设计决策。
 
-<text x="860" y="332" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[reason2_label]</text>
-<text x="860" y="356" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[reason2_desc]</text>
-<line x1="860" y1="388" x2="1200" y2="388" stroke="#E7E7E7" stroke-width="0.5"/>
-
-<text x="860" y="430" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[reason3_label]</text>
-<text x="860" y="454" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[reason3_desc]</text>
-
-<!-- 极简页脚 -->
-<text x="40" y="708" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">来源：[source]</text>
-<text x="1240" y="708" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">[page_index]</text>
-```
+**纪律**：窗口数字须可复算（如"距 X 日 N 天"给出基准日）；警示语写事实不写恐吓。
 
 ---
 
-## ## I-05 时间窗警告
-```svg
-<!-- 极简Chrome -->
-<text x="40" y="40" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B" letter-spacing="2">[section_path]</text>
+## I-90 链式递减（参数化 · consulting.py）
 
-<!-- 顶部横向时间轴 y=200 -->
-<line x1="100" y1="200" x2="1180" y2="200" stroke="#C4C4C4" stroke-width="1.5"/>
+**用途 / 适用场景**：存活/淘汰、收敛到 1 的链式叙事；数据转化漏斗走 `charts.funnel`（phase-05 §2.5 映射）。
 
-<!-- 过去节点 -->
-<circle cx="200" cy="200" r="8" fill="#9B9B9B"/>
-<text x="200" y="234" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#9B9B9B">[past_label]</text>
+**用法**：`consulting.chain_steps(x, y, vals, step=110, r=18, deltas=None, cap=None)`，末端胶囊承接收敛结果。
 
-<!-- 当前节点（红色强调） -->
-<circle cx="640" cy="200" r="20" fill="#9E3D31"/>
-<text x="640" y="207" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">[now_label]</text>
-<text x="640" y="250" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#9E3D31">[now_tag]</text>
+**来源**：MBB 咨询密集页形体语言（v2.5 调研批次），无单一可考原版。
 
-<!-- 未来节点（虚线圆） -->
-<circle cx="1080" cy="200" r="8" fill="#C4C4C4" stroke="#9B9B9B" stroke-width="1" stroke-dasharray="3,3"/>
-<text x="1080" y="234" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#9B9B9B">[future_label]</text>
-
-<!-- 警示标题 -->
-<text x="640" y="360" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="34" font-weight="bold" fill="#262626">[warning_title]</text>
-<text x="640" y="404" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" fill="#6E6E6E">[warning_desc]</text>
-
-<!-- 大号窗口期（墨色；紧迫性靠上方红色"当前"节点 + 警示标题双通道，不染数字红绿） -->
-<text x="640" y="510" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="60" font-weight="bold" fill="#262626">[window_period]</text>
-<text x="640" y="558" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#9B9B9B">[window_label]</text>
-
-<!-- 极简页脚 -->
-<text x="40" y="708" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">来源：[source]</text>
-<text x="1240" y="708" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">[page_index]</text>
-```
+**纪律（组合配方）**：元素级版式，禁单元素占满内容区——主视觉 chain_steps + 必配辅助层 ≥1（出局分布堆叠条 / 机制注解面板 / watermark 大数字）+ 标注层 + So-What；配额见 `svg-skeleton-common.md §咨询密集层 D`。

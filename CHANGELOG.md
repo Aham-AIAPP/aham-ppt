@@ -7,6 +7,136 @@
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-07-03
+
+大版本主题：**全量参数化 · 历史产物清零 · 教训固化去补丁化**（用户三项整改决策 + 5 个确认点全落地）。43 内容版式实现路径收敛为：`layouts.py` 19 式（新模块）+ `structures.py`/`consulting.py`/`charts.py` 结构与图表 + 5 个栅格直排；**全库无照抄式冻结骨架**，7 个骨架文件全部重写为五栏格式（用途/适用场景/用法/来源/纪律），来源两档如实标注。明细见下方批次 0–5 条目。
+
+### 3.0.0 · 批次 4
+
+### 新增
+- `layouts.py` A·G 组 5 函数：`three_steps`（固定 3 步硬拦，末步深色）、`option_ab`（A/B 两项，B 自动降调）、`action_table`（3–6 行硬拦）、`pillars`（2–4 柱硬拦，3 柱精确复现骨架）、`pyramid_light`（3–5 层硬拦，4 层精确复现含引线查表）。负向 4 项通过。
+- 回归：5/5 字符级一致；deck 改调后 **md5 字节级一致 5/5**。过程更正 2 处如实记录：pyramid_light 初版比例取整（165.1 vs 165）与引线终点记忆错误（960/970 系已删骨架原值，deck 实际统一 1000/1010），均以 deck 为基准修正。
+- `svg-skeleton-a.md` / `svg-skeleton-g.md` 全文五栏重写（A 系 5 ID + G 系 7 ID）；来源沿用调研出处（RACI=PMBOK/Wikipedia/Cornell、A-90=调研1+BCG 分桶、G-90=Matthies、G-91=Minto、G-92=Shostack/Zeithaml-Bitner/NN·g、G-93=Bain 合理杂交）。
+
+### 3.0.0 · 批次 3
+
+### 新增
+- `layouts.py` E 组 3 函数：`concept_curve`（三段形态与语义色冻结，3 段硬拦）、`stage_flow`（3–6 段，4 段精确复现骨架坐标）、`tri_layer`（固定 3 层硬拦，>3 层分工给 arch_layers）。负向 3 项通过；回归 3/3 字符级一致（tri_layer 修正为层-箭头交错顺序后达成）；deck 改调后 **md5 字节级一致 3/3**。
+- **设计修正（如实记录）**：V-02/V-04 不新建包装函数——其参数化实质即 charts.py 直调，额外壳属零价值函数（与审计①清理精神一致），偏离原方案映射表，已在骨架文档写清直调用法。
+- `svg-skeleton-e.md` / `svg-skeleton-v.md` 全文五栏重写（E 系 6 ID + V 系 8 ID）；V-93 标注 BCG 达拉斯为本库最强单一可考原型，V-94/E-91 等沿用调研出处。
+
+### 3.0.0 · 批次 2
+
+### 新增
+- `layouts.py` S 组 6 函数：`quad_cards`（固定 4 格硬拦）、`milestone_axis`（节点 3–5 硬拦）、`hero`（**支撑数硬拦 2/3/4**，依据 grid §3.6 三档栅格，用户拍板）、`versus`（行 3–5 且左右等长硬拦）、`kpi_six`（≤6 硬拦）、`full_panel`（bullets/body 二选一硬拦）。负向 5 项通过。
+- 回归：新函数 vs deck 旧页 body 字符级比对 6/6 一致（S-03/S-09/S-12 为前缀比对，组合层在调用侧）；deck 改调 layouts 后重建 **md5 字节级一致 6/6**。
+- `svg-skeleton-s.md` 全文重写为五栏格式（11 ID：4 直排 + 6 参数化 + S-13 组合配方）；来源两档如实标注（S-02 谱系=BCG/GE-McKinsey；S-07=Minto 金字塔原理版式化；S-09 高阶=Few 并注明品牌有意偏离；S-13 沿用调研1"无单一可核查原版"）。
+
+### 3.0.0 · 批次 1
+
+### 新增
+- `assets/components/layouts.py` 新模块（整页型手画版式的参数化层，坐标冻结自骨架规范）：`bignumber`（I-01 双变体合一，基础变体 compare_anchor 必填硬拦、带证据变体固定 3 条硬拦）、`time_window`（I-05）、`quote_page`（T-01）、`declaration`（T-02）、`bridge`（T-03）。负向测试 2 项通过。
+- **字符级回归**：用世界杯 deck 数据调新函数与旧手画页逐字符比对——04/05/08/22/30/39 六页完全一致；07_T-01 唯一差异为旧页被深底盖住的冗余白底 rect（新函数消除，视觉等价）。deck build 已改调 layouts（吃自身狗粮），重建后 md5 回归通过。
+- 调研结论（如实）：大数字页为 MBB 通用惯例（多家对 McKinsey 公开 deck 的归纳佐证），**无单一可考原版**；T 系过渡页同为通用商务惯例。
+- `svg-skeleton-i.md` / `svg-skeleton-t.md` 全文重写为**五栏统一格式**（用途/适用场景/用法/来源/纪律），删除冻结 SVG 块——确立后续批次的章节标准。
+- 归一假设更正：T-01 与 `themes.quote_dark` 经读码确认为不同页型（过渡引言 vs C 档金句），**不合并**，文档已写清分工。
+
+### 3.0.0 · 批次 0（清理与教训归位）
+
+依据：用户整改决策（全量参数化 / 历史产物清理 / 教训固化去补丁化），详见后续批次条目。
+
+### 移除
+- `examples/` 整目录（11 页早期示例 SVG、demo pptx、preview、构建脚本、consulting/demo_d 与 FIFA26 十页真源、render_shots.py）；README 图墙段（引用的 assets/shots/ 目录早已不存在，属断链）。demo_d 的冒烟基线职能由「渲染断言 + 负向测试 + lint + 形状数比对 + 像素回归」验证体系取代（svg-skeleton-common §冒烟基线已改写，机制见 CONTRIBUTING）。恢复途径：aham-ppt-v2.8-backup.skill。
+- `LESSONS.md` 删除。处置明细：FIFA26 七条中六条确认已固化于代码（BOUNDS/图例右上/引线反转/check()/tick_label/lint 名单），第六条的规范部分（图表底部≤2 层）归位 `chart-impl.md`；MES 六条确认固化于 lint/tools/quality-audit-protocol；工具链系数摘录以源码为准无需归档。
+- **已知缺失（如实记录）**：LESSONS 索引的探测类场景 1–12 与专业判断类 13–14（数字诚实校验、矛盾一致性全扫描、延续 vs 重构边界、甲乙方责任边界等）——其完整正文原载 probing-scenarios.md / professional-judgment.md，该批文件在更早的历史重构中已撤销且正文未迁入 coach-engine/phase（本次逐项 grep 证伪了 LESSONS 头部"已分散到现行文件"的自述）。**正文已丢失，无法归位**；如需恢复须重新编写。
+
+### 变更
+- `designer-rules.md` 约束7 重构：撤销"实测补遗/v2.x"补丁式标题与叙事，按 变换/箭头/字符/文本间距/可用路径能力 五主题重组为正式规范条目（内容零删减）。
+
+
+## [2.8.0] - 2026-07-03
+
+用户整改决策批次（7 项拍板全落地）。
+
+### 新增
+- `swimlane_roadmap` 三渲染模式（调研1 建议 `mode="gantt"|"chevron"|"phase_bucket"`）：gantt 默认行为与 v2.7 逐字节一致；chevron 块画雪佛龙形（相位推进）；phase_bucket 为 BCG 达拉斯式相位分桶（默认五桶 立即行动/速赢/战略优先/中期举措/长期机会，禁 today/milestones，日期不确定时比假装精确更诚实）。三模式渲染断言 + 2 项负向拦截实测通过；**未做视觉目检（本会话图像通道故障）**。
+- `lint_svg.py` 页脚检查加章节进度豁免：总页数取众数，少数派 N≤20 且 ≤2 页判为 themes.section 章节进度并点名豁免（消除历史误报）。
+
+### 变更/清理
+- `components.py` 删除 6 个全仓零引用函数（big_btn/blueprint/device_screen/kpi/phone_screen/swimlane）；`placeholder` 确认在用（E-01 图占位）予以保留，并在 svg-skeleton-e.md E-01 直排指引补引用入口。
+- `themes.py` section A 版删除无效空文本占位（渲染零变化，消 empty-text 警告）。
+- `layout-library.md` 节奏约束新增「版式陈列册」场景豁免条款；A-90 行与速查表同步三模式（新增"日期不确定→phase_bucket"触发行）。
+
+### 决策记录（不改）
+- PDF/LibreOffice 字距放大 ~10% 的观察不写入规则：转 PDF 非主要目的，按该口径收缩会反过来影响 PPT 排版（用户拍板）。PowerPoint 实际字距未验证，以实际打开为准。
+
+
+## [2.7.0] - 2026-07-03
+
+依据：2026-07《版式库全量对标评估》P0–P2 替换决策 + 第一批调研（5 类咨询版式）+ 第二批调研（6 类咨询图型）。
+上轮（v2.6）遗留的替换升级与新增版式本轮全部落地。
+
+### 新增（代码）
+- **`assets/components/structures.py`（新模块，咨询结构版式层，15 API）**：
+  - 共享引擎：`grid_cells` 网格对齐（RACI/服务蓝图复用）；`issue_tree` 内置树对齐（根/支/叶三列、父居中于子组）。
+  - 记号：`milestone` 里程碑菱形 / `gate` stage-gate 三角 / `flag_line` 标志虚线（路线图与 fte_ramp 共用）。
+  - 推算件：`mini_table` 三线表 / `bridge_arrow` 显式乘数桥 / `footnote_band` 方法论脚注三件套（BCG 式）。
+  - 结构版式：`portfolio_matrix`（气泡面积∝规模 r=10+24√(s/max)、迁移虚线箭头、grid=3 九宫格、自动画"气泡面积∝X"诚实标注）、`raci_matrix`（**强制校验每行恰好一个 A**，违反抛 ValueError；字母+灰阶双通道）、`issue_tree`（MECE 组间虚线分隔、末端假设=虚线框+「假设」角标）、`arch_layers`（层高∝weight、层内模块网格 1–2 行、纵向能力条=**单字逐个 text 堆叠非 rotate**、层间双三角接口标记）、`swimlane_roadmap`（3–6 泳道、committed/planned/proposed 三态、里程碑在轴头、Today 线、依赖肘线）、`service_blueprint`（**固定 5 泳道 + 3 分界线按 NN/g 位置**：客户|前台=互动线、前台|后台=可见性线、后台|支持=内部互动线；行数≠5 抛错）、`layered_pyramid`（梯形层内切格 + 右侧逐层 takeaway 引线）、`argument_ladder`（横向 buildup 默认 / 纵向变体）、`concentric_arcs`（**降级工具：不接受数值**，≤5 层，强制绘制「弧径不代表数值」）。
+- **`charts.py` 追加 5 函数（追加式，既有 9 图表零改动）**：`sparkline`、`kpi_card`（Few 式：值+基准+sparkline+状态）、`marimekko`（gap=0、列宽∝列总量、wlabel 必填强制画出、≤7 列/≤4 段抛错、pct/abs 双模式）、`fte_ramp`（**<10 期自动堆叠柱 / ≥10 期堆叠面积**（Datawrapper 规则）、stage-gate、图例右上）、`horizon_curves`（3–4 条 S 曲线 path 折线、强制「概念示意·无刻度」）。
+- **`consulting.py` 追加 `driver_op`**（G-90 可选算子 ×÷+−，纯线画；实证仅 ~4% 显式建模——默认不加）。
+
+### 死代码/冗余审计修复（2026-07-03 审计①，全部零行为变化）
+- `components.py`：删除 L94 不可达 `placeholder`（"真实照片占位框"，自 v2.2 起被 L132 同名"软件界面占位框"覆盖从未生效；如需照片占位从 git 历史恢复并改名）。**更正上文"components.py 零改动"声明——本次审计清理属例外。**
+- `consulting.py`：删 unused import `SANS`；删 `flow_bands` 内被覆盖的 `thh` 死赋值（v2.6 发现、本轮清）；删 `driver_node` 内 no-op replace 块。
+- `structures.py`：删 unused import `esc`/`check`。
+- pyflakes 全组件模块清洁；**遗留待决**：`components.py` 的 big_btn/blueprint/device_screen/kpi/phone_screen/swimlane/placeholder 共 7 个函数在本技能代码与文档中零引用（疑似 ppt-svg 姊妹技能共享残留），未删除、待用户决策。
+
+### 变更（版式库，46 个 ID）
+- **同 ID 高阶变体（轻量版并存）**：S-02（+portfolio_matrix）、S-09（+Few 卡）、A-03（+标准 RACI）、E-04（+arch_layers）。
+- **同 ID 替换**：G-01 手画树骨架撤销→参数化 issue_tree（树对齐是 AI 弱项，评估 P0 重度）；V-03 图左+洞察右撤销→图上直接标注（Knaflic "Label data directly" pp.176–181）。
+- **纪律追加**：V-04 图上标注差异原则；G-90 可选算子配方（含 4% caveat）。
+- **9 个新版式**：S-13 勾选盘点（组合配方，调研注明无确切一手原版）、E-91 三地平线、V-93 推算双栏（BCG 达拉斯第 11 页蓝本）、V-94 Marimekko、A-90 泳道路线图、A-91 FTE 爬坡、G-91 论证阶梯（Minto）、G-92 服务蓝图（Shostack 1984/NN-g）、G-93 剖面金字塔（Bain/Keller 形态；层内切格+右侧箭头复合结构调研注明为合理杂交）。
+- **不落地**：雷达图（layout-library 新增 §不提供的图型：Zelazny 体系外 + Few 2005 + 轴序/面积失真三缺陷；替代 hbar 分组/bullet/slope）；同心弧仅降级定性（Aon 2025 Investor Day Slide 69 系品牌叙事非数据图）。
+- 划界指针更新：E-02→E-91、G-03→G-93；速查表新增 13 行触发条件；`svg-skeleton-common.md` D 段纳入 structures.py 与通用记号/footnote_band。
+- 修复存量 bug：`designer-rules.md` L292 嵌套围栏导致全文件代码块开闭错位（v2.5.1 起即有，本轮围栏配对校验发现）。
+- `designer-rules.md` 约束7 新增第 6 条实测补遗：path 折线/path A 圆弧/polygon+opacity/circle 经 E2E 确认存活。
+
+### 有意偏离（记录在案）
+- **Few「状态色」→ 符号+文字双通道**（+/− 号 + 达标/未达）：brand 图表铁律禁红绿，kpi_card 按此适配并在骨架章节标注。
+- **归系与调研建议不同**：horizon_curves 入 E 系（调研建议 T/S；因 E-02 划界指针已指向它）、layered_pyramid 入 G 系（调研建议 S；与 G-03 划界共处）。
+- 版式计数口径：保留 5 个栅格直排 ID（v2.6 决策），故总数 46 而非评估文档估算的 ~42。
+
+### 验证（全部真实执行）
+- 16 页示例视觉渲染（cairosvg PNG）逐页目检；过程中修正 9 处：服务蓝图分界线错位一层（对 NN/g 规范）、泳道依赖肘线断裂、里程碑标签与刻度碰撞、fte_ramp 底部三层拥挤（图例移右上）、同心弧引线交叉（外环对顶行）、纵向阶梯箭头瞄准、峰值标签出界、GRAY_B/math 引用错误。
+- 端到端：16 页 SVG→svg_to_pptx→PPTX→LibreOffice PDF→PNG 抽检 8 页，path A 弧/path 折线/polygon opacity/circle 全部存活。
+- 15 项负向/属性测试全过：RACI 双 A/零 A/列数/非法记号、Mekko 8 列/5 段/abs 缺宽、蓝图 4 行、同心弧 6 层、地平线 2 条、算子非法、fte 期数不齐各抛错；fte n=9→柱 n=12→面积自动换挡、Mekko 列宽 1:3 比例、气泡 r=10+24√(s/max) 属性断言。
+
+## [2.6.0] - 2026-07-02 — 版式库对标改造 · 结构层（D 层归系 + 移出/合并/划界）
+
+依据《aham-ppt 版式库全量对标评估（40 版式）》与 D 层调用链路分析执行。**纯文档重组 + 纪律固化，consulting.py / charts.py 代码零改动，无新增绘图。**
+
+### 变更（D 层归系 · Wave 0，修复"有执行入口、无选择入口"断点）
+- **90 段版式骨架归入各系文件末尾章节**：E-90→svg-skeleton-e、V-90/V-91/V-92→svg-skeleton-v、G-90→svg-skeleton-g、I-90→svg-skeleton-i（各含组件签名+组合配方+分工/纪律）。
+- **layout-library**：90 段进各系表格；**速查表新增 6 行触发条件**（阶段带量→E-90、多源汇总→V-90、逐指标对比→V-91、配额规则→V-92、指标数学分解→G-90、收敛到1→I-90），"唯一权威决策表"口径自此闭合；D 层附录删除。
+- **svg-skeleton-common**：并入 D 层横切部分——降方卡味三原则、标注层 5 API、密度纪律+标注配额+chrome红线+蓝的记账、冒烟基线。
+- **designer-rules 新增约束7**（原 skeleton-d §4 五条 PPTX 实测补遗）；pptx-native-rules 速查表补 2 条。
+- phase-05/phase-07 例外句改写：90 段走"版式ID=章节名"常规路径，不再特例指向独立文件。
+
+### 移除
+- **`references/svg-skeleton-d.md`**（内容全部拆并，无信息丢失；LESSONS/SKILL 指针已更新）。
+- **5 个纯栅格版式的冻结 SVG 骨架**：S-01/S-04/S-05/S-06/E-01 改**栅格直排**——各系文件保留同名章节，写明 grid-system §三 坐标 + skeleton-common 构件 + 直排纪律（评估判定：纯栅格无隐性对齐约束，AI 在栅格+字号规范下可稳定生成；反复画错可整段回退）。
+
+### 合并（不增计数）
+- **S-10/S-11 → S-07 参数化 HERO（N=2/3/4）**：三变体代码块原样保留于同一章节，坐标即 grid-system §3.6 三行。
+- **I-04 → I-01 参数化大数字页（0–N 支撑）**：基础/带证据双变体；**新增内容纪律**：`[compare_anchor]` 必填（同比/目标/基准三选一，原 [support_1] 位，坐标未动）+ 来源脚注必填（评估 P2）。
+
+### 划界（写进适用场景列，不引用未落地版式）
+- S-03 限定轻量单轴（多泳道/阶段底色带不属本版式）；E-02 限定单条概念曲线（三地平线类多曲线叠加不属本版式）；G-03 限定纯层级金字塔；V-04 与 V-91 分工（逐指标对比优先 V-91）。
+
+### 核查（V-90 数据诚实性，评估要求项）
+- `flow_bands` 读码+脚本实测：源侧条高与汇侧带宽对测试值 50/30/15/5 均严格 10:6:3:1，汇侧带宽合计=汇总块内高——**带宽∝数值成立，无"为美观调宽"问题**；带体锥形是汇入汇总块的既定形态。
+- **缺口**：target 数字由调用方传入，代码不校验 =Σsources；守恒纪律已写入 V-90 骨架章节（损耗须列显式 source 行）。另：flow_bands 内有一行被立即覆盖的死代码（`thh` 首次赋值），无功能影响，未动。
+
 ## [2.5.2] - 2026-07-02 — D 层修订（chrome 红线 + 密度纪律）
 
 ### 移除
@@ -150,7 +280,8 @@
 ### 修复
 - 修复版式命名冲突、品牌色硬编码等 8 项问题。
 
-[Unreleased]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...HEAD
+[Unreleased]: https://github.com/li599198347-svg/aham-ppt/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
 [2.5.2]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.1...v2.5.2
 [2.5.1]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.4.0...v2.5.0

@@ -116,6 +116,8 @@ assert success, "转换失败,检查 SVG 是否规范"
 - SMIL 动画
 - JS 交互
 - 超大位图嵌入（> 5 MB，会让 PPT 膨胀）
+- `<text>`/`<ellipse>` 上 translate+rotate 组合变换：实测转换后漂移，**不做竖排**（详见 designer-rules 约束7）
+- 字符 `✓/✗`：tofu 高危，**用 consulting.py `check()` 线画对勾**
 
 ---
 

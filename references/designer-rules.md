@@ -3,9 +3,9 @@
 Phase 7 每页SVG设计的执行规范。
 **品牌规范以 brand.md 为权威来源，本文件只管「怎么画」。**
 
-> **v2.1 设计补充（本节即权威版，方法论同见 phase-02/03）**
+> **设计补充（本节即权威版，方法论同见 phase-02/03）**
 > - **强调色 = 信号，不是装饰**：同类并列项要么全中性、要么完全一致；主色只用于 当前/推荐/阶段/主操作/单个高亮数据/品牌点。QC 必查：页面内是否存在无语义的单点强调色？
-> - **内容区线性单色图标**为 B/C 档允许项（A 档可不用）；图标单色、取角色墨色或主色，不上多色/面性填充（见 `brand-spec/iconography.md` v2.1 例外）。
+> - **内容区线性单色图标**为 B/C 档允许项（A 档可不用）；图标单色、取角色墨色或主色，不上多色/面性填充（见 `brand-spec/iconography.md` 例外）。
 > - **真实照片用占位框**（`assets/components/components.py` 的 `placeholder`），禁 AI 生成图/网图。
 > - **样张先行**：大改视觉语言后先出 3–4 张样张确认再铺全册。
 **颜色唯一来源：brand.md §2 / tokens.css。禁止使用规范外色值；本文件下方「色值与字体」表是 brand 白名单的执行级速查（非新增色值）。**
@@ -99,7 +99,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 
 | narrative_purpose | Chrome 类型 |
 |---|---|
-| impact (I-01 / I-04 / I-05) | 极简 Chrome |
+| impact (I-01 / I-05) | 极简 Chrome |
 | transition | 极简 Chrome 或深色底 |
 | 其他 | 标准 Chrome |
 
@@ -289,7 +289,6 @@ brand.md §2.3 要求:状态 = **6px 点 + 文字**双通道,颜色之外文字�
 
 某真实项目 Phase 4.5 的一次合规审计:
 
-```
 违规触发点: 7 张样稿中有 3 张违规,共 10 处色值违规
 修正方案: A · 严格合规替换(映射到 brand.md §2 标准色)
 修正后: 7 张全部通过审计,单一源头原则建立
@@ -415,6 +414,18 @@ font-family="'JetBrains Mono', Consolas, monospace"                  <!-- 数字
 Windows 落 Inter→Calibri、微软雅黑、Consolas；macOS 落 Inter→PingFang、JetBrains Mono。**不得使用宋体 / Songti / SimSun 等衬线字体。**
 
 ---
+
+### 约束7：PPTX 原生转换兼容（svg_to_pptx 工具链硬约束）
+
+**变换**：任何元素禁 `rotate` / 负 `scale`——`<text>`/`<ellipse>` 上 translate+rotate 组合转换后整体漂移（白字落白底，灰度差质检不可见）。竖排文字用**单字逐个 `<text>` 纵向堆叠**（arch_layers 纵向能力条即此实现）；斜椭圆观感靠 rx/ry 比例。chrome（页眉/页脚/左缘）归 skeleton-common 与 themes.py，组件层禁触。
+
+**箭头**：一律 `line` + `polygon`（`<marker>` 在 path/polyline 上静默丢失）。
+
+**字符**：`✓/✗` 等在 `tools/lint_svg.py` tofu 高危名单，对勾用 `consulting.check()` 线画；mono 文本内全角 `＋ ＝` 可正常转换（Pango 逐字回退）。
+
+**文本间距**：细段标注文字**自带空格**并 `tick_label(level)` 错层，防止相邻文本粘连（如 "1/4" 与 "4" 粘成 "1/44"）。
+
+**已验证可用的路径能力**（E2E：SVG→svg_to_pptx→PPTX→PDF）：`<path>` M+L 折线（多段单 shape）、`<path>` A 圆弧（转换器内部转三次贝塞尔）、`<polygon>` 带 `opacity` 填充、`<circle>`——horizon_curves 的 S 曲线、concentric_arcs 的半圆弧、fte_ramp 的堆叠面积、气泡/芯片/端点均据此实现。
 
 ## 输出前自检
 

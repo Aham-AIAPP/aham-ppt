@@ -11,14 +11,13 @@ description: >
 
 # Aham PPT 技能 — Aham UI v6.1 · Office 轨 · PPT
 
-> **版本 v2.4**（更稳的流程 · 更准的版式）：八阶段**强制逐步执行**（防跳步 + 卡点等待 + 进度可见）、**版式库去重 + 单一选择决策表 + 首选核心集**、**数据强制图表化三环硬门禁**（规划/设计/质检）；并含 v2.3 仓库清理（去悬空引用/死代码、规范单一事实源）。详见 `CHANGELOG.md`。
->
-> **v2.5**（咨询密集层 D · 降 AI 方卡味）新增 **异形+标注组件 `consulting.py`（12 API）、骨架 `svg-skeleton-d.md`、X-90 段版式 6 个（E/V/G/I 系挂接）**；PPTX 兼容补遗（禁 text/ellipse 组合 rotate、D 层禁触 chrome 等实测结论）。
-> **v2.2**（表现力增强 · 防平淡）新增 **9 类数据图表组件 `charts.py`、C 高表现力档（深色模板 `cover_dark/section_dark/quote_dark`）、防平淡规则链**（数据强制图表化 + 图形化占比下限 + 防平淡审计）。
->
-> **v2.1**（双档主题 + 工具链修复）新增：A 克制档 / B 现代专业档（默认 B）、
-> 启动选档步骤、转换器字宽修复、线性图标库与关系图组件库、强调色语义 QC、内容方法论。
-> 详见 `references/theme-tiers.md`、`references/designer-rules.md`（设计补充）、`CHANGELOG.md`。
+> **当前能力概览**（演进史统一见 `CHANGELOG.md`，正文不再按版本叙事）：
+> 八阶段强制流程（防跳步 + 卡点等待）× 能力自适应教练机制 × A/B/C 三档视觉主题（含深色模板）。
+> 版式库 46 个 ID（7 系内容版式 + SPC 结构页），选择走 layout-library 单一决策表 + 首选核心集；
+> 数据强制图表化三环硬门禁。组件层：`charts.py` 14 类数据图表 · `consulting.py` 咨询异形与标注层 ·
+> `structures.py` 咨询结构版式（矩阵/树/泳道/蓝图/金字塔等，含 RACI 每行一 A、Mekko ≤7 列等强校验）·
+> `themes.py` 结构页 · SVG→原生可编辑 PPTX 工具链 + `tools/lint_svg.py` 预检。
+> 有意不落地：雷达图（依据与替代见 layout-library §不提供的图型）。
 
 ---
 
@@ -50,9 +49,9 @@ view /mnt/skills/public/pptx/SKILL.md
 ```
 view references/theme-tiers.md     ← 三档主题：A 克制 / B 现代专业 / C 高表现（默认 B）
 ```
-（v2.1 的字宽修复 / 强调色语义 QC / 图标组件 / 内容方法论已并入 `designer-rules.md`、`phase-02.md` 与组件代码，不再单列文件。）
+（字宽修复 / 强调色语义 QC / 图标组件 / 内容方法论已并入 `designer-rules.md`、`phase-02.md` 与组件代码，不再单列文件。）
 图标与组件资产位于 `assets/components/`：`icons.py`（~40 线性图标 + icon_circle）、
-`components.py`（泳道/蓝图/箭头/KPI/状态/设备屏/占位框）、`charts.py`（**9 类数据图表：柱/横柱/折线/瀑布/漏斗/甘特/子弹/堆叠/坡度**，一行调用、已 brand §7.5 合规、转换实测可编辑）、`themes.py`（A/B 封面/目录/章节/页眉模板 + **C 档深色模板 `cover_dark/section_dark/quote_dark`**）、`consulting.py`（**咨询密集异形层 D：雪佛龙链/流向带/哑铃/点阵/驱动树+肘线/链式递减 + 标注层（椭圆圈注/引线/水印/线画对勾/So-What）**，brand 合规、转换实测原生可编辑，规则见 `references/svg-skeleton-d.md`）。
+`layouts.py`（**整页/内容区型版式层：I·T 系整页 5 式 + S/E/A/G 手画版式 14 式的参数化实现，坐标冻结自骨架规范，含 S-07 支撑数 2/3/4、G-02 柱 2–4、G-03 层 3–5 等硬校验**）、`components.py`（基础原子：文本 T / 线 L / 面板 P / 转义 esc / 箭头 arrow·carrow / 标签 chip / 六边形 / 状态点 status / 图占位框 placeholder / 色板与字体常量）、`charts.py`（**14 类数据图表：柱/横柱/折线/瀑布/漏斗/甘特/子弹/堆叠/坡度/sparkline/KPI卡/Marimekko/FTE爬坡/三地平线**，一行调用、brand §7.5 合规、转换实测可编辑）、`themes.py`（A/B 封面/目录/章节/页眉模板 + **C 档深色模板 `cover_dark/section_dark/quote_dark`**）、`consulting.py`（**咨询异形层：雪佛龙链/流向带/哑铃/点阵/驱动树+肘线+算子/链式递减 + 标注层（椭圆圈注/引线/水印/线画对勾/So-What）**，形体骨架在各系文件 90 段章节、标注层与纪律见 `references/svg-skeleton-common.md §咨询密集层 D`）、`structures.py`（**咨询结构层：网格/树对齐引擎 + 组合矩阵/RACI/issue tree/分层架构/泳道路线图（gantt·chevron·分桶三模式）/服务蓝图/剖面金字塔/论证阶梯/推算件/记号/降级同心弧**，含强校验：RACI 每行一 A、Mekko ≤7 列、蓝图固定 5 泳道）。
 
 ---
 
@@ -120,7 +119,7 @@ phase-05（版式）/ phase-07（出片）按 `theme` 取用 `themes.py` 对应�
 
 ---
 
-## 附 · 工程预检与防坑（v2.5 增量 · 实战复盘沉淀）
+## 附 · 工程预检与防坑（实战复盘沉淀）
 
 > 大体量册子（数十页、含信息图）批量生成时，以下几类坑会反复出现。**渲染前后各跑一次 `assets/tools/lint_svg.py`**。
 

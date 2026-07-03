@@ -1,81 +1,46 @@
 # SVG Skeleton · T系版式骨架（过渡（Transition））
 
-> Phase 7 按版式ID读取本文件。使用规则：复制骨架→替换[占位符]→不改坐标。
-> 通用骨架（Chrome框架/卡片/箭头）见 svg-skeleton-common.md。
+> Phase 7 按版式 ID 读取本文件。T 系为**整页型参数化版式**：调 `layouts.py` 函数生成完整页
+> （自带极简页脚），坐标由函数冻结，不手画、不改坐标。
 
 ---
 
-## ## T-01 深色引言页
-```svg
-<!-- 深色背景 -->
-<rect width="1280" height="720" fill="#1C1C1C"/>
+## T-01 深色引言页（参数化 · layouts.py）
 
-<!-- 顶部装饰细线（深底上唯一蓝点缀 #336EE8）-->
-<rect x="80" y="80" width="40" height="2" fill="#336EE8"/>
+**用途**：章节间的深色引言过渡——一句立场/判断，给观众换气位。
 
-<!-- 主引言（两行，居中偏左） -->
-<text x="120" y="310" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="36" font-weight="bold" fill="#FFFFFF">[quote_line_1]</text>
-<text x="120" y="360" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="36" font-weight="bold" fill="#FFFFFF">[quote_line_2]</text>
+**适用场景**：章节转折、定调时刻。与 `themes.quote_dark`（C 档金句页，大引号+居中构图，无页脚）为**两个不同页型**，不互相替代：过渡引言 → 本版式；C 档独立金句页 → quote_dark。
 
-<!-- 副注 -->
-<text x="120" y="440" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" fill="#A8A8A8">[sub_line]</text>
+**用法**：`layouts.quote_page(line1, line2, sub, attribution, source, page)`——深底 #1C1C1C，唯一蓝点缀为顶部短线；两行 36px 左对齐 + 副注 + 右下署名。
 
-<!-- 引用来源 -->
-<text x="1200" y="640" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#A8A8A8">—— [source]</text>
+**来源**：通用商务惯例（深色引言/定调页），无单一可考原版。
 
-<!-- 极简页脚（深底弱字 #787878）-->
-<text x="40" y="708" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#787878">来源：[source]</text>
-<text x="1240" y="708" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#787878">[page_index]</text>
-```
+**纪律**：真实语录必须可考（人名+出处）；自撰声明句必须在 attribution 注明"本演示自撰"，**禁止冒充名人语录**。
 
 ---
 
-## ## T-02 白底大字宣言
-```svg
-<!-- 极简Chrome -->
-<text x="40" y="40" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B" letter-spacing="2">[section_path]</text>
+## T-02 白底大字宣言（参数化 · layouts.py）
 
-<!-- 居中大字宣言 -->
-<text x="640" y="310" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="44" font-weight="bold" fill="#262626">[declaration_line_1]</text>
-<text x="640" y="366" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="44" font-weight="bold" fill="#262626">[declaration_line_2]</text>
+**用途**：白底居中大字宣言——全 deck 最重的一句判断单独成页。
 
-<!-- 品牌蓝短线 -->
-<line x1="580" y1="410" x2="700" y2="410" stroke="#9B9B9B" stroke-width="2.5"/>
+**适用场景**：核心主张的独立强调位。深色氛围 → T-01；带证据 → S-07。
 
-<!-- 副注小字 -->
-<text x="640" y="456" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" fill="#6E6E6E">[sub_note]</text>
+**用法**：`layouts.declaration(sec, line1, line2, sub_note, source, page)`——居中双行 44px + 灰短线 + 副注。
 
-<!-- 极简页脚 -->
-<text x="40" y="708" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">来源：[source]</text>
-<text x="1240" y="708" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">[page_index]</text>
-```
+**来源**：通用商务惯例（宣言页），无单一可考原版。
+
+**纪律**：宣言必须是断言句（有立场、可被反驳），不是主题词。
 
 ---
 
-## ### T-03 章节承接页
-```svg
-<!-- 极简Chrome -->
-<text x="40" y="40" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B" letter-spacing="2">[section_path]</text>
+## T-03 章节承接页（参数化 · layouts.py）
 
-<!-- 左侧：刚才讲了什么 -->
-<text x="100" y="200" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#9B9B9B" letter-spacing="3">JUST COMPLETED</text>
-<line x1="100" y1="220" x2="220" y2="220" stroke="#9B9B9B" stroke-width="1"/>
-<text x="100" y="270" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#9B9B9B">[prev_part_title]</text>
-<text x="100" y="310" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#6E6E6E">[prev_part_summary]</text>
+**用途**：章节间承接——左"刚讲完什么"（灰）/ 右"即将进入什么"（墨）+ 底部进度导航。
 
-<!-- 中间垂直分割线 -->
-<line x1="520" y1="160" x2="520" y2="560" stroke="#E7E7E7" stroke-width="0.5"/>
+**适用场景**：多章 deck 的章间导航；单次分隔用 SPC-02（themes.section）即可，承接页额外提供"回顾+预告"。
 
-<!-- 右侧：即将进入 -->
-<text x="580" y="200" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="3">NEXT PART</text>
-<line x1="580" y1="220" x2="700" y2="220" stroke="#9B9B9B" stroke-width="1.5"/>
-<text x="580" y="320" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="36" font-weight="bold" fill="#262626">[next_part_title]</text>
-<text x="580" y="380" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" fill="#6E6E6E">[next_part_intro]</text>
+**用法**：`layouts.bridge(sec, prev_title, prev_summary, next_title, next_intro, nav, source, page)`。
 
-<!-- 底部导航 -->
-<text x="640" y="650" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#9B9B9B">[part_nav]</text>
+**来源**：呼应咨询叙事惯例——storyline 连续性与"recap → next"过渡为 MBB 通用做法（Slideworks/Deckary 对 MBB storyline 结构的归纳）；此双栏具体构图为本库设计，无单一可考原版。
 
-<!-- 极简页脚 -->
-<text x="40" y="708" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">来源：[source]</text>
-<text x="1240" y="708" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="10" fill="#9B9B9B">[page_index]</text>
-```
+**纪律**：左右两栏必须都是**内容概括**（讲了什么结论），不是章节名复读。

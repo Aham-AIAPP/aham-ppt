@@ -73,8 +73,8 @@
 ### 步骤1：设计前准备
 
 读取以下文件，加载设计规则：
-- `svg-skeleton-common.md`：通用Chrome/卡片/箭头骨架
-- `svg-skeleton-[当前版式系].md`：当前页对应系的版式骨架（仅读对应1个）；**系→文件例外**：封面/目录/章节用 `themes.py` 生成（不读 svg-skeleton），数据图表调 `charts.py`、**X-90 段/标注层调 `consulting.py`（读 `svg-skeleton-d.md`）**（坐标真源始终是 `grid-system.md`）
+- `svg-skeleton-common.md`：通用 Chrome/构件规范与咨询密集层纪律
+- `svg-skeleton-[当前版式系].md`：当前页版式的五栏章节（仅读对应 1 个）——**一律按「用法」栏调用参数化函数**（`layouts.py` 整页/内容区型、`consulting.py` 形体、`structures.py` / `charts.py` 结构与图表），坐标由函数冻结、不手画不自算；标注层纪律随 `svg-skeleton-common.md §咨询密集层 D` 一并加载。**系→文件例外**：封面/目录/章节用 `themes.py` 生成（不读 svg-skeleton），栅格直排版式（S-01/04/05/06、E-01）按 `grid-system.md §三` 坐标直排
 - `designer-rules.md`：设计原则+品牌纪律+PPTX约束
 - `chart-impl.md`：图表（有图表的页面才读）。**优先 `from charts import bar, hbar, line, waterfall, funnel, gantt, bullet, stacked, slope` 一行生成，不逐坐标手画**；charts 未覆盖的类型才用 chart-impl 手画模板
 
@@ -101,7 +101,7 @@
 坐标：来自Phase 5规划卡，不自行计算
 
 设计前门禁（全部✓才开始写代码）：
-□ 已加载 svg-skeleton-[系].md + grid-system.md，骨架照抄、坐标不自算（数据页改调 charts.py；X-90 段/标注层调 consulting.py；结构性页用 themes.py）
+□ 已加载 svg-skeleton-[系].md + grid-system.md，按章节「用法」栏调用参数化函数、坐标不自算（layouts/charts/consulting/structures 按归属；结构性页用 themes.py；直排版式按 grid §三）
 □ 本页若聚集 ≥3 条 D 类数据/可对比排序/时间序列 → 已选 V 系并调 charts 组件（否则停，回 Phase 5 改版式，不得文字化）
 □ 无未转义的 & < > "
 □ 无 <marker>（箭头用 <polygon>）
@@ -115,7 +115,7 @@
 
 坐标规则（新增）：
 - 坐标严格按 Phase 5 布局规划卡中的区域坐标，不自行调整
-- SVG骨架从 `svg-skeleton-[系].md` 对应章节复制，替换 `[占位符]`，不改任何坐标数值
+- 每页主体由对应章节「用法」栏的函数调用生成（坐标函数内冻结）；直排版式坐标严格取 grid §三，不自算不微调
 - 替换完成后检查：SVG中不应有任何剩余的 `[` 或 `]` 字符
 
 颜色规则：

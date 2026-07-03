@@ -58,7 +58,7 @@
 
 **视觉合规审计清单（Aham UI v6.1 · 逐项勾选）**
 
-权威取值见 `brand-spec/tokens.css`，参考样张见 `examples/*.svg`：
+权威取值见 `brand-spec/tokens.css`：
 
 ```
 □ 无顶部蓝条；蓝只出现在点缀位（logo点 / 主操作 / 选中下划线 / 推荐标 /
@@ -149,7 +149,7 @@ QC报告 · [项目名称] · [日期]
 | 文字无法编辑 | 非native模式转换 | 确认通过`svg_to_pptx_wrapper.py`调用 |
 
 
-## 增补 · 自动预检 + 双轨审计（v2.5）
+## 自动预检 + 双轨审计
 
 **渲染前/后自动预检（`assets/tools/lint_svg.py`）：** ①tofu 高危字符 ②页脚总页数一致 ③源码中文双引号。
 

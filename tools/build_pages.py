@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """为 aham-ppt / aham-survey / aham-voice 生成统一品牌落地页（GitHub Pages，docs/）。
 Aham UI v6.1 视觉。每个仓库自带 docs/index.html + docs/banner.png（社交图副本）。
-运行：python3 examples/build_pages.py
+运行：python3 tools/build_pages.py [仓库名]
 """
 import shutil
 from pathlib import Path
@@ -16,10 +16,10 @@ SITES = {
         sub="把零散素材做成方案级 / 报告级的专业 PPT。八步法 · 三档风格 · 原生可编辑 PPTX。",
         feats=[("八阶段流水线", "规范加载 → 材料解析 → 论点提炼 → … → 质检交付，不是排版美化"),
                ("原生可编辑 PPTX", "每个元素都是 PPT 原生形状 / 文本框，双击即改"),
-               ("11 页样张", "封面 / 看板 / 选型 / 趋势 / 路线 / 大数字 / 架构 / 2×2 / 流程 / 对照 / 深色"),
+               ("43 版式参数化", "21 个版式函数 + 9 类图表 + 结构 / 标注组件，坐标由函数冻结"),
                ("换成你的品牌", "改 tokens 主色 + 字体 + 品牌名，四步适配")],
         ctas=[("在 GitHub 查看", "https://github.com/li599198347-svg/aham-ppt", 1),
-              ("示例 PPTX", "https://github.com/li599198347-svg/aham-ppt/blob/main/examples/aham-ppt-v6.1-demo.pptx", 0),
+              ("历史样张（v2.5.2）", "https://github.com/li599198347-svg/aham-ppt/tree/v2.5.2/examples", 0),
               ("Releases", "https://github.com/li599198347-svg/aham-ppt/releases", 0)],
         shots=[("shots/consulting-tree.png", "驱动树 · 肘线分解 + 圈注 + 自洽校验"),
                ("shots/consulting-dots.png", "点阵去向 · 细分条 + 圈注"),

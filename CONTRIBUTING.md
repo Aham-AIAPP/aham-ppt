@@ -5,7 +5,7 @@
 ## 改动约定
 - **视觉/规范以 `references/brand-spec/` 为权威**：色值、字体、版式只从 `brand.md` / `tokens.css` 查表，不在其它文件写死色值。取值同步自设计源 [aham-ui](https://github.com/li599198347-svg/aham-ui)。
 - **方法论与视觉分离**：八阶段流程、Action Title、探测场景等是方法论；颜色/字体/卡片是视觉。改一类不应顺手改另一类。
-- 改示例后跑 `python3 examples/build_examples.py` 重新生成 11 页 SVG + `preview/deck.html`；如需验证 PPTX，用 `assets/svg_to_pptx_wrapper.py` 转换并确认 0 跳过。
+- 任何组件/骨架改动，按下方 §验证 与 §教训固化机制 执行。
 - 提交走分支 + PR，提交信息沿用仓库既有风格（`feat:` / `fix:` / `docs:` / `chore:`）。
 
 ## 发版流程（SemVer + Keep a Changelog）
@@ -16,3 +16,20 @@
    gh release create vX.Y.Z --title "vX.Y.Z — 一句话主题" --notes-file <notes.md> --latest
    ```
 4. 确认 README 的 Release 徽章动态显示新版本；**社交封面绝不印版本号**（版本由徽章动态显示）。
+
+## 验证（改动的最低门槛）
+
+- **组件级**：每个参数化函数必须有 (a) 渲染断言（关键元素计数/文本存在），(b) 负向测试（非法输入抛 ValueError）。
+- **页级**：`python3 assets/tools/lint_svg.py <svg目录>` 五项预检全过（tofu / rotate / 精确超宽 / 页脚一致 / 中文引号）。
+- **转换级**：`svg_to_pptx_wrapper` 转换成功，且 PPTX 形状数 ≥ SVG 元素数（空字符串文本被跳过属良性）。
+- **回归级**：改动既有函数时，用受影响版式的成品页（如世界杯 deck 对应页）做像素 diff——默认路径必须字节级/像素级一致，除非改动本身就是要改渲染结果。
+
+## 教训固化机制（禁止追加式教训堆）
+
+任何实战教训**必须在当轮落到以下三选一**，不允许以"补遗 / LESSONS / 实测教训清单"等形式追加堆叠：
+
+1. **代码级**：能由函数保证的，写进函数（常量锁定、布局规则、自动换挡），并配断言防回归；
+2. **校验级**：能自动检查的，进 `tools/lint_svg.py` 或函数入参校验（抛 ValueError）；
+3. **规范级**：只能约束生成行为的，**改写进对应规范文件的正文条目**（designer-rules / chart-impl / 各骨架章节），融入既有结构，不带"vX.X 补遗"字样。
+
+判据：新读者只读现行文件就能正确执行，不需要知道任何历史。演进过程只记 `CHANGELOG.md`。

@@ -1,116 +1,58 @@
-# SVG Skeleton · A系版式骨架（动作（Action））
+# SVG Skeleton · A系版式骨架（行动（Action））
 
-> Phase 7 按版式ID读取本文件。使用规则：复制骨架→替换[占位符]→不改坐标。
-> 通用骨架（Chrome框架/卡片/箭头）见 svg-skeleton-common.md。
-
----
-
-## ### A-01 下一步三步决策
-```svg
-<!-- 标准Chrome -->
-
-<!-- STEP 1：x=40 y=160 w=380 h=400 -->
-<rect x="40" y="160" width="380" height="400" rx="4" fill="#F3F3F3"/>
-<rect x="40" y="160" width="4" height="400" fill="#262626"/>
-<text x="60" y="192" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="3">STEP 01 · [step1_time]</text>
-<text x="60" y="236" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#262626">[step1_action]</text>
-<text x="60" y="268" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[step1_detail1]</text>
-<text x="60" y="292" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[step1_detail2]</text>
-<text x="60" y="316" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[step1_detail3]</text>
-
-<!-- STEP 2：x=450 y=160 w=380 h=400 -->
-<rect x="450" y="160" width="380" height="400" rx="4" fill="#F3F3F3"/>
-<rect x="450" y="160" width="4" height="400" fill="#262626"/>
-<text x="470" y="192" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="3">STEP 02 · [step2_time]</text>
-<text x="470" y="236" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#262626">[step2_action]</text>
-<text x="470" y="268" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[step2_detail1]</text>
-<text x="470" y="292" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[step2_detail2]</text>
-<text x="470" y="316" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[step2_detail3]</text>
-
-<!-- STEP 3：x=860 y=160 w=380 h=400 -->
-<rect x="860" y="160" width="380" height="400" rx="4" fill="#262626"/>
-<rect x="860" y="160" width="4" height="400" fill="#336EE8"/>
-<text x="880" y="192" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#C4C4C4" letter-spacing="3">STEP 03 · [step3_time]</text>
-<text x="880" y="236" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#FFFFFF">[step3_action]</text>
-<text x="880" y="268" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF">[step3_detail1]</text>
-<text x="880" y="292" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF">[step3_detail2]</text>
-<text x="880" y="316" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#FFFFFF">[step3_detail3]</text>
-```
+> Phase 7 按版式 ID 读取本文件。参数化版式返回内容区 body，由 `themes.chrome` 包裹。
 
 ---
 
-## ## A-02 是/否选择矩阵
-```svg
-<!-- 标准Chrome -->
+## A-01 下一步三步决策（参数化 · layouts.py）
 
-<!-- 选项A（推荐）：x=40 y=140 w=1200 h=220 -->
-<rect x="40" y="140" width="1200" height="220" rx="4" fill="#F3F3F3"/>
-<rect x="40" y="140" width="5" height="220" fill="#262626"/>
-<text x="62" y="174" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="3">OPTION A · 推荐</text>
-<text x="62" y="222" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="bold" fill="#262626">[option_a_title]</text>
-<text x="62" y="260" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#6E6E6E">[option_a_desc1]</text>
-<text x="62" y="284" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#6E6E6E">[option_a_desc2]</text>
-<!-- 右侧标注 -->
-<text x="1180" y="222" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#5A7A60">[option_a_pros]</text>
-<text x="1180" y="252" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#9E3D31">[option_a_cons]</text>
-
-<!-- 中间分隔 -->
-<text x="640" y="392" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#9B9B9B">或者</text>
-<line x1="100" y1="392" x2="500" y2="392" stroke="#E7E7E7" stroke-width="0.5"/>
-<line x1="780" y1="392" x2="1180" y2="392" stroke="#E7E7E7" stroke-width="0.5"/>
-
-<!-- 选项B（备选）：x=40 y=410 w=1200 h=220 -->
-<rect x="40" y="410" width="1200" height="220" rx="4" fill="#F3F3F3"/>
-<rect x="40" y="410" width="5" height="220" fill="#9B9B9B"/>
-<text x="62" y="444" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#9B9B9B" letter-spacing="3">OPTION B · 备选</text>
-<text x="62" y="492" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="bold" fill="#6E6E6E">[option_b_title]</text>
-<text x="62" y="530" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#9B9B9B">[option_b_desc1]</text>
-<text x="62" y="554" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" fill="#9B9B9B">[option_b_desc2]</text>
-<text x="1180" y="492" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#5A7A60">[option_b_pros]</text>
-<text x="1180" y="522" text-anchor="end" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#9E3D31">[option_b_cons]</text>
-```
+**用途**：三步行动卡并列，末步深色收束——把结论落成时间化的动作。
+**适用场景**：会后行动/近期计划；多步长排期 → A-90 / S-03。
+**用法**：`layouts.three_steps(steps)`——steps=[(时间标注, 行动, [细节 1–3 行])] **固定 3 步**（函数强制，版式语义即三步），末步自动深色+蓝条。
+**来源**：通用商务惯例（next steps 三步式），无单一可考原版。
+**纪律**：每步必须有时间标注与可执行动词。
 
 ---
 
-## ### A-03 责任矩阵
-```svg
-<!-- 标准Chrome -->
+## A-02 是/否选择矩阵（参数化 · layouts.py）
 
-<!-- 表头行：y=120 h=44 -->
-<rect x="40" y="120" width="1200" height="44" rx="0" fill="#262626"/>
-<text x="60" y="148" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF">行动事项</text>
-<text x="680" y="148" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF">责任方</text>
-<text x="980" y="148" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" font-weight="bold" fill="#FFFFFF">截止时间</text>
+**用途**：A（推荐）/ B（备选）两选项对置 + 各自 pros/cons，请求单选决策。
+**适用场景**：二选一决策页；多方案对比 → S-08 / S-02。
+**用法**：`layouts.option_ab(a, b_, a_tag, b_tag)`——a / b_ = (标题, 描述×2, pros, cons)；B 选项自动降调（灰条+降墨）。pros/cons 语义色为骨架冻结值（绿/绛）。
+**来源**：通用商务惯例（option A/B 决策页），无单一可考原版。
+**纪律**：两选项必须互斥；推荐位固定 A（阅读起点）。
 
-<!-- 数据行1：y=164 h=60，奇数行填色 -->
-<rect x="40" y="164" width="1200" height="60" fill="#FFFFFF"/>
-<line x1="40" y1="224" x2="1240" y2="224" stroke="#E7E7E7" stroke-width="0.5"/>
-<text x="60" y="192" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[action_1]</text>
-<text x="60" y="212" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E">[action_1_detail]</text>
-<text x="680" y="198" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[owner_1]</text>
-<text x="980" y="198" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#9E3D31">[deadline_1]</text>
+---
 
-<!-- 数据行2：y=224 h=60，偶数行白色 -->
-<rect x="40" y="224" width="1200" height="60" fill="#FFFFFF"/>
-<line x1="40" y1="284" x2="1240" y2="284" stroke="#E7E7E7" stroke-width="0.5"/>
-<text x="60" y="252" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[action_2]</text>
-<text x="60" y="272" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E">[action_2_detail]</text>
-<text x="680" y="258" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[owner_2]</text>
-<text x="980" y="258" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#9E3D31">[deadline_2]</text>
+## A-03 责任清单
 
-<!-- 数据行3：y=284 h=60，奇数行 -->
-<rect x="40" y="284" width="1200" height="60" fill="#FFFFFF"/>
-<line x1="40" y1="344" x2="1240" y2="344" stroke="#E7E7E7" stroke-width="0.5"/>
-<text x="60" y="312" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[action_3]</text>
-<text x="60" y="332" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E">[action_3_detail]</text>
-<text x="680" y="318" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[owner_3]</text>
-<text x="980" y="318" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#9E3D31">[deadline_3]</text>
+**用途**：行动分工表。
+**适用场景**：**简版三列清单（行动/责任方/截止）→ 轻量**；**标准 RACI（多角色权责矩阵）→ 高阶**。
+**用法**：轻量 `layouts.action_table(actions)`——actions=[(行动, 细节, 责任方, 截止)] **3–6 行**（函数强制）。
+高阶 `structures.raci_matrix(x, y, w, h, tasks, roles, cells)`——**每行恰好一个 A 由函数强制校验**（违反抛错）。
+**来源**：RACI 规范——每行唯一 Accountable（PMBOK 惯例/Wikipedia/康奈尔大学模板，对标评估）；轻量清单为通用简化。
+**纪律**：截止时间必须具体到日；R 可多个、A 恰一个。
 
-<!-- 数据行4：y=344 h=60 -->
-<rect x="40" y="344" width="1200" height="60" fill="#FFFFFF"/>
-<line x1="40" y1="404" x2="1240" y2="404" stroke="#E7E7E7" stroke-width="0.5"/>
-<text x="60" y="372" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[action_4]</text>
-<text x="60" y="392" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E">[action_4_detail]</text>
-<text x="680" y="378" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[owner_4]</text>
-<text x="980" y="378" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#9E3D31">[deadline_4]</text>
-```
+---
+
+## A-90 阶段×泳道路线图（参数化 · structures.py）
+
+**用途**：3–6 条并行 workstream 的时间/相位路线图 + Today 线 + 状态 + 里程碑。
+**适用场景**：多线并行排期与决策会评审。
+**用法**：`structures.swimlane_roadmap(x, y, w, h, lanes, total_units, today, milestones, deps, unit_label, legend, mode, bucket_names)`——三渲染模式：
+- `mode="gantt"`（默认）：精确时间轴 + 矩形块；
+- `mode="chevron"`：块画雪佛龙形，强调相位推进而非精确日期；
+- `mode="phase_bucket"`：BCG 达拉斯式相位分桶（默认五桶 立即行动/速赢/战略优先/中期举措/长期机会，对应 Immediate Actions / Quick Wins / Strategic Priorities / Medium-term Initiatives / Long-term Opportunities），**禁 today/milestones**（函数强制）——日期不确定时比假装精确更诚实。
+lanes=[(泳道名, [(块名, start, dur, status)])]，status ∈ committed/planned/proposed。
+**来源**：调研1——泳道 3–6 最佳、Today 线、Committed/Planned/Proposed 状态防过度承诺、NHS England API 交付流程为实例；分桶五相位=BCG 达拉斯公开报告。
+**纪律**：块长四舍五入到半月粒度（近似比假装精确诚实）；日期完全不确定 → `mode="phase_bucket"`；执行层细节放附录。
+
+---
+
+## A-91 FTE 爬坡（参数化 · charts.py）
+
+**用途**：分波次的人力/资源爬坡（堆叠面积/柱）+ 决策门。
+**适用场景**：投入爬坡与 stage-gate 决策叙事。
+**用法**：`charts.fte_ramp(x, y, w, h, periods, waves, wave_names, gates, unit)`——**时间点 ≥10 自动切堆叠面积、<10 用堆叠柱**（调研纪律内置）；gates=[(期索引, 门名, 决策)]。
+**来源**：调研1——stacked area + wave 虚线 + stage-gate 三角；<10 期退化为 column 的纪律；Stage-Gate 概念源 Cooper 1988/1990。
+**纪律**：图例右上（图表底部 ≤2 层，chart-impl 硬性规定）；波次与门必须有口径来源或标注演示编排。

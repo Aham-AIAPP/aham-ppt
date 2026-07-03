@@ -1,134 +1,64 @@
 # SVG Skeleton · E系版式骨架（说明（Explain））
 
-> Phase 7 按版式ID读取本文件。使用规则：复制骨架→替换[占位符]→不改坐标。
-> 通用骨架（Chrome框架/卡片/箭头）见 svg-skeleton-common.md。
+> Phase 7 按版式 ID 读取本文件。参数化版式返回内容区 body，由 `themes.chrome` 包裹。
 
 ---
 
-## ## E-01 左图右文（55:45）
-```svg
-<!-- 标准Chrome -->
+## E-01 左图右文（栅格直排）
 
-<!-- 图形区：x=40 y=140 w=660 h=480（此处留占位框，AI填入实际图形SVG） -->
-<rect x="40" y="140" width="660" height="480" rx="4" fill="#F3F3F3" stroke="#E7E7E7" stroke-width="0.5"/>
-<text x="370" y="388" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#9B9B9B">[此处替换为实际图形SVG代码]</text>
-
-<!-- 右侧文字区：x=740 y=140 w=500 h=480 -->
-<text x="740" y="172" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="2">[right_tag]</text>
-<line x1="740" y1="182" x2="880" y2="182" stroke="#9B9B9B" stroke-width="1.5"/>
-<text x="740" y="224" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="bold" fill="#262626">[right_title_line1]</text>
-<text x="740" y="258" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="bold" fill="#262626">[right_title_line2]</text>
-<line x1="740" y1="276" x2="1224" y2="276" stroke="#E7E7E7" stroke-width="0.5"/>
-<rect x="740" y="296" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="752" y="306" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[right_bullet1]</text>
-<rect x="740" y="320" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="752" y="330" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[right_bullet2]</text>
-<rect x="740" y="344" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="752" y="354" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[right_bullet3]</text>
-<rect x="740" y="368" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="752" y="378" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[right_bullet4]</text>
-```
+**用途**：实拍图/示意图 + 右栏文字说明。
+**适用场景**：需要真实画面支撑的说明页；纯数据图表 → V 系。
+**用法**：grid §3.2 图文混排硬性比例（图 x=40,w=700 / 文 x=756,w=484，或 TWO-EQ）；图占位调 `components.placeholder(x, y, w, h, label)`（禁 AI 生成图/网图）；右栏用 common 构件层级。**禁止图形占比 <40% 或 >75%**。
+**来源**：栅格系统 + 通用图文页。
+**纪律**：图必须有授权来源或明确占位待替换。
 
 ---
 
-## ## E-02 概念曲线图
-```svg
-<!-- 标准Chrome -->
+## E-02 概念曲线（参数化 · layouts.py）
 
-<!-- 坐标系 -->
-<line x1="140" y1="560" x2="140" y2="180" stroke="#262626" stroke-width="2"/>
-<line x1="140" y1="560" x2="820" y2="560" stroke="#262626" stroke-width="2"/>
-<text x="60" y="178" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[y_label]</text>
-<text x="830" y="566" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[x_label]</text>
-
-<!-- 三段曲线 -->
-<path d="M 160 540 Q 220 520, 280 460 T 380 390" stroke="#5A7A60" stroke-width="4.5" fill="none"/>
-<path d="M 380 390 Q 450 360, 510 352 T 580 370" stroke="#8A7333" stroke-width="4.5" fill="none"/>
-<path d="M 580 370 Q 650 330, 720 280" stroke="#9B9B9B" stroke-width="4.5" fill="none" stroke-dasharray="6,4"/>
-
-<!-- 当前位置标记 -->
-<circle cx="580" cy="370" r="11" fill="#9E3D31"/>
-<line x1="580" y1="360" x2="580" y2="272" stroke="#9E3D31" stroke-width="1.2" stroke-dasharray="3,3"/>
-<text x="558" y="252" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" font-weight="bold" fill="#9E3D31">[current_label]</text>
-
-<!-- 三阶段标签 -->
-<text x="270" y="592" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#5A7A60">[stage1_label]</text>
-<text x="460" y="592" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#8A7333">[stage2_label]</text>
-<text x="650" y="592" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[stage3_label]</text>
-
-<!-- 右侧结论文字 -->
-<text x="900" y="290" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="bold" fill="#262626">[conclusion_line1]</text>
-<text x="900" y="326" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24" font-weight="bold" fill="#262626">[conclusion_line2]</text>
-<line x1="900" y1="344" x2="1224" y2="344" stroke="#E7E7E7" stroke-width="0.5"/>
-<text x="900" y="372" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[right_desc1]</text>
-<text x="900" y="396" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#6E6E6E">[right_desc2]</text>
-```
+**用途**：单条三段概念曲线（爬升→平台→冲顶虚线）+ 当前位置 + 右侧结论——定性趋势叙事。
+**适用场景**：概念性阶段判断（在哪个阶段/接下来如何）；**量化数据 → V 系 charts**；多条 S 曲线错峰 → E-91。
+**用法**：`layouts.concept_curve(y_label, x_label, stage_labels×3, current_label, conclusion_lines, right_descs)`——三段形态与语义色（绿爬升/褐平台/灰虚冲顶、红当前点）为骨架冻结值；**恰好 3 段标签**（函数强制）。
+**来源**：通用商务惯例（成熟度/关注度概念曲线），无单一可考原版；三段配色为本库设计。
+**纪律**：页内必须标注"概念示意，非量化"；当前点断言须有依据。
 
 ---
 
-## ### E-03 流程示意图（箭头用polygon，不用marker）
-```svg
-<!-- 标准Chrome -->
+## E-03 流程示意（参数化 · layouts.py）
 
-<!-- 阶段1：x=80 y=260 w=200 h=100 -->
-<rect x="80" y="260" width="200" height="100" rx="4" fill="#F3F3F3" stroke="#9B9B9B" stroke-width="1.5"/>
-<text x="180" y="296" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="bold" fill="#262626" letter-spacing="2">STAGE 01</text>
-<text x="180" y="326" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[stage1_name]</text>
-
-<!-- 箭头（polygon替代marker）：从阶段1到阶段2 -->
-<line x1="280" y1="310" x2="330" y2="310" stroke="#9B9B9B" stroke-width="2"/>
-<polygon points="330,304 342,310 330,316" fill="#262626"/>
-
-<!-- 阶段2：x=342 y=260 w=200 h=100 -->
-<rect x="342" y="260" width="200" height="100" rx="4" fill="#F3F3F3" stroke="#9B9B9B" stroke-width="1.5"/>
-<text x="442" y="296" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="bold" fill="#262626" letter-spacing="2">STAGE 02</text>
-<text x="442" y="326" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[stage2_name]</text>
-
-<!-- 箭头 -->
-<line x1="542" y1="310" x2="592" y2="310" stroke="#9B9B9B" stroke-width="2"/>
-<polygon points="592,304 604,310 592,316" fill="#262626"/>
-
-<!-- 阶段3：x=604 y=260 w=200 h=100 -->
-<rect x="604" y="260" width="200" height="100" rx="4" fill="#F3F3F3" stroke="#9B9B9B" stroke-width="1.5"/>
-<text x="704" y="296" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="bold" fill="#262626" letter-spacing="2">STAGE 03</text>
-<text x="704" y="326" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[stage3_name]</text>
-
-<!-- 箭头 -->
-<line x1="804" y1="310" x2="854" y2="310" stroke="#9B9B9B" stroke-width="2"/>
-<polygon points="854,304 866,310 854,316" fill="#262626"/>
-
-<!-- 阶段4：x=866 y=260 w=200 h=100 -->
-<rect x="866" y="260" width="200" height="100" rx="4" fill="#262626"/>
-<text x="966" y="296" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" font-weight="bold" fill="#C4C4C4" letter-spacing="2">STAGE 04</text>
-<text x="966" y="326" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#FFFFFF">[stage4_name]</text>
-```
+**用途**：3–6 段线性流程框 + 箭头，末段深色收束。
+**适用场景**：单线流程；带量的阶段链 → E-90 雪佛龙；含判断分支 → A-02。
+**用法**：`layouts.stage_flow(stages, dark_last=True)`——stages=[(眉标, 名称)] **3–6 段**（函数强制）；4 段时精确复现骨架坐标；箭头 line+polygon（约束7 禁 marker）。
+**来源**：通用流程图惯例。
+**纪律**：段间必须是先后关系（并列 → S-01）。
 
 ---
 
-## ### E-04 架构层次图
-```svg
-<!-- 标准Chrome -->
+## E-04 分层架构
 
-<!-- 顶层：x=240 y=140 w=800 h=110 -->
-<rect x="240" y="140" width="800" height="110" rx="4" fill="#262626"/>
-<text x="640" y="178" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#C4C4C4" letter-spacing="3">[top_layer_tag]</text>
-<text x="640" y="212" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#FFFFFF">[top_layer_name]</text>
+**用途**：层级结构表达。
+**适用场景**：**概念三层（战略/管理/执行式）→ 轻量**；**真实 IT/系统架构（层内多模块、跨层能力条）→ 高阶**。
+**用法**：轻量 `layouts.tri_layer(layers)`——**固定 3 层**（函数强制），深→中→浅 + 层间下行箭头。
+高阶 `structures.arch_layers(x, y, w, h, layers, pillars, iface_labels, hi_layer)`——layers 自上而下 [(层名, [模块…], 层高权重)]，层内模块等宽网格自动对齐；pillars 纵向能力条（单字逐 text 纵排，非 rotate）；iface_labels 层间接口标记。
+**来源**：高阶依据 TOGAF 四域/经典分层 + 层内组件对上层提供服务（对标评估）；轻量为通用简化。
+**纪律**：轻量层名 ≤8 字；高阶应用层权重最大（如 1.6）。
 
-<!-- 向下箭头 -->
-<line x1="640" y1="250" x2="640" y2="295" stroke="#9B9B9B" stroke-width="2"/>
-<polygon points="634,295 640,307 646,295" fill="#262626"/>
+---
 
-<!-- 中层：x=240 y=307 w=800 h=110 -->
-<rect x="240" y="307" width="800" height="110" rx="4" fill="#6E6E6E"/>
-<text x="640" y="345" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#C4C4C4" letter-spacing="3">[mid_layer_tag]</text>
-<text x="640" y="379" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#FFFFFF">[mid_layer_name]</text>
+## E-90 雪佛龙阶段链（参数化 · consulting.py）
 
-<!-- 向下箭头 -->
-<line x1="640" y1="417" x2="640" y2="462" stroke="#9B9B9B" stroke-width="2"/>
-<polygon points="634,462 640,474 646,462" fill="#9B9B9B"/>
+**用途**：带量的阶段推进链（每段名+数值+副注），可 hi 单段。
+**适用场景**：阶段×数量叙事（各段场次/产能/人数）；无量纯流程 → E-03。
+**用法**：`consulting.chevron_flow(x, y, w, h, stages, hi)`——stages=[(名, 量, 副注)]。
+**来源**：MBB 咨询密集页形体语言（v2.5 调研批次），无单一可考原版。
+**纪律（组合配方）**：元素级版式——主视觉 + 辅助层 ≥1 + 标注层 + So-What（common §D 配额）。
 
-<!-- 底层：x=240 y=474 w=800 h=110 -->
-<rect x="240" y="474" width="800" height="110" rx="4" fill="#C8C8C8"/>
-<text x="640" y="512" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E" letter-spacing="3">[bot_layer_tag]</text>
-<text x="640" y="546" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#262626">[bot_layer_name]</text>
-```
+---
+
+## E-91 三地平线（参数化 · charts.py）
+
+**用途**：3–4 条 S 曲线错峰叠加——并行管理的增长/接力叙事。
+**适用场景**：三地平线/技术接力/业务梯队；单条概念曲线 → E-02。
+**用法**：`charts.horizon_curves(x, y, w, h, horizons, hi)`——horizons=[(名, 注)] **3–4 条**（函数硬拦，标准形态依据）。**不带刻度**（概念图不假装量化）。
+**来源**：Three Horizons 框架——Baghai/Coley/White《The Alchemy of Growth》1999（调研2）；官方语义为三层**并行管理**而非先后接棒。
+**纪律**：横轴不标年份刻度；每线配一句注。

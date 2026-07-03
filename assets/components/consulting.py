@@ -16,7 +16,7 @@
      并用 tick_label(level=0/1) 错层避让。
 —— API 约定同 charts.py：传外框 (x,y,w,h)，返回 SVG 字符串，坐标自包含。
 """
-from components import T, L, esc, MONO, SANS, ACC, INK1, INK2, INK3, INK4, LINE, PANEL
+from components import T, L, esc, MONO, ACC, INK1, INK2, INK3, INK4, LINE, PANEL
 import math
 
 GRAY_A = INK3        # 主灰
@@ -119,8 +119,7 @@ def flow_bands(x, y, w, h, sources, target, hi=None, bar_w=110, tgt_w=140):
             s += T(x+bar_w/2, yy+hh/2+4, str(v), 11.5, "#FFFFFF", w=700, fam=MONO, anchor="middle")
         else:
             s += T(x+bar_w+8, yy+hh/2+4, str(v), 10.5, col, w=700, fam=MONO)
-        thh = hh*usable/(h if h else 1) * (h/ (total*unit))  # 比例映射
-        thh = hh * usable / (total*unit)
+        thh = hh * usable / (total*unit)   # 汇入带宽与源块同比例
         s += (f'<polygon points="{x+bar_w},{yy} {tx},{tgt_y} {tx},{tgt_y+thh} '
               f'{x+bar_w},{yy+hh}" fill="{col}" opacity="0.28"/>')
         yy += hh + gapy; tgt_y += thh
@@ -181,8 +180,6 @@ def driver_node(x, y, w, h, big, sub, kind="branch"):
     else:
         s = f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="6" fill="#FFFFFF" stroke="{LINE}" stroke-width="1.4"/>'
         s += T(x+w/2, y+h/2+4, sub, 12, INK2, anchor="middle")
-        if big:
-            s = s.replace(f'>{esc(sub)}<', f'>{esc(sub)}<')  # no-op keep simple
     return s
 
 
@@ -212,4 +209,27 @@ def chain_steps(x, y, vals, step=110, r=18, deltas=None, cap=None):
         ex = x + (len(vals)-1)*step + r + 18
         s += f'<rect x="{ex}" y="{y-17}" width="104" height="34" rx="17" fill="{INK1}"/>'
         s += T(ex+52, y+5, cap, 12.5, "#FFFFFF", w=700, anchor="middle")
+    return s
+
+
+# -------------------------------------------------------------------- v2.7 追加
+def driver_op(cx, cy, op, r=11, c=INK1):
+    """驱动树算子记号（G-90 可选专业度升级）：在肘线汇合处标 ×/÷/+/- 运算。
+    纯线画（圆 + line/圆点），不用文字字形，规避 tofu。
+    注意（对标评估实证）：真实咨询驱动树仅 ~4% 显式建模算子——默认不加，
+    仅当页面主论点就是「公式分解」时使用。op ∈ 'x' '/' '+' '-'。"""
+    s = f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#FFFFFF" stroke="{c}" stroke-width="1.6"/>'
+    a = r * 0.48
+    if op == "x":
+        s += L(cx - a, cy - a, cx + a, cy + a, c, 2) + L(cx - a, cy + a, cx + a, cy - a, c, 2)
+    elif op == "+":
+        s += L(cx - a, cy, cx + a, cy, c, 2) + L(cx, cy - a, cx, cy + a, c, 2)
+    elif op == "-":
+        s += L(cx - a, cy, cx + a, cy, c, 2)
+    elif op == "/":
+        s += L(cx - a, cy, cx + a, cy, c, 2)
+        s += f'<circle cx="{cx}" cy="{cy-a*0.95:.1f}" r="1.8" fill="{c}"/>'
+        s += f'<circle cx="{cx}" cy="{cy+a*0.95:.1f}" r="1.8" fill="{c}"/>'
+    else:
+        raise ValueError("op 仅支持 'x' '/' '+' '-'")
     return s

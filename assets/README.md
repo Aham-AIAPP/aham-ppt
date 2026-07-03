@@ -45,7 +45,7 @@ svg_to_native_pptx(svg_files, Path('output.pptx'))
 
 | 文件 | 能力 |
 |---|---|
-| `components.py` | 关系图 / UI 原型原子组件：文本 `T`、面板 `P`、连线 `L`、直/曲箭头、`chip` / `hexagon` / `kpi` / `status`、设备与手机屏 `device_screen` / `phone_screen`、大按钮、占位图、分层蓝图 `blueprint`、泳道 `swimlane`。 |
+| `components.py` | 原子组件：文本 `T`、面板 `P`、连线 `L`、直/曲箭头、`chip` / `hexagon` / `status`、界面占位框 `placeholder`。（v3.0 删除全仓零引用的 6 个旧原型组件） |
 | `charts.py` | 参数化图表：`waterfall` / `bar` / `hbar` / `line` / `funnel` / `gantt` / `bullet` / `stacked` / `slope`。严格遵守 `brand.md §7.5 / §2.4`——灰阶 + 至多一个 `#336EE8` 高亮、无饼图/环形/3D/渐变、正负靠符号+文字双通道、数字 mono。 |
 | `icons.py` | Lucide 风格线性图标库（~40 个）：`ICON` 取图标、`icon_circle` 图标圆；取色传入，不写死品牌色。 |
 | `themes.py` | A / B / C 三档模板：`cover` / `toc` / `section` / `chrome`（A·B 通用）+ `cover_dark` / `section_dark` / `quote_dark`（C·高表现力深色档）。1280×720 画布，依赖 `components.py` / `icons.py`。 |

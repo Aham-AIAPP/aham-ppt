@@ -1,193 +1,73 @@
-# SVG Skeleton · G系版式骨架（结构分解（G））
+# SVG Skeleton · G系版式骨架（结构分解（Graph））
 
-> Phase 7 按版式ID读取本文件。使用规则：复制骨架→替换[占位符]→不改坐标。
-> 通用骨架（Chrome框架/卡片/箭头）见 svg-skeleton-common.md。
-
----
-
-## ### G-01 树状分解图
-```svg
-<!-- 标准Chrome -->
-
-<!-- 顶层节点：居中，x=490 y=120 w=300 h=60 -->
-<rect x="490" y="120" width="300" height="60" rx="4" fill="#262626"/>
-<text x="640" y="156" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">[root_title]</text>
-
-<!-- 竖线：从顶层底部到分支行 -->
-<line x1="640" y1="180" x2="640" y2="240" stroke="#9B9B9B" stroke-width="1.5"/>
-<!-- 横线：连接三个分支 -->
-<line x1="200" y1="240" x2="1080" y2="240" stroke="#9B9B9B" stroke-width="1.5"/>
-
-<!-- 分支1竖线+节点：x=140 y=240 w=220 h=60 -->
-<line x1="200" y1="240" x2="200" y2="270" stroke="#9B9B9B" stroke-width="1.5"/>
-<rect x="90" y="270" width="220" height="60" rx="4" fill="#F3F3F3" stroke="#9B9B9B" stroke-width="1"/>
-<text x="200" y="306" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[branch1_title]</text>
-
-<!-- 分支1子节点1：x=90 y=370 w=100 h=48 -->
-<line x1="140" y1="330" x2="140" y2="370" stroke="#9B9B9B" stroke-width="1"/>
-<rect x="90" y="370" width="100" height="48" rx="3" fill="#F3F3F3" stroke="#C4C4C4" stroke-width="0.5"/>
-<text x="140" y="399" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#262626">[leaf1_1]</text>
-
-<!-- 分支1子节点2：x=200 y=370 w=100 h=48 -->
-<line x1="250" y1="330" x2="250" y2="370" stroke="#9B9B9B" stroke-width="1"/>
-<rect x="200" y="370" width="100" height="48" rx="3" fill="#F3F3F3" stroke="#C4C4C4" stroke-width="0.5"/>
-<text x="250" y="399" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#262626">[leaf1_2]</text>
-
-<!-- 分支2竖线+节点：居中 x=530 y=270 w=220 h=60 -->
-<line x1="640" y1="240" x2="640" y2="270" stroke="#9B9B9B" stroke-width="1.5"/>
-<rect x="530" y="270" width="220" height="60" rx="4" fill="#F3F3F3" stroke="#9B9B9B" stroke-width="1"/>
-<text x="640" y="306" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[branch2_title]</text>
-
-<!-- 分支2子节点1 -->
-<line x1="580" y1="330" x2="580" y2="370" stroke="#9B9B9B" stroke-width="1"/>
-<rect x="530" y="370" width="100" height="48" rx="3" fill="#F3F3F3" stroke="#C4C4C4" stroke-width="0.5"/>
-<text x="580" y="399" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#262626">[leaf2_1]</text>
-
-<!-- 分支2子节点2 -->
-<line x1="690" y1="330" x2="690" y2="370" stroke="#9B9B9B" stroke-width="1"/>
-<rect x="640" y="370" width="100" height="48" rx="3" fill="#F3F3F3" stroke="#C4C4C4" stroke-width="0.5"/>
-<text x="690" y="399" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#262626">[leaf2_2]</text>
-
-<!-- 分支3竖线+节点：x=970 y=270 w=220 h=60 -->
-<line x1="1080" y1="240" x2="1080" y2="270" stroke="#9B9B9B" stroke-width="1.5"/>
-<rect x="970" y="270" width="220" height="60" rx="4" fill="#F3F3F3" stroke="#9B9B9B" stroke-width="1"/>
-<text x="1080" y="306" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="14" font-weight="bold" fill="#262626">[branch3_title]</text>
-
-<!-- 分支3子节点1 -->
-<line x1="1020" y1="330" x2="1020" y2="370" stroke="#9B9B9B" stroke-width="1"/>
-<rect x="970" y="370" width="100" height="48" rx="3" fill="#F3F3F3" stroke="#C4C4C4" stroke-width="0.5"/>
-<text x="1020" y="399" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#262626">[leaf3_1]</text>
-
-<!-- 分支3子节点2 -->
-<line x1="1130" y1="330" x2="1130" y2="370" stroke="#9B9B9B" stroke-width="1"/>
-<rect x="1080" y="370" width="100" height="48" rx="3" fill="#F3F3F3" stroke="#C4C4C4" stroke-width="0.5"/>
-<text x="1130" y="399" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#262626">[leaf3_2]</text>
-
-<!-- 底部说明文字区 y=460 -->
-<text x="200" y="470" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[branch1_desc]</text>
-<text x="640" y="470" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[branch2_desc]</text>
-<text x="1080" y="470" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[branch3_desc]</text>
-```
-
-**占位符说明：**
-- `[root_title]`：顶层核心概念（≤10字）
-- `[branch1/2/3_title]`：三个分支标题（≤8字）
-- `[leaf1_1]` 等：叶节点（≤6字）
-- `[branch1/2/3_desc]`：分支补充说明（≤15字，可选）
+> Phase 7 按版式 ID 读取本文件。参数化版式返回内容区 body，由 `themes.chrome` 包裹。
 
 ---
 
-## ### G-02 三支柱并立
-```svg
-<!-- 标准Chrome -->
+## G-01 树状分解 · issue tree（参数化 · structures.py）
 
-<!-- 支柱1：x=40 y=130 w=370 h=520，左侧竖线强调 -->
-<rect x="40" y="130" width="370" height="520" rx="4" fill="#F3F3F3"/>
-<rect x="40" y="130" width="5" height="520" fill="#262626"/>
-
-<!-- 支柱1顶部标签+大字 -->
-<text x="225" y="170" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="2">[pillar1_tag]</text>
-<text x="225" y="230" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="36" font-weight="bold" fill="#262626">[pillar1_title]</text>
-<line x1="65" y1="250" x2="390" y2="250" stroke="#C4C4C4" stroke-width="0.5"/>
-
-<!-- 支柱1要点（每条y递增32） -->
-<rect x="65" y="268" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="76" y="279" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar1_point1]</text>
-<rect x="65" y="300" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="76" y="311" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar1_point2]</text>
-<rect x="65" y="332" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="76" y="343" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar1_point3]</text>
-<rect x="65" y="364" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="76" y="375" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar1_point4]</text>
-
-<!-- 支柱1底部结论 -->
-<rect x="55" y="570" width="340" height="60" rx="3" fill="#262626"/>
-<text x="225" y="606" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">[pillar1_conclusion]</text>
-
-<!-- 支柱2：x=455 y=130 w=370 h=520 -->
-<rect x="455" y="130" width="370" height="520" rx="4" fill="#F3F3F3"/>
-<rect x="455" y="130" width="5" height="520" fill="#262626"/>
-<text x="640" y="170" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="2">[pillar2_tag]</text>
-<text x="640" y="230" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="36" font-weight="bold" fill="#262626">[pillar2_title]</text>
-<line x1="480" y1="250" x2="805" y2="250" stroke="#C4C4C4" stroke-width="0.5"/>
-<rect x="480" y="268" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="491" y="279" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar2_point1]</text>
-<rect x="480" y="300" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="491" y="311" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar2_point2]</text>
-<rect x="480" y="332" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="491" y="343" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar2_point3]</text>
-<rect x="480" y="364" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="491" y="375" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar2_point4]</text>
-<rect x="470" y="570" width="340" height="60" rx="3" fill="#262626"/>
-<text x="640" y="606" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">[pillar2_conclusion]</text>
-
-<!-- 支柱3：x=870 y=130 w=370 h=520 -->
-<rect x="870" y="130" width="370" height="520" rx="4" fill="#F3F3F3"/>
-<rect x="870" y="130" width="5" height="520" fill="#262626"/>
-<text x="1055" y="170" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#262626" letter-spacing="2">[pillar3_tag]</text>
-<text x="1055" y="230" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="36" font-weight="bold" fill="#262626">[pillar3_title]</text>
-<line x1="895" y1="250" x2="1220" y2="250" stroke="#C4C4C4" stroke-width="0.5"/>
-<rect x="895" y="268" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="906" y="279" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar3_point1]</text>
-<rect x="895" y="300" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="906" y="311" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar3_point2]</text>
-<rect x="895" y="332" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="906" y="343" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar3_point3]</text>
-<rect x="895" y="364" width="3" height="14" rx="1" fill="#9B9B9B"/>
-<text x="906" y="375" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#262626">[pillar3_point4]</text>
-<rect x="885" y="570" width="340" height="60" rx="3" fill="#262626"/>
-<text x="1055" y="606" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#FFFFFF">[pillar3_conclusion]</text>
-```
-
-**占位符说明：**
-- `[pillar1/2/3_tag]`：支柱标签（如"战略层" "执行层"，≤6字，大写字母或中文）
-- `[pillar1/2/3_title]`：支柱标题（≤6字）
-- `[pillar1/2/3_point1~4]`：每条要点（≤18字）
-- `[pillar1/2/3_conclusion]`：底部结论（≤20字）
+**用途**：定性问题的 MECE 分解树（根/支/叶三列严格对齐）。
+**适用场景**：归因/拆解论证；**指标数学分解且节点带数值 → G-90 驱动树**（公式天然 MECE，最可靠）。
+**用法**：`structures.issue_tree(x, y, w, h, root, branches, hyp_tag="假设")`——branches=[(支名, [叶 或 (叶, True=假设)])]；父节点纵向居中于子组、支组间虚线分隔（MECE 视觉分组）、假设叶虚线框+角标。
+**来源**：麦肯锡 issue tree 规范（对标评估：树形对齐是 AI 手画弱项 P0 → 参数化保证；"公式天然 MECE"引 Hacking the Case Interview）。
+**纪律**：分支 3–5 / 每支叶 ≤4（超出拆页，文档纪律不硬拦）；同层同抽象度；组间虚线只是提示，MECE 靠内容自查。组合配方：主视觉 + 标注层（mark_ellipse 圈重点假设 / leader 引验证方式）+ So-What。
 
 ---
 
-## ### G-03 层级金字塔
-```svg
-<!-- 标准Chrome -->
+## G-02 支柱并立（参数化 · layouts.py）
 
-<!-- 金字塔层1（顶层·最重要）：梯形 用polygon -->
-<!-- 顶层梯形：上宽400，下宽560，居中于x=640，y=120，高=110 -->
-<polygon points="440,120 840,120 870,230 410,230" fill="#262626"/>
-<text x="640" y="165" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#C4C4C4" letter-spacing="2">[layer1_tag]</text>
-<text x="640" y="200" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="bold" fill="#FFFFFF">[layer1_title]</text>
+**用途**：2–4 根支柱并立（默认 3），柱内 tag+标题+要点+底部深墨结论块。
+**适用场景**：几大支柱/维度的并列论证；层级关系 → G-03 / E-04。
+**用法**：`layouts.pillars(items)`——items=[(标题, 眉标, [要点 ≤4], 结论)] **2–4 柱**（函数强制），3 柱时精确复现骨架坐标。
+**来源**：通用商务惯例（pillar 页），无单一可考原版。
+**纪律**：柱间必须真并列；每柱结论是判断句。
 
-<!-- 层2：上宽560，下宽720，y=236，高=110 -->
-<polygon points="410,236 870,236 910,346 370,346" fill="#6E6E6E"/>
-<text x="640" y="281" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#C4C4C4" letter-spacing="2">[layer2_tag]</text>
-<text x="640" y="316" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="bold" fill="#FFFFFF">[layer2_title]</text>
+---
 
-<!-- 层3：上宽720，下宽880，y=352，高=110 -->
-<polygon points="370,352 910,352 950,462 330,462" fill="#C8C8C8"/>
-<text x="640" y="397" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E" letter-spacing="2">[layer3_tag]</text>
-<text x="640" y="432" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="bold" fill="#262626">[layer3_title]</text>
+## G-03 层级金字塔（参数化 · layouts.py）
 
-<!-- 层4（底层·最基础）：上宽880，下宽1040，y=468，高=110 -->
-<polygon points="330,468 950,468 990,578 290,578" fill="#E7E7E7"/>
-<text x="640" y="513" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E" letter-spacing="2">[layer4_tag]</text>
-<text x="640" y="548" text-anchor="middle" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="bold" fill="#262626">[layer4_title]</text>
+**用途**：纯层级堆叠金字塔（层名+短说明），深→浅。
+**适用场景**：层级/稀缺度表达；**每层多要素切格 / 右侧逐层 takeaway → G-93 剖面金字塔**。
+**用法**：`layouts.pyramid_light(layers)`——layers=[(眉标, 标题, 右注或 None)] **3–5 层**（函数强制），4 层时精确复现骨架 polygon 与引线坐标；颜色梯度内置勿改。
+**来源**：通用商务惯例（金字塔层级页）；Bain 价值要素金字塔等正式框架走 G-93。
+**纪律**：顶层最稀缺/最深色的语义不可倒置。
 
-<!-- 右侧注释（每层对齐） -->
-<line x1="875" y1="175" x2="960" y2="175" stroke="#C4C4C4" stroke-width="0.5" stroke-dasharray="3,3"/>
-<text x="970" y="180" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[layer1_desc]</text>
+---
 
-<line x1="915" y1="291" x2="960" y2="291" stroke="#C4C4C4" stroke-width="0.5" stroke-dasharray="3,3"/>
-<text x="970" y="296" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[layer2_desc]</text>
+## G-90 驱动树（参数化 · consulting.py）
 
-<line x1="955" y1="407" x2="960" y2="407" stroke="#C4C4C4" stroke-width="0.5" stroke-dasharray="3,3"/>
-<text x="970" y="412" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[layer3_desc]</text>
+**用途**：指标的数学分解树（节点带数值），可选算子记号。
+**适用场景**：总量=因子×因子 的量化拆解；定性归因 → G-01。
+**用法**：`consulting.driver_node / driver_elbow / driver_op`——算子（×÷+−）**默认不加**：实证依据（对标评估引 Matthies, arXiv 2512.14740，161 个真实驱动树样本）仅约 4% 显式建模算子；仅当页面主论点就是「公式分解」时使用。
+**来源**：VDMN 学术源（Matthies）+ DuPont/ROIC 经典分解（对标评估）。
+**纪律**：根值=子值可复算（页内给自洽校验）；组合配方同 D 层配额。
 
-<line x1="990" y1="523" x2="1000" y2="523" stroke="#C4C4C4" stroke-width="0.5" stroke-dasharray="3,3"/>
-<text x="1010" y="528" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#6E6E6E">[layer4_desc]</text>
-```
+---
 
-**占位符说明：**
-- `[layer1/2/3/4_tag]`：层级标签（如"战略" "管理" "执行" "操作"，≤4字）
-- `[layer1/2/3/4_title]`：层级名称（≤8字）
-- `[layer1/2/3/4_desc]`：右侧说明（≤20字，可选留空）
-- **注意**：顶层(layer1)颜色最深，向下逐渐变浅，已预设好，不修改颜色
+## G-91 论证阶梯（参数化 · structures.py）
+
+**用途**：论据逐级累加 → 收敛到结论框（金字塔原理的横向 buildup）。
+**适用场景**：3 步式强论证收束页。
+**用法**：`structures.argument_ladder(x, y, w, h, steps, conclusion)`——steps=[(论点, 证据)]；横向左→右累加（调研1：比纯纵向阶梯更符合阅读动线）。
+**来源**：金字塔原理（Minto 1985/1996，调研1）；横向 buildup 变体为调研1 明确推荐。
+**纪律**：每级论据须有出处（配 footnote_band）；结论是论据的归纳而非新信息。
+
+---
+
+## G-92 服务蓝图（参数化 · structures.py）
+
+**用途**：5 泳道服务蓝图（物理证据/客户行为/前台/后台/支持系统）+ 3 条分界线。
+**适用场景**：服务/体验流程的跨层设计图。
+**用法**：`structures.service_blueprint(x, y, w, h, steps, rows, arrows)`——**固定 5 泳道**（函数硬拦）；互动线/可见性线/内部互动线位置由函数 BOUNDS 常量锁定，**勿手画**（历史实测：照抄规范也会错一层）。
+**来源**：Shostack 1984（HBR No. 84115，蓝图原始文献）；5 泳道=Zeithaml/Bitner 规范；3 分界线=NN/g 定义（调研2）。
+**纪律**：rows 语义顺序不可换；跨泳道箭头 ≤2。
+
+---
+
+## G-93 剖面金字塔（参数化 · structures.py）
+
+**用途**：分层金字塔 × 层内要素切格 × 右侧逐层 takeaway 的复合剖面。
+**适用场景**：价值分层/需求分层的正式框架呈现。
+**用法**：`structures.layered_pyramid(x, y, w, h, layers, takeaways, hi_layer)`——layers=[(层名, [要素…])] 自上而下。
+**来源**：Bain 价值要素金字塔（HBR R1609C, 2016：4 层 30 要素）为形态原型；"层内切格+右注"复合结构为合理杂交，**无单一可考原版**（调研2 判定）。
+**纪律**：层内要素数自上而下递增（稀缺度语义）；takeaway 与层一一对应。

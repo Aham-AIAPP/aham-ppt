@@ -59,7 +59,7 @@
 
 <img src="assets/shots/consulting-skin.png" alt="同一真源换肤对比" width="100%">
 
-> 完整 11 页样张 + 可编辑版 → [aham-ppt-v6.1-demo.pptx](examples/aham-ppt-v6.1-demo.pptx)　·　世界杯十页样张（SVG 真源 + 双配色 PPTX）→ [examples/consulting/](examples/consulting/)
+> 历史样张与可编辑 PPTX（11 页示例 + 世界杯十页双配色）存档于 [v2.5.2 tag](https://github.com/li599198347-svg/aham-ppt/tree/v2.5.2/examples)；v3.0 起版式收敛为参数化函数（43 版式），不再随仓库携带示例产物。
 
 ## 开始使用
 

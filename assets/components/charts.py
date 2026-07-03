@@ -395,3 +395,244 @@ def slope(x, y, w, h, items, label_left="前", label_right="后", hi_index=None,
         s.append(T(lx - 10, yl + 4, f"{name} {_fmt(vl, money)}", 11, tc, anchor="end"))
         s.append(T(rx + 10, yr + 4, _fmt(vr, money), 11, tc, 700, fam=MONO))
     return "".join(s)
+
+
+# ==================================================================== v2.7 追加
+# 依据 2026-07 版式库对标评估 + 两批版式调研（Wave 1–3）。追加式扩展：
+# 上方 9 个既有图表函数一行未动。
+
+def sparkline(x, y, w, h, values, hi_last=True, baseline=None):
+    """迷你趋势线（无轴无标签，Few 式 KPI 卡内嵌用；也可独立点缀表格行）。"""
+    n = len(values)
+    if n < 2:
+        return ""
+    vmax, vmin = max(values), min(values)
+    rng = (vmax - vmin) or 1.0
+    vy = lambda v: y + h - ((v - vmin) / rng) * h
+    vx = lambda i: x + w * (i / (n - 1))
+    s = []
+    if baseline is not None and vmin <= baseline <= vmax:
+        s.append(L(x, vy(baseline), x + w, vy(baseline), INK4, 0.8, dash="3,2"))
+    for i in range(n - 1):
+        s.append(L(vx(i), vy(values[i]), vx(i + 1), vy(values[i + 1]), INK3, 1.6))
+    col = ACC if hi_last else INK1
+    s.append(f'<circle cx="{vx(n-1):.1f}" cy="{vy(values[-1]):.1f}" r="3.2" fill="{col}"/>')
+    return "".join(s)
+
+
+def kpi_card(x, y, w, h, label, value, benchmark=None, trend=None, unit="",
+             bench_label="目标", money=False, hi=False):
+    """Few 式 KPI 卡（S-09 高阶）：当前值 + 对比基准 + 迷你 sparkline + 状态。
+    依据 Stephen Few《Information Dashboard Design》：KPI 不应是孤立数字格。
+    品牌适配：Few 原文的「状态色」在本体系改为**符号+文字双通道**
+    （+/- 号 + 达标/未达字样）——brand 图表铁律禁红绿。"""
+    bc = ACC if hi else LINE
+    s = f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="10" fill="#FFFFFF" stroke="{bc}" stroke-width="{1.8 if hi else 1.2}"/>'
+    if hi:
+        s += f'<rect x="{x}" y="{y}" width="3" height="{h}" rx="1.5" fill="{ACC}"/>'
+    s += T(x + 16, y + 24, label, 12, INK2, w=600)
+    vtxt = _fmt(value, money) + (f" {unit}" if unit else "")
+    s += T(x + 16, y + 58, vtxt, 27, (ACC if hi else INK1), w=700, fam=MONO)
+    if benchmark is not None:
+        d = value - benchmark
+        sign = "+" if d >= 0 else "-"
+        status = "达标" if d >= 0 else "未达"
+        s += T(x + 16, y + 80, f"{bench_label} {_fmt(benchmark, money)}", 10.5, INK3, fam=MONO)
+        s += T(x + w - 16, y + 80, f"{sign}{_fmt(abs(d), money)} {status}", 11,
+               INK1, w=700, fam=MONO, anchor="end")
+    if trend:
+        s += sparkline(x + 16, y + h - 38, w - 32, 24, trend, hi_last=hi,
+                       baseline=benchmark)
+    return s
+
+
+def marimekko(x, y, w, h, columns, seriesnames, wlabel, mode="pct",
+              hi_series=None, money=False, title=None):
+    """Marimekko / Mekko 市场地图（V-94）：列宽 ∝ 列总量、列内分段构成，
+    面积 ∝ 绝对值，gap=0（Mekko 视觉判据）。columns=[(列名, [段值...], 列宽量?)]，
+    列宽量缺省 = sum(段值)；mode='pct' 列高统一 100% / 'abs' 列高 ∝ 列合计
+    （Bar Mekko，此时列宽量必须显式给出）。wlabel（列宽代表什么量）**必填并画出**。
+    纪律（调研）：≤7 列、≤4 段；时间序列/需精确比较勿用。"""
+    if len(columns) > 7:
+        raise ValueError("Marimekko 限 ≤7 列（列宽变化的哈哈镜效应随列数放大）")
+    if len(seriesnames) > 4:
+        raise ValueError("Marimekko 限 ≤4 段（灰阶只有 4 级）")
+    pad_l = 46 if mode == "abs" else 40
+    pad_b, pad_t = 52, (30 if title else 18)
+    px, pyt = x + pad_l, y + pad_t
+    pw, ph = w - pad_l - 14, h - pad_t - pad_b
+    widths, sums = [], []
+    for colm in columns:
+        segs = colm[1]
+        cw_v = colm[2] if (len(colm) > 2 and colm[2] is not None) else sum(segs)
+        if mode == "abs" and (len(colm) < 3 or colm[2] is None):
+            raise ValueError("mode='abs'（Bar Mekko）时每列须显式给列宽量（第 3 元）")
+        widths.append(float(cw_v))
+        sums.append(float(sum(segs)))
+    wtot = sum(widths) or 1.0
+    smax = max(sums) or 1.0
+    grays = ["#C8C8C8", INK3, INK2, INK1]
+    s = []
+    if title:
+        s.append(T(x, y + 16, title, 15, INK1, 700))
+    if mode == "pct":
+        for gv, gl in ((0, "0"), (0.5, "50%"), (1.0, "100%")):
+            gy = pyt + ph * (1 - gv)
+            s.append(L(px, gy, px + pw, gy, LINE, 0.6, dash="2,2"))
+            s.append(T(px - 6, gy + 4, gl, 9.5, INK3, anchor="end", fam=MONO))
+    else:
+        for g in range(1, 4):
+            gv = smax * g / 3.0
+            gy = pyt + ph * (1 - g / 3.0)
+            s.append(L(px, gy, px + pw, gy, LINE, 0.6, dash="2,2"))
+            s.append(T(px - 6, gy + 4, _fmt(gv, money), 9.5, INK3, anchor="end", fam=MONO))
+    cx = px
+    for i, colm in enumerate(columns):
+        label, segs = colm[0], colm[1]
+        cw_ = pw * widths[i] / wtot
+        colh = ph if mode == "pct" else ph * sums[i] / smax
+        ybase = pyt + ph
+        denom = sums[i] or 1.0
+        for k, v in enumerate(segs):
+            segh = colh * (v / denom)
+            col = ACC if k == hi_series else grays[k % len(grays)]
+            s.append(f'<rect x="{cx:.1f}" y="{ybase-segh:.1f}" width="{cw_:.1f}" height="{segh:.1f}" fill="{col}"/>')
+            if segh >= 18 and cw_ >= 44:
+                s.append(T(cx + cw_ / 2, ybase - segh / 2 + 4, f"{v/denom*100:.0f}%",
+                           9.5, "#FFFFFF", 700, anchor="middle", fam=MONO))
+            ybase -= segh
+        s.append(L(cx, pyt + ph - colh, cx, pyt + ph, "#FFFFFF", 1))   # 列间白细线（gap=0）
+        s.append(T(cx + cw_ / 2, pyt + ph - colh - 6, _fmt(widths[i], money), 10.5,
+                   INK1, 700, anchor="middle", fam=MONO))
+        s.append(T(cx + cw_ / 2, pyt + ph + 16, label, 10.5, INK2, anchor="middle"))
+        s.append(T(cx + cw_ / 2, pyt + ph + 30, f"{widths[i]/wtot*100:.0f}%", 9,
+                   INK3, anchor="middle", fam=MONO))
+        cx += cw_
+    s.append(L(px, pyt + ph, px + pw, pyt + ph, INK3, 0.8))
+    lx = px
+    ly = y + h - 8
+    for k, nm in enumerate(seriesnames):
+        col = ACC if k == hi_series else grays[k % len(grays)]
+        s.append(f'<rect x="{lx:.1f}" y="{ly-10}" width="11" height="11" rx="2" fill="{col}"/>')
+        s.append(T(lx + 16, ly, nm, 10.5, INK2))
+        lx += 16 + len(nm) * 12 + 20
+    s.append(T(px + pw, ly, f"列宽 ∝ {wlabel}", 9.5, INK4, anchor="end"))
+    return "".join(s)
+
+
+def fte_ramp(x, y, w, h, periods, waves, wave_names, gates=None, unit="FTE",
+             title=None, force=None):
+    """FTE 人力爬坡（A-91）：波次堆叠 + stage-gate 决策门 + 波次分界虚线。
+    periods=[期名]；waves=[[各期值] × 波次]（自底向上叠）；
+    gates=[(期位置, 门名, 决策语)]，位置以期序 0..n-1 连续值计。
+    选型纪律（Datawrapper）：时间点 <10 自动用堆叠柱，≥10 用堆叠面积；
+    force='area'/'column' 可覆盖。"""
+    from structures import gate as _gate, flag_line as _flag
+    n = len(periods)
+    if any(len(row) != n for row in waves):
+        raise ValueError("每个波次的取值个数必须等于期数")
+    mode = force or ("area" if n >= 10 else "column")
+    pad_l, pad_b, pad_t = 52, 56, (30 if title else 18)
+    px, pyt = x + pad_l, y + pad_t
+    pw, ph = w - pad_l - 16, h - pad_t - pad_b
+    totals = [sum(wv[i] for wv in waves) for i in range(n)]
+    vmax = max(totals) or 1.0
+    vy = lambda v: pyt + ph - (v / vmax) * ph
+    grays = ["#C8C8C8", INK3, INK2, INK1]
+    s = []
+    if title:
+        s.append(T(x, y + 16, title, 15, INK1, 700))
+    s.append(T(px, pyt - 6, unit, 10, INK3))
+    for g in range(1, 4):
+        gv = vmax * g / 3.0
+        s.append(L(px, vy(gv), px + pw, vy(gv), LINE, 0.5, dash="2,2"))
+        s.append(T(px - 8, vy(gv) + 4, _fmt(gv), 10, INK3, anchor="end", fam=MONO))
+    s.append(L(px, pyt, px, pyt + ph, INK3, 0.6))
+    s.append(L(px, pyt + ph, px + pw, pyt + ph, INK3, 0.6))
+    if mode == "area":
+        ux = lambda i: px + pw * (i / (n - 1))
+        cum = [0.0] * n
+        for k, wv in enumerate(waves):
+            lower = cum[:]
+            cum = [cum[i] + wv[i] for i in range(n)]
+            pts = " ".join(f"{ux(i):.1f},{vy(cum[i]):.1f}" for i in range(n))
+            pts += " " + " ".join(f"{ux(i):.1f},{vy(lower[i]):.1f}" for i in range(n - 1, -1, -1))
+            s.append(f'<polygon points="{pts}" fill="{grays[k % 4]}" opacity="0.92"/>')
+        step = max(1, n // 8)
+        for i in range(0, n, step):
+            s.append(T(ux(i), pyt + ph + 16, periods[i], 9.5, INK2, anchor="middle"))
+        pk = totals.index(max(totals))
+        anc = "end" if pk > n * 0.8 else ("start" if pk < n * 0.2 else "middle")
+        s.append(T(ux(pk), vy(totals[pk]) - 8, f"峰值 {_fmt(totals[pk])}", 10.5, INK1, 700,
+                   anchor=anc, fam=MONO))
+        gx = ux
+    else:
+        slot = pw / n
+        bw_ = slot * 0.56
+        for i in range(n):
+            bx = px + i * slot + slot * 0.22
+            ybase = pyt + ph
+            for k, wv in enumerate(waves):
+                segh = (wv[i] / vmax) * ph
+                s.append(f'<rect x="{bx:.1f}" y="{ybase-segh:.1f}" width="{bw_:.1f}" height="{segh:.1f}" fill="{grays[k % 4]}"/>')
+                ybase -= segh
+            s.append(T(bx + bw_ / 2, vy(totals[i]) - 6, _fmt(totals[i]), 10, INK1, 700,
+                       anchor="middle", fam=MONO))
+            s.append(T(bx + bw_ / 2, pyt + ph + 16, periods[i], 9.5, INK2, anchor="middle"))
+        gx = lambda u: px + (u + 0.5) * (pw / n)
+    for (gu, gl, gd) in (gates or []):
+        s.append(_flag(gx(gu), pyt, pyt + ph, None, c=INK2, dash="5,4"))
+        lab = f"{gl} · {gd}" if gd else gl
+        s.append(_gate(gx(gu), pyt + ph + 32, lab, None, size=8))
+    lx = x + w - 16                                   # 图例右上（底部留给轴标/门标）
+    for k in range(len(wave_names) - 1, -1, -1):
+        nm = wave_names[k]
+        lx -= len(nm) * 12 + 4
+        s.append(T(lx, y + 16, nm, 10.5, INK2))
+        lx -= 15
+        s.append(f'<rect x="{lx:.1f}" y="{y+6}" width="11" height="11" rx="2" fill="{grays[k % 4]}"/>')
+        lx -= 18
+    return "".join(s)
+
+
+def horizon_curves(x, y, w, h, horizons=None, xlab="时间", ylab="价值", hi=2):
+    """三地平线 S 曲线族（E-91 · McKinsey Three Horizons，Baghai/Coley/White 1999）：
+    3 条错峰递高的 S 曲线（接力/衰减与再生），非装饰山丘。
+    horizons=[(名, 注)]×3（缺省 H1/H2/H3 标准语）；hi 高亮第 i 条（默认 H3）。
+    仅表达概念形态，无刻度——函数强制绘制「概念示意」标注。
+    纯里程碑阶段链请用 E-90 雪佛龙，勿用本版式。"""
+    import math
+    horizons = horizons or [("地平线 1", "守住核心业务"),
+                            ("地平线 2", "壮大新兴业务"),
+                            ("地平线 3", "培育未来期权")]
+    if len(horizons) not in (3, 4):
+        raise ValueError("三地平线标准形态为 3 条曲线（至多 4）")
+    pad_l, pad_b, pad_t = 34, 36, 14
+    px, pyt = x + pad_l, y + pad_t
+    pw, ph = w - pad_l - 20, h - pad_t - pad_b
+    s = []
+    s.append(L(px, pyt + ph, px + pw - 8, pyt + ph, INK3, 1.2))
+    s.append(f'<polygon points="{px+pw},{pyt+ph} {px+pw-9},{pyt+ph-4} {px+pw-9},{pyt+ph+4}" fill="{INK3}"/>')
+    s.append(L(px, pyt + ph, px, pyt + 8, INK3, 1.2))
+    s.append(f'<polygon points="{px},{pyt} {px-4},{pyt+9} {px+4},{pyt+9}" fill="{INK3}"/>')
+    s.append(T(px + pw, pyt + ph + 18, xlab, 10.5, INK2, 700, anchor="end"))
+    s.append(T(px - 6, pyt + 4, ylab, 10.5, INK2, 700, anchor="end"))
+    m = len(horizons)
+    cols = [BAR_SUB, INK3, INK1, INK2]
+    for k, (nm, note) in enumerate(horizons):
+        t0 = 0.16 + 0.30 * k                # S 中点右移（接力）
+        amp = 0.42 + (0.50 / max(m - 1, 1)) * k   # 峰值递高
+        col = ACC if k == hi else cols[k % 4]
+        pts = []
+        N = 44
+        for j in range(N + 1):
+            t = j / N
+            v = amp / (1.0 + math.exp(-11.0 * (t - t0)))
+            pts.append((px + pw * 0.965 * t, pyt + ph - v * ph * 0.94))
+        d = "M " + " L ".join(f"{a:.1f} {b:.1f}" for a, b in pts)
+        s.append(f'<path d="{d}" fill="none" stroke="{col}" stroke-width="{2.6 if k == hi else 2}"/>')
+        lx_, ly_ = pts[-1]
+        s.append(T(lx_ + 4, ly_ - 8, nm, 12, (ACC if k == hi else INK1), 700))
+        s.append(T(lx_ + 4, ly_ + 8, note, 9.5, INK2))
+    s.append(T(px + 4, pyt + ph - 6, "概念示意 · 无刻度", 9, INK4))
+    return "".join(s)

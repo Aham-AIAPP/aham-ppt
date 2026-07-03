@@ -81,8 +81,7 @@ def toc(theme,chapters):
 def section(theme,num,zh,summary,total="04",items=None):
     """items(B 用)=[(icon,text),...] 右侧「本章内容」。"""
     if theme=="A":
-        b=[T(40,40,"",11,INK3),
-           T(40,300,num,120,INK4,700,fam=MONO),
+        b=[T(40,300,num,120,INK4,700,fam=MONO),
            f'<rect x="44" y="330" width="90" height="4" fill="{ACC}"/>',
            T(40,400,zh,40,INK1,700),
            T(40,452,summary,17,INK2),

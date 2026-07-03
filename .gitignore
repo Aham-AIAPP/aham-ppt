@@ -31,8 +31,6 @@ svg_final/
 deliverables/
 tools/out/
 *.pptx
-!examples/*.pptx
-!examples/**/*.pptx
 
 # Logs
 *.log

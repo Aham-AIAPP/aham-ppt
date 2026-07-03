@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """渲染双档主题样张（A 克制 / B 现代专业）到 assets/shots/，供 README「视觉档」节展示。
-依赖 assets/components/themes.py + playwright。运行：python3 examples/build_theme_samples.py
+依赖 assets/components/themes.py + playwright。运行：python3 tools/build_theme_samples.py
 """
 import sys
 from pathlib import Path

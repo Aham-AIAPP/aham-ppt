@@ -130,3 +130,54 @@
 <line x1="[x1]" y1="[y]" x2="[x2-12]" y2="[y]" stroke="#9B9B9B" stroke-width="2"/>
 <polygon points="[x2-12],[y-6] [x2],[y] [x2-12],[y+6]" fill="#9B9B9B"/>
 ```
+
+---
+
+## 咨询密集层 D（consulting.py / structures.py）· 三原则 / 标注层 / 纪律
+
+> **形体 API**（chevron_flow / flow_bands / dumbbell_rows / dot_matrix / driver_node+elbow / chain_steps）见各系骨架文件末尾的 90 段章节：`E-90 / V-90 / V-91 / V-92 / G-90 / I-90`；**结构版式**（矩阵/树/泳道/分层网格）见 `S-13 / E-91 / V-93 / V-94 / A-90 / A-91 / G-91 / G-92 / G-93` 及 S-02/S-09/A-03/G-01/E-04 的高阶变体。本节是可叠加**任意版式**的横切部分：三原则、标注层 API、密度与标注纪律。
+> 代码真源 `assets/components/consulting.py` + `assets/components/structures.py`（矩阵/树/泳道/分层结构层）+ `charts.py`（kpi_card/marimekko/fte_ramp/horizon_curves/sparkline）——均为参数化函数，不逐坐标手画。
+
+### 降「AI 方形大卡片味」三原则
+
+AI 生成 deck 的公认短板是结构纪律、行动标题与视觉层级（Slideworks 五工具实测评述，2026）。形体语言是补「视觉层级」的直接抓手。三原则（均有出处）：
+
+1. **图表即主角，裸摊白底**——密集页不许给图表再套卡片/外框容器；标题陈述结论、图表即证明（BCG "smart simplicity"，Deckary《BCG Presentation Style》）。公共 pptx 规范同向："标题下强调线 / 边缘色条是 AI 生成幻灯片的标志"。本文件上方的"卡片无边框无阴影"在 D 层收紧为：**图表区禁任何外框**。
+2. **异形替代等宽矩形阵**——chevron 时间轴、瀑布为"桥/差值"类默认、Mekko/100% 堆叠替代饼图、2×2 / 散点 / 甘特为 MBB 常备图谱（Deckary《McKinsey Slides》图谱清单；PopAi 版式清单 "Project Timeline (Chevron Style)"、"'So What?' Box"）。等宽矩形阵只在内容本身同构时使用。
+3. **标注层 + 跨区连接**——椭圆圈注关键数、引线把图表元素牵到编号动作/旁注、So-What 锚点条、大号淡水印；高密度靠严格栅格对齐维持可读（Deckary："grid-aligned layouts… calm and easy to read even when a slide is information-dense"）。
+
+### 标注层 API（可叠加任意版式）
+
+| 函数 | 用途 |
+|---|---|
+| `mark_ellipse(cx,cy,rx,ry)` | 手绘感椭圆圈注（禁 rotate） |
+| `leader(x1,y1,x2,y2)` | 引线箭头（line+polygon） |
+| `watermark(x,y,text,size)` | 大号淡水印，**最先绘制** |
+| `sowhat(x,y,w,h,label,text,dark)` | So-What 锚点条（灰面板或深墨） |
+| `tick_label(cx,y_top,text,level)` / `check(x,y)` | 细段错层小标注 / 线画对勾（替 ✓） |
+| `structures.footnote_band(x,y,w,notes,note,source)` | 方法论脚注带（编号脚注+注+来源三件套，BCG 式）——任何"推算/抽样/外推"页通用，放内容区底部、chrome 页脚之上 |
+| `structures.milestone(cx,cy)` / `gate(cx,y)` / `flag_line(x,y0,y1)` | 里程碑菱形 / stage-gate 三角 / 竖向标志虚线（Today 线、波次分界）——路线图与爬坡图共用记号 |
+
+### 密度与标注纪律
+
+**密度纪律（防「一页一组件」式过简）：**
+- 单个 X-90 元素**禁止**独占内容区；每页 = 1 主视觉 + ≥1 辅助层 + 标注层 + So-What（各 90 段章节列了本版式的组合配方）。
+- 相关元素允许同页并用（如 点阵＋堆叠条、哑铃＋拆解条、链＋分布条）；数据图表可与 charts.py 同页混排。
+- 内容区（40/100/1200/590）留白靠栅格分配，不靠"整块空着"。
+
+**标注层配额：**
+- 每页 ≤1 处椭圆圈注、≤2 条引线；水印 op ≤ 0.04 且最先绘制；So-What 全页至多 1 条。
+- **chrome 红线**：页眉/页脚/左缘留白归本文件与 themes.py，D 层元素不得进入 x<40 或页眉页脚区。
+- **蓝的记账**：hi 参数与 ACC 文字合并计入 brand「单点缀」——全页至多一个蓝语义。
+
+### 降级工具：同心弧（定性叙事专用）
+
+`structures.concentric_arcs(x, y, w, h, rings)`——半圆同心弧**只做定性层级叙事**（≤5 层标签，不接受数值），
+函数强制绘制「定性层级示意 · 弧径不代表数值」。原因（调研核实）：径向布局面积随半径平方增长、
+系统性夸大外圈，Zelazny 五图体系无此图型；Aon 2025 Investor Day Slide 69 那页是真实的品牌叙事图，
+不是严谨数据图。**定量规模序列 → charts.hbar 或 V-94 Marimekko**（速查表已反引导）。
+雷达图**不提供**——理由与替代见 `layout-library.md §不提供的图型`。
+
+### 冒烟基线
+
+组件级：每个参数化函数须有渲染断言 + 负向测试；页级：`tools/lint_svg.py` 预检 + SVG→PPTX 形状数比对；改动回归：成品页像素 diff。机制与门槛见 `CONTRIBUTING.md §验证`。
