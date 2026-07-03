@@ -7,7 +7,10 @@ Aham UI v6.1 视觉。每个仓库自带 docs/index.html + docs/banner.png（社
 import shutil
 from pathlib import Path
 
-DOCS = "/Users/lichengbao/Documents"
+import os as _os
+DOCS = _os.environ.get("AHAM_DOCS_ROOT", "")
+if not DOCS:
+    raise SystemExit("[build_pages] 请设置环境变量 AHAM_DOCS_ROOT=各仓库所在根目录（v3.1 起移除硬编码个人路径）")
 NAV = [("aham-ui", "Aham UI"), ("aham-survey", "Aham Survey"),
        ("aham-voice", "Aham Voice"), ("aham-ppt", "Aham PPT")]
 
@@ -16,7 +19,7 @@ SITES = {
         sub="把零散素材做成方案级 / 报告级的专业 PPT。八步法 · 三档风格 · 原生可编辑 PPTX。",
         feats=[("八阶段流水线", "规范加载 → 材料解析 → 论点提炼 → … → 质检交付，不是排版美化"),
                ("原生可编辑 PPTX", "每个元素都是 PPT 原生形状 / 文本框，双击即改"),
-               ("43 版式参数化", "21 个版式函数 + 9 类图表 + 结构 / 标注组件，坐标由函数冻结"),
+               ("48 版式参数化", "21 个版式函数 + 14 类图表 + 结构 / 标注组件，坐标由函数冻结"),
                ("换成你的品牌", "改 tokens 主色 + 字体 + 品牌名，四步适配")],
         ctas=[("在 GitHub 查看", "https://github.com/li599198347-svg/aham-ppt", 1),
               ("历史样张（v2.5.2）", "https://github.com/li599198347-svg/aham-ppt/tree/v2.5.2/examples", 0),

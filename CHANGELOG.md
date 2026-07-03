@@ -7,6 +7,64 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2026-07-03 — 审计增强批（对标缺口补齐）
+
+> 依据2026-07-03 四路专家审计的第三批。
+
+### 新增
+- **S-14 团队页 / S-15 报价页**参数化版式：`layouts.team_grid`（2–8 人硬拦，照片一律 placeholder 占位不硬编假头像）/ `layouts.price_table`（1–8 行硬拦，**合计由调用方传入、函数绝不求和**）；入 layout-library 决策表+速查表、svg-skeleton-s 五栏章节；版式库 46→48 ID、layouts 19→21 式（渲染断言+负向测试+转换实测通过）。
+- **tokens.css §11 文字前景×背景允许组合表**：17 组组合全部脚本实算登记；新增任何组合必须先实测入表，QC 按表判定（对标 Carbon 的结构化对比度治理，堵住 P1 对比度失守的根因）。
+- **讲者备注链路**（presenting/hybrid）：phase-05 规划卡增「讲者备注」字段，phase-07 转换后经 python-pptx 写入备注栏（Duarte「页面留冲击、内容进备注」的后半环）。
+- **phase-08 步骤1.5 渲染目检**：soffice 出图逐页目检重叠感/拥挤感/节奏（对标官方 pptx 技能渲染 QA 闭环；LibreOffice 缺失则记录跳过）。
+- **CONTRIBUTING 触发评测集**：12 条应触发 + 8 条不应触发的人工评测清单，改 description 前后必跑。
+- **C 档内容层张力规则**（phase-04）：每章 ≥1 组「现状→愿景」对比结构（对标 Duarte sparkline；与深色重音页编排合并执行）。
+
+### 变更
+- pptx-native-rules 增「**编辑语义边界**」节：如实披露标签级文本框（改长不回流、bullet 非列表语义、~字号×0.1px 左移）+ 交付话术模板。
+- theme-tiers 增**换肤纪律**：深底必须走 `--ppt-surface-dark`，禁手写近似值（登记 docs 演示图 #171717 漂移实例）。
+
+## [3.1.0] - 2026-07-03 — 审计修正批（13 项 P1 + 22 项 P2）
+
+> 依据2026-07-03 四路专家审计的第一、二批。
+
+### 修复（P1，全部经断言/实测验证）
+- **降级基线统一**：删除 phase-01「通用商务模式」第二套标准（#1A3C5E/#4A7CAB 双蓝体系与微软雅黑标题），降级唯一指向 SKILL §降级基线。
+- **孤儿规范接线**：quality-audit-protocol / pptx-native-rules 由 phase-07/08 显式 view；转换代码段唯一维护处收敛到 phase-07；质检权威分工声明（视觉详单归 QAP、机判项归 phase-08 L2），消除双头。
+- **删除跨环境硬编码** `view /mnt/skills/public/pptx/SKILL.md`（该路径仅存在于 claude.ai 容器，且官方 pptx 技能的配色/装饰指令与本体系直接冲突），改为条件化说明；phase-07 `sys.path` 默认值改为显式坏值强制替换。
+- **依赖声明**：新增 `requirements.txt`；SKILL 增「依赖」节（python-pptx/cairosvg 必装、LibreOffice 可选及降级话术、字体回退现实说明）。
+- **Action Title 上限 20→30 字**：修复「规则 ≤20 字 vs 自家三个好示例全部 22 字」的内伤；phase-04/06/07/08 四处同步。
+- **纵向逻辑门禁全模式化**：Ghost Deck 四项测试扩为五项（测试5 · 证据配对，红色论点不得进 Ghost Deck，**专家模式不豁免**）；phase-08 L1 增「标题↔证据支撑，超卖页判 ERROR」；修正 phase-02 与 phase-04 的描述矛盾。
+- **专家档合并闸门**（coach-engine）：强制停等从 ~18–20 次降至 ≤10 次；P3 灵魂句、P6 样稿任何档位不可合并；只减停等、不减任何测试/质检。
+- **EQ 栅格真等分**：三列 380/380/408→**389/389/390**、四列 277×3+321→**288×4**、二列 590/594→**592×2**（grid-system、layouts.py、svg-skeleton-s、HERO-2/3/4 全同步；汉字字数表列宽更名；端到端实测 PPTX 落地 288×4）。
+- **Chrome 规格统一 32px/y78/线94**：themes.chrome 由 26px/y74/线90 追平 common 骨架（=tokens `--ppt-title` 24pt；icon_circle 圆心 66→70 随基线对齐；实测落地 sz=2400）。
+- **S-09 高阶网格越界修正**：388×224@x=40/452/864（右缘 1252 越线）→ **384×224@x=40/448/856**（缝 24、右缘恰 1240）；lint_svg 新增 **rect/polygon 越界检查**（整页背景豁免；负向测试通过）。
+- **内容区口径唯一化**：红线 h=590（底 y=690，与页脚线对齐），分栏 h=580 为排版目标；svg-skeleton-v「540±」同口径。
+- **页脚/来源/页码/轴标签升 ink-2** `#6E6E6E`（5.10:1）：themes 页眉页脚、charts 全部信息性文字（11 处）、common 页脚模板、designer-rules 来源模板与白名单表述、brand §2.2、track-rules 铁规改写（「任何承载信息的文字 ≥4.5:1；ink-3 仅限装饰」）。
+- **C 档深底字色达标**：信息性小字 LT3 #787878（3.86:1）→ LT2 #A8A8A8（7.17:1）；封面导览蓝编号 #336EE8（3.27:1）→ **ACC_HOVER #5C8BED**（4.59:1，tokens 登记 `--ppt-dark-accent-info`）。
+- **图表非文字对比（WCAG 1.4.11）**：面型数据元素+图例统一 **1px #6E6E6E 描边**（charts.py `EDGE` 常量，chart-impl/brand §7.5/QAP 同步）；slope 非高亮线与 sparkline 主线 INK3→INK2（执行中补充决定，线型元素无法用描边通道）。
+
+### 变更（P2 · 口径对账）
+- 图表口径单一源：phase-05/07 的「9 类」内联枚举改为 **14 类全量** + 指向 layout-library 速查表/chart-impl 权威清单。
+- tokens §10 改为 **SVG px→PPTX pt 落地对账表**（`--ppt-body` 15pt→10.5pt 等，标注旧值为已废弃的手写 python-pptx 轨遗值；与 smoketest 实测 sz 一致）；大数字收敛双档（内容页 44–60pt / I-01 整页 127.5–135pt，grid/brand/tokens/skeleton-i 四处互引）。
+- KPI 网格等分并文档追平代码：2×3=**373/373/374**（缝40，kpi_six 同步）、2×2=**592×2**（缝16）、1×3 缝 36→**32**（归 4 基阶）；右缘一律 1240。
+- 字体栈顺序统一 **PingFang 优先**（tokens 与 brand/designer-rules/common/产线一致）；pt/px 单位统一（designer-rules ≥80pt→≥107px、≥60pt→≥80px）。
+- 实现层 3 个白名单外色值收编 tokens §10（#2E2E2E 章节水印 / #333333 金句引号 / #F7F8FA 占位框底），QC 白名单同步；图标自绘例外正式登记（iconography：icons.py 为转换兼容自绘 Lucide 近似，QC 放行）。
+- 「Inter→Calibri」回退承诺改为如实表述（PPTX 不嵌字体，替换由 PowerPoint 决定）；行距 1.3→**1.35** 归 `--lh-snug`。
+
+### 变更（P2 · 方法论）
+- phase-04 增**论证模式选择**（归纳分组默认 / 演绎链 ≤3 环）+ **Minto 四排序**（演绎/时间/结构/重要性）；**论点→页面折算规则**明文化（第二层论点=章节、证据 1–2 条/页、页数按受众顾虑加权）。
+- phase-02 增**关键信息冲突登记**（关键数据冲突强制用户裁决后才进 P3）；《项目基线》机制提入正文引用。
+- 一页一消息判据升级为语义判据（两个可独立证伪的断言；词表降为提示信号，单结论多依据不拆）。
+- phase-03 锚点改为**增量确认**（引用 Phase 1 初检答案，消除逐字重复提问）。
+- 受众卡增可选「**次要受众/否决点**」字段；phase-04 测试3 增次要受众顾虑核对。
+
+### 变更（P2 · 工程卫生）
+- `tools/build_pages.py` 移除硬编码个人路径（改 `AHAM_DOCS_ROOT` 环境变量，缺失即报错退出）。
+- 对外物料统计追平实数（catalog：14 类图表/14 标注 API/45 内容版式；build_pages：48 版式/21 函数）并入 CONTRIBUTING 发版核对清单；两个 tools 目录分工写明。
+- SKILL 增 **references 索引表**（全部文件→何时读）；Step 1 不再预载 designer-rules（473 行下沉至 Phase 6/7）。
+- CHANGELOG 规范化：2.6–2.8 补 compare 链接与「随 v3.0.0 发布」注、删除尾部游离 v2.5 段、补 v1.0.0 说明。
+- brand §5/§6 跳号说明；theme-tiers 补齐 **A/B/C 三列完整对照表**；基线坐标学注解（26/30/58 与 4 基间距阶的关系）。
+
 ## [3.0.0] - 2026-07-03
 
 大版本主题：**全量参数化 · 历史产物清零 · 教训固化去补丁化**（用户三项整改决策 + 5 个确认点全落地）。43 内容版式实现路径收敛为：`layouts.py` 19 式（新模块）+ `structures.py`/`consulting.py`/`charts.py` 结构与图表 + 5 个栅格直排；**全库无照抄式冻结骨架**，7 个骨架文件全部重写为五栏格式（用途/适用场景/用法/来源/纪律），来源两档如实标注。明细见下方批次 0–5 条目。
@@ -56,6 +114,8 @@
 
 ## [2.8.0] - 2026-07-03
 
+> 随 v3.0.0 一次性提交发布，无独立 git tag；compare 链接指向 v2.5.2→v3.0.0 区间。
+
 用户整改决策批次（7 项拍板全落地）。
 
 ### 新增
@@ -72,6 +132,8 @@
 
 
 ## [2.7.0] - 2026-07-03
+
+> 随 v3.0.0 一次性提交发布，无独立 git tag；compare 链接指向 v2.5.2→v3.0.0 区间。
 
 依据：2026-07《版式库全量对标评估》P0–P2 替换决策 + 第一批调研（5 类咨询版式）+ 第二批调研（6 类咨询图型）。
 上轮（v2.6）遗留的替换升级与新增版式本轮全部落地。
@@ -112,6 +174,8 @@
 - 15 项负向/属性测试全过：RACI 双 A/零 A/列数/非法记号、Mekko 8 列/5 段/abs 缺宽、蓝图 4 行、同心弧 6 层、地平线 2 条、算子非法、fte 期数不齐各抛错；fte n=9→柱 n=12→面积自动换挡、Mekko 列宽 1:3 比例、气泡 r=10+24√(s/max) 属性断言。
 
 ## [2.6.0] - 2026-07-02 — 版式库对标改造 · 结构层（D 层归系 + 移出/合并/划界）
+
+> 随 v3.0.0 一次性提交发布，无独立 git tag；compare 链接指向 v2.5.2→v3.0.0 区间。
 
 依据《aham-ppt 版式库全量对标评估（40 版式）》与 D 层调用链路分析执行。**纯文档重组 + 纪律固化，consulting.py / charts.py 代码零改动，无新增绘图。**
 
@@ -275,13 +339,20 @@
 - 旧视觉件：深蓝强调卡、浅蓝 Callout、描边白卡、顶部 3pt 蓝条、衬线标题、状态色块 / 红黄绿灯、图表多色。
 - 全仓库旧视觉 token（`#1677FF` / `#1A1A1A` / `#E2E2E2` / 思源宋体 / Roboto Mono / `var(--brand-primary)`）清零。
 
+> 注：v1.0.0 初版未单独立条，公开条目自 [1.1.0] 始（tag 列表亦无 v1.0.0）。
+
 ## [1.1.0] - 2026-04-30
 
 ### 修复
 - 修复版式命名冲突、品牌色硬编码等 8 项问题。
 
-[Unreleased]: https://github.com/li599198347-svg/aham-ppt/compare/v3.0.0...HEAD
+[Unreleased]: https://github.com/li599198347-svg/aham-ppt/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/li599198347-svg/aham-ppt/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/li599198347-svg/aham-ppt/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
+[2.8.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
+[2.7.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
+[2.6.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
 [2.5.2]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.1...v2.5.2
 [2.5.1]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.4.0...v2.5.0
@@ -293,9 +364,3 @@
 [2.0.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.0.0
 [1.1.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v1.1.0
 
-
-## v2.5（实战复盘增量）
-- 新增 `assets/tools/lint_svg.py`（tofu/页码/中文引号预检）、`icons_preview.py`（图标缩略校验）、`pageno_fill.py`（页码集中回填）。
-- 新增 `assets/components/mes_icons.py`（25+ 具象制造业图标；修正 gearmold=模具、新增 injection=注塑机）。
-- `components.py` 新增 `placeholder()` 界面占位组件。
-- SKILL.md 增"工程预检与防坑"附录；质检协议增自动预检 + 双轨审计；LESSONS 增大体量册复盘。

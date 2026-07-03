@@ -19,6 +19,7 @@ from components import T, L, MONO, ACC, INK1, INK2, INK3, INK4, LINE
 BAR_MAIN = INK3        # 数据柱默认灰
 BAR_SUB = "#C8C8C8"    # 次级灰（§2.4 允许的次灰）
 BAR_TOTAL = INK1       # 瀑布图总量柱（深墨，作锚点）
+EDGE = ' stroke="#6E6E6E" stroke-width="1"'  # 面型数据元素轮廓通道（WCAG 1.4.11 非文字对比 3:1；灰面本身 2.78/1.67 不达标）
 
 
 def _fmt(v, money=False):
@@ -75,7 +76,7 @@ def waterfall(x, y, w, h, items, hi_index=None, unit="", money=False, title=None
     if title:
         s.append(T(x, y + 16, title, 15, INK1, 700))
     if unit:
-        s.append(T(px, pyt - 4, unit, 10, INK3))
+        s.append(T(px, pyt - 4, unit, 10, INK2))
 
     # 水平网格 + Y 刻度（3 档）
     for g in range(1, 4):
@@ -105,7 +106,7 @@ def waterfall(x, y, w, h, items, hi_index=None, unit="", money=False, title=None
             fill = BAR_TOTAL
         else:
             fill = BAR_MAIN
-        s.append(f'<rect x="{bx:.1f}" y="{ytop:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{fill}"/>')
+        s.append(f'<rect x="{bx:.1f}" y="{ytop:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{fill}"{EDGE}/>')
 
         # 浮动连接虚线：从上一柱的“结束累计”高度，水平连到当前柱左侧
         if prev_b1_py is not None:
@@ -139,7 +140,7 @@ def bar(x, y, w, h, data, hi_index=None, unit="", money=False, title=None, targe
     def vy(v): return pyt + ph - (v / vmax) * ph
     s = []
     if title: s.append(T(x, y + 16, title, 15, INK1, 700))
-    if unit: s.append(T(px, pyt - 4, unit, 10, INK3))
+    if unit: s.append(T(px, pyt - 4, unit, 10, INK2))
     for g in range(1, 4):
         gv = vmax * g / 3.0; gy = vy(gv)
         s.append(L(px, gy, px + pw, gy, LINE, 0.5, dash="2,2"))
@@ -150,7 +151,7 @@ def bar(x, y, w, h, data, hi_index=None, unit="", money=False, title=None, targe
     for i, (label, val) in enumerate(data):
         bx = px + i * slot + gap / 2; ytop = vy(val); bh = max(pyt + ph - ytop, 1.5)
         fill = ACC if i == hi_index else BAR_MAIN
-        s.append(f'<rect x="{bx:.1f}" y="{ytop:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{fill}"/>')
+        s.append(f'<rect x="{bx:.1f}" y="{ytop:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{fill}"{EDGE}/>')
         s.append(T(bx + bw / 2, ytop - 6, _fmt(val, money), 11, INK1, 700, anchor="middle", fam=MONO))
         s.append(T(bx + bw / 2, pyt + ph + 18, label, 11, INK2, anchor="middle"))
     if target:
@@ -174,7 +175,7 @@ def hbar(x, y, w, h, data, hi_index=None, money=False, title=None):
         cy = pyt + i * rowh + rowh / 2; bw = (val / vmax) * pw
         fill = ACC if i == hi_index else BAR_MAIN
         s.append(T(x + pad_l - 12, cy + 4, label, 12.5, INK2, anchor="end"))
-        s.append(f'<rect x="{px:.1f}" y="{cy - bh/2:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{fill}"/>')
+        s.append(f'<rect x="{px:.1f}" y="{cy - bh/2:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{fill}"{EDGE}/>')
         s.append(T(px + bw + 8, cy + 4, _fmt(val, money), 12, INK1, 700, fam=MONO))
     return "".join(s)
 
@@ -193,7 +194,7 @@ def line(x, y, w, h, values, xlabels, hi_last=True, unit="", money=False, title=
     def vx(i): return px + pw * (i / (n - 1))
     s = []
     if title: s.append(T(x, y + 16, title, 15, INK1, 700))
-    if unit: s.append(T(px, pyt - 4, unit, 10, INK3))
+    if unit: s.append(T(px, pyt - 4, unit, 10, INK2))
     for g in range(0, 4):
         gv = vlo + rng * g / 3.0; gy = vy(gv)
         s.append(L(px, gy, px + pw, gy, LINE, 0.5, dash="2,2"))
@@ -242,12 +243,12 @@ def funnel(x, y, w, h, stages, hi_index=None, money=False, title=None):
         fill = ACC if i == hi_index else (BAR_MAIN if i % 2 == 0 else BAR_SUB)
         pts = (f"{cx-topw/2:.1f},{yt:.1f} {cx+topw/2:.1f},{yt:.1f} "
                f"{cx+botw/2:.1f},{yb:.1f} {cx-botw/2:.1f},{yb:.1f}")
-        s.append(f'<polygon points="{pts}" fill="{fill}"/>')
+        s.append(f'<polygon points="{pts}" fill="{fill}"{EDGE}/>')
         s.append(T(x + w * 0.70, yt + seg_h / 2 - 3, label, 12.5, INK1, 600))
         s.append(T(x + w * 0.70, yt + seg_h / 2 + 15, _fmt(val, money), 13, INK1, 700, fam=MONO))
         if prev_val is not None and prev_val > 0:
             rate = val / prev_val * 100
-            s.append(T(cx, yt - gap / 2 + 4, f"{rate:.0f}%", 10.5, INK3, anchor="middle", fam=MONO))
+            s.append(T(cx, yt - gap / 2 + 4, f"{rate:.0f}%", 10.5, INK2, anchor="middle", fam=MONO))
         prev_val = val
     return "".join(s)
 
@@ -287,8 +288,8 @@ def gantt(x, y, w, h, tasks, total_units, today=None, unit_label="", title=None)
         bw = (dur / total_units) * pw
         fill = ACC if hi else BAR_MAIN
         s.append(T(x + pad_l - 12, cy + 4, name, 12, INK2, anchor="end"))
-        s.append(f'<rect x="{bx:.1f}" y="{cy-barh/2:.1f}" width="{bw:.1f}" height="{barh:.1f}" rx="3" fill="{fill}"/>')
-        s.append(T(bx + bw + 6, cy + 4, f"{dur}{unit_label}", 10, INK3, fam=MONO))
+        s.append(f'<rect x="{bx:.1f}" y="{cy-barh/2:.1f}" width="{bw:.1f}" height="{barh:.1f}" rx="3" fill="{fill}"{EDGE}/>')
+        s.append(T(bx + bw + 6, cy + 4, f"{dur}{unit_label}", 10, INK2, fam=MONO))
     if today is not None:
         tx = ux(today)
         s.append(L(tx, pyt - 6, tx, pyt + ph, INK1, 1.2, dash="4,2"))
@@ -320,7 +321,7 @@ def bullet(x, y, w, h, metrics, hi_index=None, money=False, title=None):
         s.append(f'<rect x="{px:.1f}" y="{cy-barh/2:.1f}" width="{pw:.1f}" height="{barh:.1f}" fill="{LINE}"/>')
         aw = min(actual / mx, 1.0) * pw
         fill = ACC if i == hi_index else BAR_MAIN
-        s.append(f'<rect x="{px:.1f}" y="{cy-barh/2:.1f}" width="{aw:.1f}" height="{barh:.1f}" fill="{fill}"/>')
+        s.append(f'<rect x="{px:.1f}" y="{cy-barh/2:.1f}" width="{aw:.1f}" height="{barh:.1f}" fill="{fill}"{EDGE}/>')
         tx = px + min(target / mx, 1.0) * pw
         s.append(L(tx, cy - barh / 2 - 4, tx, cy + barh / 2 + 4, INK1, 1.8))
         s.append(T(x + pad_l - 12, cy + 4, label, 12, INK2, anchor="end"))
@@ -341,7 +342,7 @@ def stacked(x, y, w, h, data, seriesnames, hi_series=None, unit="", money=False,
     grays = ["#C8C8C8", INK3, INK2, INK1]   # 4 级灰阶（白名单内：#C8C8C8/#9B9B9B/#6E6E6E/#262626）
     s = []
     if title: s.append(T(x, y + 16, title, 15, INK1, 700))
-    if unit: s.append(T(px, pyt - 4, unit, 10, INK3))
+    if unit: s.append(T(px, pyt - 4, unit, 10, INK2))
     for g in range(1, 4):
         gv = vmax * g / 3.0; gy = vy(gv)
         s.append(L(px, gy, px + pw, gy, LINE, 0.5, dash="2,2"))
@@ -354,14 +355,14 @@ def stacked(x, y, w, h, data, seriesnames, hi_series=None, unit="", money=False,
         for k, v in enumerate(vals):
             segh = (v / vmax) * ph
             col = ACC if k == hi_series else grays[k % len(grays)]
-            s.append(f'<rect x="{bx:.1f}" y="{ybase-segh:.1f}" width="{bw:.1f}" height="{segh:.1f}" fill="{col}"/>')
+            s.append(f'<rect x="{bx:.1f}" y="{ybase-segh:.1f}" width="{bw:.1f}" height="{segh:.1f}" fill="{col}"{EDGE}/>')
             ybase -= segh
         s.append(T(bx + bw / 2, pyt + ph + 18, label, 11, INK2, anchor="middle"))
         s.append(T(bx + bw / 2, vy(totals[i]) - 6, _fmt(totals[i], money), 10.5, INK1, 700, anchor="middle", fam=MONO))
     lx = px; ly = y + h - 20
     for k, nm in enumerate(seriesnames):
         col = ACC if k == hi_series else grays[k % len(grays)]
-        s.append(f'<rect x="{lx:.1f}" y="{ly:.1f}" width="11" height="11" rx="2" fill="{col}"/>')
+        s.append(f'<rect x="{lx:.1f}" y="{ly:.1f}" width="11" height="11" rx="2" fill="{col}"{EDGE}/>')
         s.append(T(lx + 16, ly + 9.5, nm, 10.5, INK2))
         lx += 16 + len(nm) * 13 + 20
     return "".join(s)
@@ -380,13 +381,13 @@ def slope(x, y, w, h, items, label_left="前", label_right="后", hi_index=None,
     def vy(v): return pyt + ph - ((v - vmin) / rng) * ph
     s = []
     if title: s.append(T(x, y + 16, title, 15, INK1, 700))
-    s.append(T(lx, pyt - 12, label_left, 11, INK3, 600, anchor="middle"))
-    s.append(T(rx, pyt - 12, label_right, 11, INK3, 600, anchor="middle"))
+    s.append(T(lx, pyt - 12, label_left, 11, INK2, 600, anchor="middle"))
+    s.append(T(rx, pyt - 12, label_right, 11, INK2, 600, anchor="middle"))
     s.append(L(lx, pyt, lx, pyt + ph, LINE, 0.6))
     s.append(L(rx, pyt, rx, pyt + ph, LINE, 0.6))
     for i, (name, vl, vr) in enumerate(items):
         yl = vy(vl); yr = vy(vr)
-        col = ACC if i == hi_index else INK3
+        col = ACC if i == hi_index else INK2
         sw = 2.4 if i == hi_index else 1.4
         s.append(L(lx, yl, rx, yr, col, sw))
         s.append(f'<circle cx="{lx:.1f}" cy="{yl:.1f}" r="3.5" fill="{col}"/>')
@@ -414,7 +415,7 @@ def sparkline(x, y, w, h, values, hi_last=True, baseline=None):
     if baseline is not None and vmin <= baseline <= vmax:
         s.append(L(x, vy(baseline), x + w, vy(baseline), INK4, 0.8, dash="3,2"))
     for i in range(n - 1):
-        s.append(L(vx(i), vy(values[i]), vx(i + 1), vy(values[i + 1]), INK3, 1.6))
+        s.append(L(vx(i), vy(values[i]), vx(i + 1), vy(values[i + 1]), INK2, 1.6))
     col = ACC if hi_last else INK1
     s.append(f'<circle cx="{vx(n-1):.1f}" cy="{vy(values[-1]):.1f}" r="3.2" fill="{col}"/>')
     return "".join(s)
@@ -479,7 +480,7 @@ def marimekko(x, y, w, h, columns, seriesnames, wlabel, mode="pct",
         for gv, gl in ((0, "0"), (0.5, "50%"), (1.0, "100%")):
             gy = pyt + ph * (1 - gv)
             s.append(L(px, gy, px + pw, gy, LINE, 0.6, dash="2,2"))
-            s.append(T(px - 6, gy + 4, gl, 9.5, INK3, anchor="end", fam=MONO))
+            s.append(T(px - 6, gy + 4, gl, 9.5, INK2, anchor="end", fam=MONO))
     else:
         for g in range(1, 4):
             gv = smax * g / 3.0
@@ -496,7 +497,7 @@ def marimekko(x, y, w, h, columns, seriesnames, wlabel, mode="pct",
         for k, v in enumerate(segs):
             segh = colh * (v / denom)
             col = ACC if k == hi_series else grays[k % len(grays)]
-            s.append(f'<rect x="{cx:.1f}" y="{ybase-segh:.1f}" width="{cw_:.1f}" height="{segh:.1f}" fill="{col}"/>')
+            s.append(f'<rect x="{cx:.1f}" y="{ybase-segh:.1f}" width="{cw_:.1f}" height="{segh:.1f}" fill="{col}"{EDGE}/>')
             if segh >= 18 and cw_ >= 44:
                 s.append(T(cx + cw_ / 2, ybase - segh / 2 + 4, f"{v/denom*100:.0f}%",
                            9.5, "#FFFFFF", 700, anchor="middle", fam=MONO))
@@ -506,14 +507,14 @@ def marimekko(x, y, w, h, columns, seriesnames, wlabel, mode="pct",
                    INK1, 700, anchor="middle", fam=MONO))
         s.append(T(cx + cw_ / 2, pyt + ph + 16, label, 10.5, INK2, anchor="middle"))
         s.append(T(cx + cw_ / 2, pyt + ph + 30, f"{widths[i]/wtot*100:.0f}%", 9,
-                   INK3, anchor="middle", fam=MONO))
+                   INK2, anchor="middle", fam=MONO))
         cx += cw_
     s.append(L(px, pyt + ph, px + pw, pyt + ph, INK3, 0.8))
     lx = px
     ly = y + h - 8
     for k, nm in enumerate(seriesnames):
         col = ACC if k == hi_series else grays[k % len(grays)]
-        s.append(f'<rect x="{lx:.1f}" y="{ly-10}" width="11" height="11" rx="2" fill="{col}"/>')
+        s.append(f'<rect x="{lx:.1f}" y="{ly-10}" width="11" height="11" rx="2" fill="{col}"{EDGE}/>')
         s.append(T(lx + 16, ly, nm, 10.5, INK2))
         lx += 16 + len(nm) * 12 + 20
     s.append(T(px + pw, ly, f"列宽 ∝ {wlabel}", 9.5, INK4, anchor="end"))
@@ -542,7 +543,7 @@ def fte_ramp(x, y, w, h, periods, waves, wave_names, gates=None, unit="FTE",
     s = []
     if title:
         s.append(T(x, y + 16, title, 15, INK1, 700))
-    s.append(T(px, pyt - 6, unit, 10, INK3))
+    s.append(T(px, pyt - 6, unit, 10, INK2))
     for g in range(1, 4):
         gv = vmax * g / 3.0
         s.append(L(px, vy(gv), px + pw, vy(gv), LINE, 0.5, dash="2,2"))
@@ -574,7 +575,7 @@ def fte_ramp(x, y, w, h, periods, waves, wave_names, gates=None, unit="FTE",
             ybase = pyt + ph
             for k, wv in enumerate(waves):
                 segh = (wv[i] / vmax) * ph
-                s.append(f'<rect x="{bx:.1f}" y="{ybase-segh:.1f}" width="{bw_:.1f}" height="{segh:.1f}" fill="{grays[k % 4]}"/>')
+                s.append(f'<rect x="{bx:.1f}" y="{ybase-segh:.1f}" width="{bw_:.1f}" height="{segh:.1f}" fill="{grays[k % 4]}"{EDGE}/>')
                 ybase -= segh
             s.append(T(bx + bw_ / 2, vy(totals[i]) - 6, _fmt(totals[i]), 10, INK1, 700,
                        anchor="middle", fam=MONO))
@@ -590,7 +591,7 @@ def fte_ramp(x, y, w, h, periods, waves, wave_names, gates=None, unit="FTE",
         lx -= len(nm) * 12 + 4
         s.append(T(lx, y + 16, nm, 10.5, INK2))
         lx -= 15
-        s.append(f'<rect x="{lx:.1f}" y="{y+6}" width="11" height="11" rx="2" fill="{grays[k % 4]}"/>')
+        s.append(f'<rect x="{lx:.1f}" y="{y+6}" width="11" height="11" rx="2" fill="{grays[k % 4]}"{EDGE}/>')
         lx -= 18
     return "".join(s)
 

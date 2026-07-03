@@ -1,0 +1,6 @@
+# aham-ppt 运行时依赖（Phase 7 SVG→PPTX 转换链）
+python-pptx>=0.6.23
+cairosvg>=2.7
+# 说明：
+# - LibreOffice（soffice CLI）为可选依赖：PDF 导出与渲染抽检用；缺失时交付物不含 PDF。
+# - tools/ 下发版物料脚本另需 playwright，不属运行时依赖，不在此列。

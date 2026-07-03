@@ -60,6 +60,30 @@ def lint_svg_dir(d):
             if right > 1242:
                 ow.append(f"{os.path.basename(p)}: x={xx:.0f} fs={fs:.0f} 估右界{right:.0f} 「{txt[:14]}…」")
     print("\n".join("  [!] " + o for o in ow) if ow else "  无")
+
+    print("=== 形状越界（rect/polygon 超内容区 x>1242 或 y>692）===")
+    ob = []
+    for p in svgs:
+        t = open(p, encoding='utf-8').read()
+        for m in re.finditer(r'<rect ([^>]*?)/?>', t):
+            attrs = m.group(1)
+            gx = re.search(r'\bx="([\d.-]+)"', attrs); gy = re.search(r'\by="([\d.-]+)"', attrs)
+            gw = re.search(r'width="([\d.]+)"', attrs); gh = re.search(r'height="([\d.]+)"', attrs)
+            if not (gw and gh):
+                continue
+            x = float(gx.group(1)) if gx else 0.0; y = float(gy.group(1)) if gy else 0.0
+            w = float(gw.group(1)); h = float(gh.group(1))
+            if w >= 1270 and h >= 710:
+                continue  # 整页背景（含 C 档深底）豁免
+            if x + w > 1242 or y + h > 692:
+                ob.append(f"{os.path.basename(p)}: rect x={x:.0f} y={y:.0f} 右界{x+w:.0f} 底界{y+h:.0f}")
+        for m in re.finditer(r'<polygon points="([^"]+)"', t):
+            pts = re.findall(r'([\d.]+)[, ]([\d.]+)', m.group(1))
+            if pts:
+                mx = max(float(a) for a, _b in pts); my = max(float(_b) for a, _b in pts)
+                if mx > 1242 or my > 692:
+                    ob.append(f"{os.path.basename(p)}: polygon 右界{mx:.0f} 底界{my:.0f}")
+    print("\n".join("  [!] " + o for o in ob) if ob else "  无")
     print("=== 页脚总页数 ===", end=" ")
     if not totals:
         print("一致：（未发现页脚）"); return

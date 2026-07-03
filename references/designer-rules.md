@@ -22,7 +22,7 @@ Phase 7 每页SVG设计的执行规范。
 | 表面 3 / 线 | `#E7E7E7` | 分隔线、表格横线、选中 |
 | 墨 主 | `#262626` | 标题、正文、数字 |
 | 墨 次 | `#6E6E6E` | 次要、表头副文 |
-| 墨 三 | `#9B9B9B` | 占位、页脚、来源、轴标签 |
+| 墨 三 | `#9B9B9B` | 占位、装饰性弱字（对白 2.78:1，**不承载须读取的信息**；页脚/来源/轴标签用墨次 `#6E6E6E`） |
 | 墨 四 | `#C4C4C4` | 最弱线、禁用（不承载正文） |
 | 强调蓝 | `#336EE8` | **仅点缀**：品牌点/主操作/选中下划线/推荐标/单个高亮数据点/封面短线 |
 | 蓝 hover/press | `#5C8BED` / `#164EC3` | 同上 |
@@ -86,7 +86,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 
 | narrative_purpose | 视觉基调 | 关键指令 |
 |---|---|---|
-| **impact** | 震撼 | 单数字/单句字号 ≥80pt，留白 ≥ 50%，极简 Chrome |
+| **impact** | 震撼 | 单数字/单句字号 ≥107px（≈80pt），留白 ≥ 50%，极简 Chrome |
 | **structure** | 结构 | 标准 Chrome，多区块布局，信息密度中高 |
 | **explain** | 说明 | 图示优先，图示占画面 ≥ 40% |
 | **evidence** | 证据 | 图表优先，数据来源标注必备 |
@@ -142,6 +142,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 **卡片标题**：y=卡片y+30，无衬线 600 15px，**#262626（墨色，非蓝）**
 
 **Bullets**（• 点 + 文字，起始y=卡片y+58，间距26px）：
+> 注：卡片内 y+30 / y+58 / 行距 26 属**基线坐标学**（文字基线定位值），不属 4 基间距阶；间距阶只约束块间距。页边距 40 为画布常数（Carbon 间距体系亦含 40 档，不视为出圈）。
 ```svg
 <circle cx="[cx+19]" cy="[itemY-4]" r="3" fill="#9B9B9B"/>
 <text x="[cx+32]" y="[itemY]" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif"
@@ -158,7 +159,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 **数据来源标注**（有 data_points 时必须）：
 ```svg
 <text x="[cx+cw-16]" y="[cy+ch-10]" text-anchor="end"
-      font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="9" fill="#9B9B9B">
+      font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="9" fill="#6E6E6E">
   来源：[source]，[date]</text>
 ```
 
@@ -170,7 +171,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 - presenting 模式：≤3条 bullet
 - hybrid 模式（默认）：≤5条 bullet
 - reading 模式：≤7条 bullet
-- impact 类页面：必须有 ≥60pt 大数字
+- impact 类页面：必须有 ≥80px（=60pt）大数字
 - explain 类页面：必须有图示（占画面 ≥40%）
 
 ---
@@ -411,7 +412,7 @@ SVG `<text>` 不支持自动换行。有两种可靠的换行方式，工具链�
 font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif"   <!-- 标题/正文 -->
 font-family="'JetBrains Mono', Consolas, monospace"                  <!-- 数字/编号/时间 -->
 ```
-Windows 落 Inter→Calibri、微软雅黑、Consolas；macOS 落 Inter→PingFang、JetBrains Mono。**不得使用宋体 / Songti / SimSun 等衬线字体。**
+Windows 无 Inter 时由 PowerPoint 决定替换（常见 Calibri）、中文微软雅黑、数字 Consolas；macOS 无 Inter 时常落 PingFang，数字 JetBrains Mono。PPTX 不嵌字体，回退不受文件控制——需精确度量请安装 Inter（SKILL.md §依赖）。**不得使用宋体 / Songti / SimSun 等衬线字体。**
 
 ---
 

@@ -27,29 +27,10 @@
 
 ### 步骤 2 · 调用工具链
 
-单次调用即可完成全部转换:
-
-```python
-import sys
-from pathlib import Path
-
-# ⚠️ 请将下一行替换为你本地 aham-ppt/assets 的绝对路径
-# 示例（Claude 标准技能路径）：/mnt/skills/user/aham-ppt/assets
-sys.path.insert(0, '/path/to/aham-ppt/assets')
-
-from svg_to_pptx_wrapper import svg_to_native_pptx
-
-svg_files = sorted(Path('./workspace/svg_final').glob('*.svg'))
-output = Path('./workspace/deliverables/方案.pptx')
-
-success = svg_to_native_pptx(
-    svg_files=svg_files,
-    output_path=output,
-    canvas_format='auto',  # 默认按 SVG viewBox 推导（16:9 设计基准）；或显式传 'ppt169'
-    verbose=True,
-)
-assert success, "转换失败,检查 SVG 是否规范"
-```
+**转换调用代码段以 `phase-07.md` 步骤5 为唯一维护处，本文件不复写**。要点：
+- `sys.path` 指向本机 `aham-ppt/assets` 绝对路径（必填，无可用默认值）；
+- `from svg_to_pptx_wrapper import svg_to_native_pptx`；
+- `canvas_format='auto'`（按 SVG viewBox 推导，16:9 设计基准）；返回值必须 assert。
 
 ### 步骤 3 · 验证产物
 
@@ -177,6 +158,16 @@ assert success, "转换失败,检查 SVG 是否规范"
 **处置**：通过 `svg_to_native_pptx()` 调用时默认已启用 `use_native_shapes=True`，确认调用的是 wrapper 而不是直接调底层。
 
 ---
+
+## 编辑语义边界（v3.2 明示，交付前须让用户知情）
+
+本工具链的文本是**标签级**而非段落级——转换器把多行文字（`<tspan dy>`）拆为 N 个独立单行文本框：
+
+- 双击可改字、可改色、可换字体（原生可编辑成立）；但**改长一句不会自动回流换行**，需手动挪动下一行框；
+- 项目符号圆点是画出来的图形，**不是 PPT 列表语义**（不能按 Tab 升降级、不能自动续点）；
+- 同一 x 坐标、不同字号的文本框之间存在约「字号×0.1px」的系统性左移（视觉可忽略，知悉即可）。
+
+**交付话术模板**：「每个元素都是原生形状/文本框，双击即可修改文字与颜色；若需整段重写或增删行，建议改 SVG 真源后重转（SVG 是单一可信源），比在 PPT 里手动挪框更快更齐。」
 
 ## 核心纪律
 

@@ -76,7 +76,7 @@
 - `svg-skeleton-common.md`：通用 Chrome/构件规范与咨询密集层纪律
 - `svg-skeleton-[当前版式系].md`：当前页版式的五栏章节（仅读对应 1 个）——**一律按「用法」栏调用参数化函数**（`layouts.py` 整页/内容区型、`consulting.py` 形体、`structures.py` / `charts.py` 结构与图表），坐标由函数冻结、不手画不自算；标注层纪律随 `svg-skeleton-common.md §咨询密集层 D` 一并加载。**系→文件例外**：封面/目录/章节用 `themes.py` 生成（不读 svg-skeleton），栅格直排版式（S-01/04/05/06、E-01）按 `grid-system.md §三` 坐标直排
 - `designer-rules.md`：设计原则+品牌纪律+PPTX约束
-- `chart-impl.md`：图表（有图表的页面才读）。**优先 `from charts import bar, hbar, line, waterfall, funnel, gantt, bullet, stacked, slope` 一行生成，不逐坐标手画**；charts 未覆盖的类型才用 chart-impl 手画模板
+- `chart-impl.md`：图表（有图表的页面才读）。**优先 `from charts import bar, hbar, line, waterfall, funnel, gantt, bullet, stacked, slope, sparkline, kpi_card, marimekko, fte_ramp, horizon_curves`（14 类全量）一行生成，不逐坐标手画**；charts 未覆盖的类型才用 chart-impl 手画模板
 
 **按视觉档（theme，Phase 1 记录）调用 `themes.py` 结构性页模板：**
 - A / B 档：`cover / toc / section / chrome`（B 档 chrome 可带图标/关系图）
@@ -123,7 +123,7 @@
 - 语义色场景必须颜色+符号双通道（不能只靠颜色区分）
 
 标题规则：
-- Action Title≤20字，**无衬线 Bold `#262626`，无蓝竖线**（禁宋体/衬线）
+- Action Title≤30字，**无衬线 Bold `#262626`，无蓝竖线**（禁宋体/衬线）
 - 坐标按 `grid-system.md §五`：单行 y=78 / 32px，双行 y=60·86 / 22px
 
 图表规则（有图表时读 chart-impl.md）：
@@ -147,7 +147,7 @@
 
 ### 步骤3：每3页确认
 
-每完成3页，输出中间确认：
+每完成3页，输出中间确认（**专家档**按 coach-engine「专家档合并闸门」改为**每章一次**）：
 
 ```
 已完成第[X]-[X+2]页，请查看以上设计。
@@ -186,18 +186,24 @@
 
 **PPTX模式（output_format=pptx-native 或 both，默认both）：**
 
+> **转换前必读** `view references/pptx-native-rules.md`（支持元素矩阵/雷区/验证步骤）；
+> **转换后必执行** `view references/quality-audit-protocol.md`（三级关卡说明 + lint 渲染前后双轨 + 人工审计入口）。
+
 ```python
 import sys
 from pathlib import Path
 
-# ⚠️ 请将下一行替换为你本地 aham-ppt/assets 的绝对路径
-# 示例（Claude 标准技能路径）：/mnt/skills/user/aham-ppt/assets
-sys.path.insert(0, '/mnt/skills/user/aham-ppt/assets')
+# ⚠️ 必填：将下一行替换为本机 aham-ppt/assets 的绝对路径（故意不给可用默认值，不替换会 ImportError）
+# 定位提示：本地克隆 → /<你的路径>/aham-ppt/assets；Claude 云容器 → /mnt/skills/user/aham-ppt/assets
+sys.path.insert(0, '<替换为_aham-ppt/assets_绝对路径>')
 
 from svg_to_pptx_wrapper import svg_to_native_pptx
 
 svg_files = sorted(Path('./workspace/svg_final').glob('*.svg'))
 output = Path('./workspace/deliverables/方案.pptx')
+
+# presenting/hybrid 模式：从 Phase 5 规划卡收集「讲者备注」，转换完成后写入 PPTX 备注栏
+notes_list = []  # 与 svg_files 逐页对应；无备注的页留空字符串
 
 success = svg_to_native_pptx(
     svg_files=svg_files,
@@ -205,6 +211,15 @@ success = svg_to_native_pptx(
     canvas_format='ppt169',
 )
 assert success, "转换失败，检查SVG是否规范"
+
+# 写入讲者备注（Duarte 式「页面留冲击、内容进备注」的后半环；python-pptx 已在依赖中）
+if any(notes_list):
+    from pptx import Presentation
+    prs = Presentation(output)
+    for slide, note in zip(prs.slides, notes_list):
+        if note:
+            slide.notes_slide.notes_text_frame.text = note
+    prs.save(output)
 ```
 
 **PPTX转换的严禁行为：**

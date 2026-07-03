@@ -8,7 +8,7 @@
 
 **用途**：一张图占满 FULL 区，用数据本身说话。
 **适用场景**：单一数据故事；两组数据对照 → V-04。
-**用法**：FULL 区（40,100,1200,540±）**直调 charts.py**（bar/hbar/line/waterfall/funnel/stacked/slope/marimekko…按 phase-05 §2.5 图型映射）；来源走 chrome 页脚，图内补充注可置 (56,656)。无包装函数（charts 即其参数化实现）。
+**用法**：FULL 区（40,100,1200,580 排版目标；红线底 y=690）**直调 charts.py**（bar/hbar/line/waterfall/funnel/stacked/slope/marimekko…按 phase-05 §2.5 图型映射）；来源走 chrome 页脚，图内补充注可置 (56,656)。无包装函数（charts 即其参数化实现）。
 **来源**：图表选型体系=Zelazny 五图（调研2）；各图型纪律见 chart-impl。
 **纪律**：一页一个数据故事；标题写结论不写图名。
 

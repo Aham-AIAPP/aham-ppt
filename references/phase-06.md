@@ -88,7 +88,7 @@
 设计时严格执行：
 - 颜色决策全部查BRAND_RULES，不自定义任何色值
 - 字体严格按BRAND_RULES：**单一无衬线**（Inter / 微软雅黑 / PingFang），数字用 mono（Consolas / JetBrains Mono）；**禁衬线/宋体**
-- Action Title（结论式标题）≤20字，**无衬线 Bold `#262626`，无蓝竖线**（坐标见 grid-system §五）
+- Action Title（结论式标题）≤30字，**无衬线 Bold `#262626`，无蓝竖线**（坐标见 grid-system §五）
 - 页脚包含：页码/版本/日期/保密标注
 - 图表页优先用 `charts.py` 组件（兜底 `chart-impl.md`）；禁用饼图/环形图、不用3D效果、不用渐变
 

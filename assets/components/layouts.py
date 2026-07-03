@@ -6,7 +6,7 @@
 纪律：坐标一律取自各系骨架规范（svg-skeleton-*.md 历史冻结值），函数内为唯一真源；
 内容数量数据驱动，仅在有依据处硬校验（CONTRIBUTING §教训固化机制）。
 """
-from components import T, L, P, MONO, ACC, INK1, INK2, INK3, INK4, LINE, PANEL
+from components import T, L, P, MONO, ACC, INK1, INK2, INK3, INK4, LINE, PANEL, placeholder
 
 _DK1, _DK2, _DK3 = "#FFFFFF", "#A8A8A8", "#787878"   # 深底三级字
 
@@ -185,9 +185,9 @@ def hero(conclusion_lines, supports):
     n = len(supports)
     if n not in (2, 3, 4):
         raise ValueError("S-07 支撑数硬拦 2/3/4（grid §3.6 三档栅格），收到 %d" % n)
-    COLS = {2: [(40, 590), (646, 594)],
-            3: [(40, 380), (436, 380), (832, 408)],
-            4: [(40, 277), (333, 277), (626, 277), (919, 321)]}[n]
+    COLS = {2: [(40, 592), (648, 592)],
+            3: [(40, 389), (445, 389), (850, 390)],
+            4: [(40, 288), (344, 288), (648, 288), (952, 288)]}[n]
     b = f'<rect x="40" y="100" width="1200" height="255" rx="4" fill="{INK1}"/>'
     b += T(56, 136, "CORE FINDING", 11, "#A8A8A8", ls=3)
     for i, ln in enumerate(_as_lines(conclusion_lines, 'conclusion_lines')[:2]):
@@ -224,8 +224,8 @@ def kpi_six(cards):
     正式经营看板（值+基准+sparkline）→ charts.kpi_card（S-09 高阶）。"""
     if not 1 <= len(cards) <= 6:
         raise ValueError("S-09 轻量格限 1–6 张，收到 %d" % len(cards))
-    POS = [(40, 120, 360), (440, 120, 360), (840, 120, 400),
-           (40, 320, 360), (440, 320, 360), (840, 320, 400)]
+    POS = [(40, 120, 373), (453, 120, 373), (866, 120, 374),
+           (40, 320, 373), (453, 320, 373), (866, 320, 374)]  # 等分 373/373/374·缝40·右缘1240（v3.1）
     b = ""
     for (la, v, de), (x, y, w) in zip(cards, POS):
         b += P(x, y, w, 160, PANEL, r=4)
@@ -436,4 +436,73 @@ def pyramid_light(layers):
     for (x1, x2, tx, ym, desc) in leads:
         b += L(x1, ym, x2, ym, INK4, 0.5, dash="3,3")
         b += T(tx, ym + 5, desc, 12, INK2)
+    return b
+
+
+# ============================================================
+#  S-14 团队页 / S-15 报价页（v3.2 新增，补齐客户方案缺口）
+# ============================================================
+
+def _eq_cols(k, total=1200, gutter=16, x0=40):
+    """等分列引擎：均分 + 余数摊给末列 1px 级（与 grid §3 等分纪律一致，右缘恰 x0+total）。"""
+    w0 = (total - gutter * (k - 1)) // k
+    rem = (total - gutter * (k - 1)) - w0 * k
+    cols, x = [], x0
+    for i in range(k):
+        w = w0 + (rem if i == k - 1 else 0)
+        cols.append((x, w)); x += w + gutter
+    return cols
+
+
+def team_grid(members):
+    """S-14 团队页（人像占位 + 职务网格）。members=[(name, title, note)] **2–8 人**（函数强制）。
+    照片一律 components.placeholder 占位——等真实照片替换，不硬编假头像（同 SKILL 附·工程预检 4）。
+    N≤4 单行；5–8 人两行×4 列。坐标等分冻结（389/389/390、288×4 同源算法）。"""
+    n = len(members)
+    if not 2 <= n <= 8:
+        raise ValueError("S-14 团队页限 2–8 人，收到 %d" % n)
+    rows = [members] if n <= 4 else [members[:4], members[4:]]
+    b = ""
+    for ri, row in enumerate(rows):
+        cols = _eq_cols(len(row) if n <= 4 else 4)
+        y0 = 130 if n <= 4 else (110 if ri == 0 else 400)
+        ph_h = 300 if n <= 4 else 150
+        for (name, title, note), (x, w) in zip(row, cols):
+            b += placeholder(x, y0, w, ph_h, label="成员照片")
+            ty = y0 + ph_h + 34
+            b += T(x, ty, name, 18, INK1, 700)
+            b += T(x, ty + 24, title, 12, INK2, 600)
+            if note:
+                b += T(x, ty + 46, note, 11, INK2)
+    return b
+
+
+def price_table(rows, header=("项目", "说明", "金额"), total=None, total_label="合计", note=""):
+    """S-15 报价/条款页（三线表）。rows=[(item, desc, amount_str)] **1–8 行**（函数强制）。
+    金额为**字符串**由调用方算好传入（含币种/千分位，绝不由函数求和——不猜数、不编数）。
+    表格纪律：只横线无竖线、数字右对齐 mono、表头/合计加粗（brand §4 表格规范）。"""
+    if not 1 <= len(rows) <= 8:
+        raise ValueError("S-15 报价表限 1–8 行，收到 %d" % len(rows))
+    x0, x1, rh = 40, 1240, 52
+    cx_item, cx_desc, cx_amt = 56, 380, 1224
+    y = 140
+    b = f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{INK1}" stroke-width="1.5"/>'
+    b += T(cx_item, y + 33, header[0], 13, INK1, 700)
+    b += T(cx_desc, y + 33, header[1], 13, INK1, 700)
+    b += T(cx_amt, y + 33, header[2], 13, INK1, 700, anchor="end")
+    y += rh
+    b += L(x0, y, x1, y)
+    for item, desc, amt in rows:
+        b += T(cx_item, y + 33, item, 14, INK1, 600)
+        b += T(cx_desc, y + 33, desc, 12, INK2)
+        b += T(cx_amt, y + 33, amt, 14, INK1, 600, fam=MONO, anchor="end")
+        y += rh
+        b += L(x0, y, x1, y)
+    if total is not None:
+        b += T(cx_item, y + 33, total_label, 14, INK1, 700)
+        b += T(cx_amt, y + 33, total, 15, INK1, 700, fam=MONO, anchor="end")
+        y += rh
+    b += f'<line x1="{x0}" y1="{y}" x2="{x1}" y2="{y}" stroke="{INK1}" stroke-width="1.5"/>'
+    if note:
+        b += T(x0, y + 28, note, 11, INK2)
     return b

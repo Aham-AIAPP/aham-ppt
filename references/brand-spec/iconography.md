@@ -94,6 +94,8 @@ Colors: `●` success `#5A7A60` · `▲` warning `#8A7333` · `✕` danger `#9E3
 ❌ Font Awesome legacy / iconfont multi-color packs
 ❌ Self-drawn SVGs that diverge from Lucide's geometry
 
+> **PPTX-track registered exception**: `assets/components/icons.py` uses **self-drawn Lucide-style approximations**（为 SVG→PPTX 转换兼容；几何简化已审定，默认 stroke 1.7px 在 1.5–2 规范区间内）。QC 对 icons.py 产出按此放行，不判违例；新增图标仍须先过 `icons_preview.py` 缩略目检。
+
 ## Logo as icon (favicon, app icon)
 
 Use `assets/logo.png` (full lockup). The brand mark renders as a small `#336EE8` square + `Aham` wordmark; the blue square is the *only* blue point on a cover/header. For 24 × 24 favicons, supply a graphic-mark-only SVG (see README caveats).

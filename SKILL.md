@@ -11,9 +11,15 @@ description: >
 
 # Aham PPT 技能 — Aham UI v6.1 · Office 轨 · PPT
 
+## 依赖（Phase 7 转换前确认）
+
+- **必装 pip 包**：`python-pptx`、`cairosvg`（见 `requirements.txt`；缺失时 Phase 7 转换第一步即 ImportError）。
+- **可选**：LibreOffice（`soffice` CLI）——用于 PDF 导出与渲染抽检；缺失时交付物**不含 PDF**，在交付说明中注明原因即可，不阻塞 PPTX 交付。
+- **字体现实**：规范字体 Inter / JetBrains Mono 若未安装，PPTX 打开时由系统回退（Windows 常见 Calibri/微软雅黑/Consolas），不影响可编辑性；需精确度量请安装 Inter。
+
 > **当前能力概览**（演进史统一见 `CHANGELOG.md`，正文不再按版本叙事）：
 > 八阶段强制流程（防跳步 + 卡点等待）× 能力自适应教练机制 × A/B/C 三档视觉主题（含深色模板）。
-> 版式库 46 个 ID（7 系内容版式 + SPC 结构页），选择走 layout-library 单一决策表 + 首选核心集；
+> 版式库 48 个 ID（7 系内容版式 + SPC 结构页；v3.2 增 S-14 团队页 / S-15 报价页），选择走 layout-library 单一决策表 + 首选核心集；
 > 数据强制图表化三环硬门禁。组件层：`charts.py` 14 类数据图表 · `consulting.py` 咨询异形与标注层 ·
 > `structures.py` 咨询结构版式（矩阵/树/泳道/蓝图/金字塔等，含 RACI 每行一 A、Mekko ≤7 列等强校验）·
 > `themes.py` 结构页 · SVG→原生可编辑 PPTX 工具链 + `tools/lint_svg.py` 预检。
@@ -32,18 +38,15 @@ view references/brand-spec/track-rules.md
 
 **优先级 2（PPT 专项规范）：**
 ```
-view references/designer-rules.md
 view references/phase-01.md  ← 规范加载阶段
 （按执行阶段依次读取对应 phase-XX.md）
 ```
+（`designer-rules.md` 473 行，由 Phase 6/7 按需加载——启动时不预载，见下方索引表。）
 
 **优先级 3（降级兜底）：**
-使用本文件末尾「降级基线」。
+使用本文件末尾「降级基线」（唯一降级标准，phase-01 同此，不另设第二套）。
 
-加载 pptx 文档生成技能：
-```
-view /mnt/skills/public/pptx/SKILL.md
-```
+> 本技能自带完整 SVG→原生 PPTX 转换链，**不加载官方 pptx 技能**（其配色/装饰建议与本体系直接冲突）。仅当需要读取/编辑客户存量 .pptx 时，才按运行环境定位官方 pptx 技能，且只用其文件操作部分、忽略其全部设计建议。
 
 **视觉档规范（务必加载）：**
 ```
@@ -51,7 +54,7 @@ view references/theme-tiers.md     ← 三档主题：A 克制 / B 现代专业 
 ```
 （字宽修复 / 强调色语义 QC / 图标组件 / 内容方法论已并入 `designer-rules.md`、`phase-02.md` 与组件代码，不再单列文件。）
 图标与组件资产位于 `assets/components/`：`icons.py`（~40 线性图标 + icon_circle）、
-`layouts.py`（**整页/内容区型版式层：I·T 系整页 5 式 + S/E/A/G 手画版式 14 式的参数化实现，坐标冻结自骨架规范，含 S-07 支撑数 2/3/4、G-02 柱 2–4、G-03 层 3–5 等硬校验**）、`components.py`（基础原子：文本 T / 线 L / 面板 P / 转义 esc / 箭头 arrow·carrow / 标签 chip / 六边形 / 状态点 status / 图占位框 placeholder / 色板与字体常量）、`charts.py`（**14 类数据图表：柱/横柱/折线/瀑布/漏斗/甘特/子弹/堆叠/坡度/sparkline/KPI卡/Marimekko/FTE爬坡/三地平线**，一行调用、brand §7.5 合规、转换实测可编辑）、`themes.py`（A/B 封面/目录/章节/页眉模板 + **C 档深色模板 `cover_dark/section_dark/quote_dark`**）、`consulting.py`（**咨询异形层：雪佛龙链/流向带/哑铃/点阵/驱动树+肘线+算子/链式递减 + 标注层（椭圆圈注/引线/水印/线画对勾/So-What）**，形体骨架在各系文件 90 段章节、标注层与纪律见 `references/svg-skeleton-common.md §咨询密集层 D`）、`structures.py`（**咨询结构层：网格/树对齐引擎 + 组合矩阵/RACI/issue tree/分层架构/泳道路线图（gantt·chevron·分桶三模式）/服务蓝图/剖面金字塔/论证阶梯/推算件/记号/降级同心弧**，含强校验：RACI 每行一 A、Mekko ≤7 列、蓝图固定 5 泳道）。
+`layouts.py`（**整页/内容区型版式层：I·T 系整页 5 式 + S/E/A/G 版式 16 式的参数化实现（含 v3.2 新增 S-14 团队页/S-15 报价页），坐标冻结自骨架规范，含 S-07 支撑数 2/3/4、G-02 柱 2–4、G-03 层 3–5、S-14 成员 2–8、S-15 行 1–8 等硬校验**）、`components.py`（基础原子：文本 T / 线 L / 面板 P / 转义 esc / 箭头 arrow·carrow / 标签 chip / 六边形 / 状态点 status / 图占位框 placeholder / 色板与字体常量）、`charts.py`（**14 类数据图表：柱/横柱/折线/瀑布/漏斗/甘特/子弹/堆叠/坡度/sparkline/KPI卡/Marimekko/FTE爬坡/三地平线**，一行调用、brand §7.5 合规、转换实测可编辑）、`themes.py`（A/B 封面/目录/章节/页眉模板 + **C 档深色模板 `cover_dark/section_dark/quote_dark`**）、`consulting.py`（**咨询异形层：雪佛龙链/流向带/哑铃/点阵/驱动树+肘线+算子/链式递减 + 标注层（椭圆圈注/引线/水印/线画对勾/So-What）**，形体骨架在各系文件 90 段章节、标注层与纪律见 `references/svg-skeleton-common.md §咨询密集层 D`）、`structures.py`（**咨询结构层：网格/树对齐引擎 + 组合矩阵/RACI/issue tree/分层架构/泳道路线图（gantt·chevron·分桶三模式）/服务蓝图/剖面金字塔/论证阶梯/推算件/记号/降级同心弧**，含强校验：RACI 每行一 A、Mekko ≤7 列、蓝图固定 5 泳道）。
 
 ---
 
@@ -79,7 +82,7 @@ phase-05（版式）/ phase-07（出片）按 `theme` 取用 `themes.py` 对应�
 >
 > 1. **逐阶段加载**：进入第 N 阶段前，**必须先 `view references/phase-0N.md`** 并完整执行其中的「强制等待锚点」与全部步骤——**禁止只凭下方阶段名脑补着做**。
 > 2. **卡点等待**：每个阶段结束必须输出该阶段「完成卡」，并**等用户确认后**才进入下一阶段；用户未确认，不得继续。
-> 3. **不可跳步 / 不可合并**：八阶段按序逐个执行，禁止跳过（尤其 P3 论点提炼、P4 叙事骨架、P6 样稿确认这三个最易被省的环节），禁止把多个阶段并成一次产出。
+> 3. **不可跳步 / 不可合并**：八阶段按序逐个执行，禁止跳过（尤其 P3 论点提炼、P4 叙事骨架、P6 样稿确认这三个最易被省的环节），禁止把多个阶段并成一次产出。**例外**：专家档按 coach-engine「专家档合并闸门」合并部分停等卡点（只减停等次数、不减任何测试/质检项），不视为违反本条。
 > 4. **进度可见**：每个阶段开头先输出一行 `【阶段 N/8 · 名称 · 已加载 phase-0N.md】`，让执行轨迹可被监督（各 phase 文件顶部已重申此要求）。
 > 5. **Phase 1 ≠ Step 1**：Step 1 只完成规范 `view`；phase-01 的受众问答（强制等待锚点）与受众卡/完成卡**仍须照常执行**，不得因 Step 1 已加载文件就跳过 Phase 1 的实质工作。
 
@@ -93,8 +96,27 @@ phase-05（版式）/ phase-07（出片）按 `theme` 取用 `themes.py` 对应�
 | 4 | 叙事骨架搭建（Ghost Deck） | `references/phase-04.md` |
 | 5 | 大纲与版式规划 | `references/phase-05.md` |
 | 6 | 样稿确认（与用户对齐） | `references/phase-06.md` |
-| 7 | 逐页设计输出 | `references/phase-07.md` |
-| 8 | 质检交付（QC 清单） | `references/phase-08.md` |
+| 7 | 逐页设计输出（附属规范：`pptx-native-rules.md` 转换前必读、`quality-audit-protocol.md` 转换后 Gate/lint） | `references/phase-07.md` |
+| 8 | 质检交付（QC 清单；附属规范：`quality-audit-protocol.md` 人工审计环节） | `references/phase-08.md` |
+
+### references 索引（全部文件 · 何时读）
+
+| 文件 | 何时读 | 用途 |
+|---|---|---|
+| `brand-spec/brand.md` + `tokens.css` | Step 1 | 品牌规范 + 取值唯一事实源 |
+| `brand-spec/track-rules.md` | Step 1 | 轨道分流与铁规 |
+| `brand-spec/iconography.md` | Phase 6/7（用图标时） | 图标规范（含 icons.py 自绘例外登记） |
+| `theme-tiers.md` | Step 1（务必） | A/B/C 三档主题对照 |
+| `phase-01.md` … `phase-08.md` | 各阶段入口（铁律 1） | 阶段执行细则 |
+| `coach-engine.md` | Phase 1 末尾起全程 | 档位检测 / 引导序列 / 专家档合并闸门 |
+| `designer-rules.md` | Phase 6/7 | 设计原则 + 品牌纪律 + PPTX 约束（全库最大 md，按需加载） |
+| `grid-system.md` | Phase 5/7（直排页） | 栅格坐标唯一源 + 汉字字数表 |
+| `layout-library.md` | Phase 5 | 版式单一决策表 + 图表速查（权威清单） |
+| `svg-skeleton-common.md` | Phase 7 | Chrome/构件/状态/咨询密集层 D |
+| `svg-skeleton-{s,e,g,i,t,v,a}.md` | Phase 7（按当前页系，仅读 1 个） | 各系版式五栏章节 |
+| `chart-impl.md` | Phase 7（图表页） | 图表手画模板（charts.py 未覆盖时才用） |
+| `pptx-native-rules.md` | Phase 7 转换前 | 转换规范 / 支持矩阵 / 排查 |
+| `quality-audit-protocol.md` | Phase 7 转换后 + Phase 8 | 三级关卡 + lint 双轨 + 人工审计 |
 
 ---
 

@@ -16,6 +16,9 @@
    gh release create vX.Y.Z --title "vX.Y.Z — 一句话主题" --notes-file <notes.md> --latest
    ```
 4. 确认 README 的 Release 徽章动态显示新版本；**社交封面绝不印版本号**（版本由徽章动态显示）。
+5. **对外物料统计核对**：重跑 `tools/layout_catalog.py` / `tools/build_pages.py` 前，先核对脚本内统计数字与组件实数一致（`charts.py` 图表函数数、`consulting.py` 公开 API 数、版式函数数）——这些数字曾漂移过（v3.1 修正）。
+
+> **两个 tools 目录的分工**：`tools/` = 仓库发版物料脚本（README 长图 / GitHub Pages / 社交封面，需 playwright，与技能运行时无关）；`assets/tools/` = 技能运行时工具（lint_svg / pageno_fill / icons_preview）。
 
 ## 验证（改动的最低门槛）
 
@@ -25,6 +28,14 @@
 - **回归级**：改动既有函数时，用受影响版式的成品页（如世界杯 deck 对应页）做像素 diff——默认路径必须字节级/像素级一致，除非改动本身就是要改渲染结果。
 
 ## 教训固化机制（禁止追加式教训堆）
+
+## 触发评测集（v3.2 · 人工评测清单，改 description 前后各跑一遍）
+
+> 技能无自动化评测 harness，本清单为**人工判定**：逐条设想用户只说这一句，判断技能应否触发。改动 SKILL.md description 后必须全量复跑并记录结果。
+
+**应触发（12 条）**：①帮我做PPT ②做个演示文稿 ③根据这份资料做PPT ④做客户方案PPT ⑤制作幻灯片 ⑥把这份材料做成汇报 ⑦做一版给领导汇报的片子 ⑧做个路演deck ⑨竞标方案PPT ⑩项目复盘做成PPT ⑪这周的成果整理成演示 ⑫做一页报价PPT
+
+**不应触发（8 条）**：①写个Word周报（→docx 技能）②做个Excel报表（→xlsx）③设计一张海报（→设计类技能）④做个官网/落地页（→前端）⑤要 SVG/HTML 版演示（→ppt-svg，description 已消歧）⑥帮我改一下这个现成 pptx 里的错别字（存量编辑→官方 pptx 技能文件操作）⑦做个PDF报告（→pdf）⑧「汇报一下进展」（口头汇报，无制作意图——**边界最模糊的一条**，误触发时优先收紧 description 的「做一个汇报」措辞）
 
 任何实战教训**必须在当轮落到以下三选一**，不允许以"补遗 / LESSONS / 实测教训清单"等形式追加堆叠：
 

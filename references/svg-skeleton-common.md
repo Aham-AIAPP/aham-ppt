@@ -39,8 +39,8 @@
 
 <!-- ④ 页脚 -->
 <line x1="40" y1="690" x2="1240" y2="690" stroke="#E7E7E7" stroke-width="1"/>
-<text x="40" y="709" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#9B9B9B">来源：[source] · [date]</text>
-<text x="1240" y="709" text-anchor="end" font-family="'JetBrains Mono', Consolas, monospace" font-size="11" fill="#9B9B9B">[page_index] / [total_pages]</text>
+<text x="40" y="709" font-family="Inter, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="11" fill="#6E6E6E">来源：[source] · [date]</text>
+<text x="1240" y="709" text-anchor="end" font-family="'JetBrains Mono', Consolas, monospace" font-size="11" fill="#6E6E6E">[page_index] / [total_pages]</text>
 
 <!-- ⑤ 可选·关键页品牌点缀：左下蓝短条（全页仅此一处蓝面） -->
 <!-- <rect x="40" y="672" width="84" height="2" fill="#336EE8"/> -->

@@ -108,20 +108,20 @@ def section(theme,num,zh,summary,total="04",items=None):
 # ============================================================
 #  内容页页眉（chrome）
 # ============================================================
-def chrome(theme,section_label,title,source,page,total,body,brand="",tsize=26,icon=None):
-    head=[T(40,24,section_label,11,INK3,ls=1)]
+def chrome(theme,section_label,title,source,page,total,body,brand="",tsize=32,icon=None):
+    head=[T(40,24,section_label,11,INK2,ls=1)]
     if brand:
         head.append(f'<rect x="1188" y="16" width="9" height="9" rx="2" fill="{ACC}"/>')
         head.append(T(1240,24,brand,12,INK1,600,anchor="end"))
     head.append(L(40,32,1240,32))
     tx=40
     if theme=="B" and icon:
-        head.append(icon_circle(icon,58,66,16,ACC,PANEL,isize=20)); tx=86
-    head.append(T(tx,74,title,tsize,INK1,700))
-    head.append(L(40,90,1240,90))
+        head.append(icon_circle(icon,58,70,16,ACC,PANEL,isize=20)); tx=86
+    head.append(T(tx,78,title,tsize,INK1,700))
+    head.append(L(40,94,1240,94))
     foot=[L(40,690,1240,690),
-          T(40,709,"来源："+source,11,INK3),
-          T(1240,709,f"{page} / {total}",11,INK3,fam=MONO,anchor="end")]
+          T(40,709,"来源："+source,11,INK2),
+          T(1240,709,f"{page} / {total}",11,INK2,fam=MONO,anchor="end")]
     return _svg("".join(head)+body+"".join(foot))
 
 
@@ -132,9 +132,10 @@ def chrome(theme,section_label,title,source,page,total,body,brand="",tsize=26,ic
 BG_DARK = "#1C1C1C"
 LT1 = "#F2F2F2"      # 深底上主字
 LT2 = "#A8A8A8"      # 深底上次字
-LT3 = "#787878"      # 深底上弱字（页脚/PART）
+LT3 = "#787878"      # 深底装饰性弱字（对 #1C1C1C 仅 3.86:1，不得承载须读取的信息；信息性小字用 LT2）
 DK_LINE = "#3A3A3A"  # 深底上的分隔线
 DK_PANEL = "#262626" # 深底上稍亮的块
+ACC_HOVER = "#5C8BED" # 深底信息性蓝字（对 #262626 4.59:1、对 #1C1C1C 5.17:1，过 AA；#336EE8 在深底仅作装饰）
 
 
 def cover_dark(brand, title, subtitle, chapters, meta_left="", meta_right="", eyebrow="OVERVIEW"):
@@ -142,26 +143,26 @@ def cover_dark(brand, title, subtitle, chapters, meta_left="", meta_right="", ey
     eyebrow：大标题上方小字眉标，中性占位，按实际主题传入（勿写死行业）。"""
     b = [f'<rect x="40" y="60" width="12" height="12" rx="2" fill="{ACC}"/>',
          T(62, 76, brand, 19, LT1, 700),
-         T(80, 168, eyebrow, 13, LT3, ls=5),
+         T(80, 168, eyebrow, 13, LT2, ls=5),
          T(80, 332, title, 56, LT1, 700)]
     if subtitle:
         b.append(T(80, 404, subtitle, 20, LT2))
     b.append(f'<rect x="84" y="430" width="150" height="5" rx="2" fill="{ACC}"/>')
     b.append(f'<rect x="812" y="96" width="428" height="528" rx="22" fill="{DK_PANEL}"/>')
     b.append(T(852, 150, "本册导览", 15, LT1, 700))
-    b.append(T(852, 172, "IN THIS DECK", 10, LT3, ls=2))
+    b.append(T(852, 172, "IN THIS DECK", 10, LT2, ls=2))
     m = min(len(chapters), 5)
     for i, (n, zh, sub, ic) in enumerate(chapters[:5]):
         y = 220 + i * 78
-        b.append(T(852, y, n, 14, ACC, 700, fam=MONO))
+        b.append(T(852, y, n, 14, ACC_HOVER, 700, fam=MONO))
         b.append(T(892, y, zh, 16, LT1, 600))
         if sub:
             b.append(T(892, y + 20, sub, 12, LT2))
         if i < m - 1:
             b.append(L(852, y + 46, 1200, y + 46, DK_LINE, 1))
     b.append(L(80, 648, 1240, 648, DK_LINE, 1))
-    b.append(T(80, 682, meta_left, 13, LT3))
-    b.append(T(1240, 682, meta_right, 13, LT3, anchor="end"))
+    b.append(T(80, 682, meta_left, 13, LT2))
+    b.append(T(1240, 682, meta_right, 13, LT2, anchor="end"))
     return _svg("".join(b), bg=BG_DARK)
 
 
@@ -171,18 +172,18 @@ def section_dark(num, zh, summary, total="04", items=None):
          f'<rect x="60" y="470" width="120" height="6" rx="3" fill="{ACC}"/>',
          T(60, 540, zh, 40, LT1, 700),
          T(60, 592, summary, 16, LT2),
-         T(60, 640, f"PART {num} / {total}", 13, LT3, ls=3, fam=MONO)]
+         T(60, 640, f"PART {num} / {total}", 13, LT2, ls=3, fam=MONO)]
     if items:
         rx = 620
         b.append(T(rx, 150, "本章内容", 16, LT1, 700))
-        b.append(T(rx, 172, "IN THIS SECTION", 10, LT3, ls=2))
+        b.append(T(rx, 172, "IN THIS SECTION", 10, LT2, ls=2))
         for i, t in enumerate(items):
             y = 232 + i * 80
             b.append(f'<rect x="{rx}" y="{y-13}" width="6" height="26" rx="2" fill="{ACC}"/>')
             b.append(T(rx + 22, y + 5, t, 16, LT1, 600))
             if i < len(items) - 1:
                 b.append(L(rx, y + 40, 1200, y + 40, DK_LINE, 1))
-    b.append(T(1240, 700, f"{num} / {total}", 11, LT3, fam=MONO, anchor="end"))
+    b.append(T(1240, 700, f"{num} / {total}", 11, LT2, fam=MONO, anchor="end"))
     return _svg("".join(b), bg=BG_DARK)
 
 
