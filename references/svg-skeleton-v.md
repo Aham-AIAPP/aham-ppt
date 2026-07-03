@@ -9,7 +9,7 @@
 **用途**：一张图占满 FULL 区，用数据本身说话。
 **适用场景**：单一数据故事；两组数据对照 → V-04。
 **用法**：FULL 区（40,100,1200,580 排版目标；红线底 y=690）**直调 charts.py**（bar/hbar/line/waterfall/funnel/stacked/slope/marimekko…按 phase-05 §2.5 图型映射）；来源走 chrome 页脚，图内补充注可置 (56,656)。无包装函数（charts 即其参数化实现）。
-**来源**：图表选型体系=Zelazny 五图（调研2）；各图型纪律见 chart-impl。
+**来源**：图表选型体系=Gene Zelazny（McKinsey 视觉传达总监）, *Say It With Charts: The Executive's Guide to Visual Communication*, McGraw-Hill, 初版 **1985**（后 1991/1996/2001 版）——五类比较 Component/Item/Time Series/Frequency Distribution/Correlation（调研报告来源升级表）；瀑布图由 McKinsey 于 1990s 普及（调研报告：Wikipedia "Waterfall chart"，业界亦称 McKinsey chart）；各图型纪律见 chart-impl。
 **纪律**：一页一个数据故事；标题写结论不写图名。
 
 ---
@@ -81,3 +81,13 @@
 **用法**：`charts.marimekko(x, y, w, h, cols, series, wlabel, mode, hi_series)`——cols=[(名, [段值], 列总)]，**≤7 列 / ≤4 段**（函数硬拦）；mode="pct"|"abs"（abs=Bar Mekko）。
 **来源**：mosaic/Marimekko——Hartigan & Kleiner 1981 学术源；Aon 2025 Investor Day Slide 69 为在用实例（调研2，文本标签已核实、系品牌叙事图）。
 **纪律**：≤7 列硬拦依据=哈哈镜效应随列数放大（调研2）；近似拆分必须页内标注。
+
+---
+
+## V-05 小倍数网格（参数化 · charts.py · v4.0）
+
+**用途**：同图型、**同坐标尺度**的 4–12 个小图网格——只让数据变化、设计不变，跨类别/跨期系统比较。
+**适用场景**：多产线/多区域/多期的同构横扫。2 图深对比 → V-04；单一数据故事 → V-02。
+**用法**：`charts.small_multiples(x, y, w, h, kind, datasets, cols, unit, shared_max)`——kind="line"|"bar"；datasets=[(标题, 数值列)] 4–12 格且各格点数一致（函数强制）；**全局共享 Y 尺度由函数强制**（Tufte 定义的核心纪律），底部自动注明尺度声明。
+**来源**：Edward Tufte, *The Visual Display of Quantitative Information*, Graphics Press, 1983（调研报告候选10，一手书籍；普及者）。
+**纪律**：禁各格独立缩放（那是误导性对比）；末值标签统一右上。

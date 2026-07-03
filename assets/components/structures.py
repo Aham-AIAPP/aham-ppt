@@ -458,6 +458,9 @@ def service_blueprint(x, y, w, h, steps, rows, arrows=None):
     BOUNDS = {2: "互动线", 3: "可见性线", 4: "内部互动线"}
     if len(rows) != 5:
         raise ValueError(f"服务蓝图固定 5 泳道，收到 {len(rows)} 行")
+    for ri, row in enumerate(rows):
+        if not isinstance(row, (list, tuple)) or any(c is not None and not isinstance(c, str) for c in row):
+            raise ValueError(f"服务蓝图第 {ri+1} 泳道须为字符串/None 列表（泳道名由函数内置，勿传 (名, 列表) 元组）")
     label_w, head_h = 148, 32
     px, pyt = x + label_w, y + head_h
     pw, ph = w - label_w, h - head_h
@@ -622,4 +625,248 @@ def concentric_arcs(x, y, w, h, rings):
         s += T(x + w * 0.78 + 6, ly_ + 4, lab, 12, INK1, w=700)
     s += L(ccx - r_max - 6, ccy, ccx + r_max + 6, ccy, INK3, 1)
     s += T(x + w - 4, y + h - 4, "定性层级示意 · 弧径不代表数值", 9.5, INK4, anchor="end")
+    return s
+
+
+# ============================================================ v4.0 新增（调研落地批）
+def harvey_table(x, y, w, h, dims, items, legend=True):
+    """S-16 Harvey Balls 评估表：行=评估对象，列=维度，格=0–4 五档填充圆。
+    dims=[维度名] 2–6 列；items=[(对象名, [评分 0–4 ×len(dims)])] 2–8 行。
+    来源：Harvey L. Poppel @ Booz Allen Hamilton, 1970s（调研報告候选1）。
+    与 S-13 勾选盘点分工：二值完成态→S-13；程度梯度→本表。"""
+    if not 2 <= len(dims) <= 6:
+        raise ValueError("S-16 维度列限 2–6，收到 %d" % len(dims))
+    if not 2 <= len(items) <= 8:
+        raise ValueError("S-16 评估行限 2–8，收到 %d" % len(items))
+    for nm, scores in items:
+        if len(scores) != len(dims):
+            raise ValueError(f"S-16 「{nm}」评分数 {len(scores)} ≠ 维度数 {len(dims)}")
+        if any(not 0 <= s <= 4 for s in scores):
+            raise ValueError(f"S-16 「{nm}」评分须 0–4 五档")
+    name_w = 220
+    col_w = (w - name_w) / len(dims)
+    row_h = min(56, (h - 40 - (30 if legend else 0)) / len(items))
+    s = f'<rect x="{x}" y="{y}" width="{w:.0f}" height="40" fill="{INK1}"/>'
+    s += T(x + 16, y + 26, "评估对象", 12, "#FFFFFF", 700)
+    for j, d in enumerate(dims):
+        s += T(x + name_w + (j + 0.5) * col_w, y + 26, d, 12, "#FFFFFF", 700, anchor="middle")
+    r = min(13, row_h * 0.32)
+    for i, (nm, scores) in enumerate(items):
+        ry = y + 40 + i * row_h
+        if i % 2:
+            s += f'<rect x="{x}" y="{ry:.1f}" width="{w:.0f}" height="{row_h:.1f}" fill="{PANEL}"/>'
+        s += T(x + 16, ry + row_h / 2 + 5, nm, 13, INK1, 700)
+        for j, sc in enumerate(scores):
+            cx, cy = x + name_w + (j + 0.5) * col_w, ry + row_h / 2
+            s += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" fill="none" stroke="{INK1}" stroke-width="1.5"/>'
+            if sc == 4:
+                s += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r-2:.1f}" fill="{INK1}"/>'
+            elif sc > 0:  # 扇形：12 点起顺时针 sc/4 圆
+                a = sc / 4 * 2 * math.pi
+                x1, y1 = cx, cy - (r - 2)
+                x2, y2 = cx + (r - 2) * math.sin(a), cy - (r - 2) * math.cos(a)
+                s += (f'<path d="M {cx:.1f} {cy:.1f} L {x1:.1f} {y1:.1f} '
+                      f'A {r-2:.1f} {r-2:.1f} 0 {1 if sc > 2 else 0} 1 {x2:.1f} {y2:.1f} Z" fill="{INK1}"/>')
+        s += L(x, ry + row_h, x + w, ry + row_h, LINE, 0.5)
+    if legend:
+        ly = y + 40 + len(items) * row_h + 20
+        s += T(x, ly + 4, "图例", 11, INK2, 700)
+        for k in range(5):
+            cx = x + 70 + k * 96
+            s += f'<circle cx="{cx}" cy="{ly:.1f}" r="9" fill="none" stroke="{INK1}" stroke-width="1.2"/>'
+            if k == 4:
+                s += f'<circle cx="{cx}" cy="{ly:.1f}" r="7" fill="{INK1}"/>'
+            elif k > 0:
+                a = k / 4 * 2 * math.pi
+                s += (f'<path d="M {cx} {ly:.1f} L {cx} {ly-7:.1f} A 7 7 0 {1 if k > 2 else 0} 1 '
+                      f'{cx + 7*math.sin(a):.1f} {ly - 7*math.cos(a):.1f} Z" fill="{INK1}"/>')
+            s += T(cx + 16, ly + 4, ["无", "弱", "中", "较强", "全面"][k], 11, INK2)
+    return s
+
+
+def value_chain(x, y, w, h, primary, support, margin_label="利润"):
+    """E-05 Porter 价值链：顶部支持活动横条 + 底部主活动雪佛龙带 + 右端利润尖角。
+    primary=[(名, 注 或 None)] 3–6 段主活动；support=[名] 2–4 条支持活动。
+    来源：Michael E. Porter, *Competitive Advantage*, Free Press, 1985（调研报告候选5）。"""
+    if not 3 <= len(primary) <= 6:
+        raise ValueError("E-05 主活动限 3–6 段（Porter 原型 5 段），收到 %d" % len(primary))
+    if not 2 <= len(support) <= 4:
+        raise ValueError("E-05 支持活动限 2–4 条（Porter 原型 4 条），收到 %d" % len(support))
+    tip_w = min(150, w * 0.14)                       # 利润尖角水平深度
+    sup_h = (h * 0.42) / len(support)
+    body_w = w - tip_w
+    s = ""
+    for i, nm in enumerate(support):                 # 支持活动横条
+        sy = y + i * sup_h
+        s += (f'<rect x="{x}" y="{sy:.1f}" width="{body_w:.1f}" height="{sup_h-4:.1f}" '
+              f'fill="{PANEL}" stroke="{INK3}" stroke-width="1"/>')
+        s += T(x + 16, sy + sup_h / 2 + 3, nm, 13, INK2, 700)
+    py = y + h * 0.42 + 12
+    ph = h - (py - y)
+    seg_w = body_w / len(primary)
+    aa = 16
+    for i, (nm, note) in enumerate(primary):         # 主活动雪佛龙带
+        px = x + i * seg_w
+        pts = [(px, py), (px + seg_w - aa, py), (px + seg_w, py + ph / 2),
+               (px + seg_w - aa, py + ph), (px, py + ph)]
+        if i > 0:
+            pts.append((px + aa, py + ph / 2))
+        pstr = " ".join(f"{a_:.1f},{b_:.1f}" for a_, b_ in pts)
+        s += f'<polygon points="{pstr}" fill="{INK1 if i == len(primary)-1 else PANEL}" stroke="{INK3}" stroke-width="1"/>'
+        dark = i == len(primary) - 1
+        s += T(px + seg_w / 2, py + ph / 2 - 4, nm, 13, "#FFFFFF" if dark else INK1, 700, anchor="middle")
+        if note:
+            s += T(px + seg_w / 2, py + ph / 2 + 18, note, 10.5, "#C4C4C4" if dark else INK2, anchor="middle")
+    mx = x + body_w                                   # 利润尖角（贯通全高）
+    s += (f'<polygon points="{mx:.1f},{y} {mx+tip_w:.1f},{y+h/2:.1f} {mx:.1f},{y+h}" '
+          f'fill="none" stroke="{INK1}" stroke-width="1.5"/>')
+    s += T(mx + tip_w * 0.42, y + h / 2 + 5, margin_label, 13, INK1, 700, anchor="middle")
+    return s
+
+
+def fishbone(x, y, w, h, effect, bones):
+    """G-04 鱼骨图（Ishikawa 因果图）：水平主骨 → 右端结果框；大骨上下交替斜出，
+    子因水平短线沿大骨排布（文字不旋转，约束7）。
+    bones=[(类别名, [子因 ≤4])] 3–6 根；effect=结果/问题。
+    来源：Kaoru Ishikawa，1960s 普及（川崎造船所质量管理；ASQ 七大质量工具，调研报告候选6）。
+    与 G-01 分工：MECE 逻辑分解→G-01；制造业质量/工序归因（6M 语言）→本图。"""
+    if not 3 <= len(bones) <= 6:
+        raise ValueError("G-04 大骨限 3–6 根（6M 惯例上限），收到 %d" % len(bones))
+    for nm, subs in bones:
+        if len(subs) > 4:
+            raise ValueError(f"G-04 「{nm}」子因限 ≤4，收到 {len(subs)}")
+    head_w = 150
+    spine_y = y + h / 2
+    sx0, sx1 = x + 20, x + w - head_w - 12
+    s = L(sx0, spine_y, sx1, spine_y, INK1, 2.5)
+    s += f'<polygon points="{sx1},{spine_y-7} {sx1+12},{spine_y} {sx1},{spine_y+7}" fill="{INK1}"/>'
+    s += f'<rect x="{x+w-head_w}" y="{spine_y-34:.1f}" width="{head_w}" height="68" rx="4" fill="{INK1}"/>'
+    for i, ln in enumerate(effect if isinstance(effect, (list, tuple)) else [effect]):
+        s += T(x + w - head_w / 2, spine_y - 2 + i * 20 + (0 if isinstance(effect, str) else -8), ln, 13.5, "#FFFFFF", 700, anchor="middle")
+    top = [b for i, b in enumerate(bones) if i % 2 == 0]
+    bot = [b for i, b in enumerate(bones) if i % 2 == 1]
+    reach = h / 2 - 44
+    for group, sign in ((top, -1), (bot, 1)):
+        n = len(group)
+        for k, (nm, subs) in enumerate(group):
+            bx1 = sx0 + (k + 1) * (sx1 - sx0 - 60) / (n + 0.35)   # 大骨与主骨交点
+            bx0 = bx1 - reach * 0.72                                # 45° 斜骨起点
+            by0 = spine_y + sign * reach
+            s += L(bx0, by0, bx1, spine_y, INK2, 1.8)
+            s += T(bx0, by0 + (-10 if sign < 0 else 20), nm, 13, INK1, 700, anchor="middle")
+            for j, sub in enumerate(subs):                          # 子因水平短线（沿斜骨等距）
+                f = (j + 1) / (len(subs) + 1)
+                jx = bx0 + f * (bx1 - bx0)
+                jy = by0 + f * (spine_y - by0)
+                s += L(jx, jy, jx + 64, jy, INK3, 1)
+                s += T(jx + 70, jy + 4, sub, 11, INK2)
+    return s
+
+
+def impact_effort(x, y, w, h, items, quads=None, x_axis="投入 / 难度 →", y_axis="↑ 影响 / 价值"):
+    """A-04 Impact-Effort 优先级矩阵（2×2 快赢矩阵）：举措按 (impact, effort) 落位。
+    items=[(名, impact 0–10, effort 0–10, hi?)] 2–12 项；
+    quads 默认（速赢, 重大项目, 填空任务, 吃力不讨好）按（高I低E, 高I高E, 低I低E, 低I高E）。
+    来源：无单一可考原版（通用优先级工具族，可上溯艾森豪威尔矩阵；1990s 进入战略咨询工作坊——调研报告候选2）。
+    与 S-02 portfolio_matrix 分工：资产组合气泡落位→S-02；举措优先级点落位→本表。"""
+    if not 2 <= len(items) <= 12:
+        raise ValueError("A-04 举措数限 2–12，收到 %d" % len(items))
+    for it in items:
+        if not (0 <= it[1] <= 10 and 0 <= it[2] <= 10):
+            raise ValueError(f"A-04 「{it[0]}」impact/effort 须 0–10")
+    quads = quads or ("速赢 Quick Wins", "重大项目", "填空任务", "吃力不讨好")
+    mx, my = x + (w - 40) / 2 + 40, y + (h - 36) / 2
+    px, pw, ph = x + 40, w - 40, h - 36
+    s = f'<rect x="{px}" y="{y}" width="{pw:.0f}" height="{ph:.0f}" fill="#FFFFFF" stroke="{INK3}" stroke-width="1.2"/>'
+    s += L(mx, y, mx, y + ph, INK4, 0.8, dash="4,3") + L(px, my, px + pw, my, INK4, 0.8, dash="4,3")
+    QP = [(px + pw * 0.25, y + 22), (px + pw * 0.75, y + 22),
+          (px + pw * 0.25, y + ph - 10), (px + pw * 0.75, y + ph - 10)]
+    for (qx, qy), qn in zip(QP, quads):
+        s += T(qx, qy, qn, 11, INK3, 700, ls=1, anchor="middle")
+    s += T(px + pw / 2, y + ph + 26, x_axis, 12, INK2, anchor="middle")
+    s += T(x + 12, y + 14, y_axis, 12, INK2)
+    for it in items:
+        nm, imp, eff, hi = (it + (False,))[:4]
+        cx = px + eff / 10 * (pw - 40) + 20
+        cy = y + ph - (imp / 10 * (ph - 40) + 20)
+        c = ACC if hi else INK1
+        s += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="7" fill="{c}"/>'
+        s += T(cx + 12, cy + 4, nm, 12, INK1, 700 if hi else 400)
+    return s
+
+
+def competitive_arc(x, y, w, h, vendors, bands=None, x_axis="战略前瞻 →", y_axis="↑ 当前能力"):
+    """S-17 竞争格局定位图（弧带型，去品牌化）：双轴散点 + 右上角同心弧带分档 + 气泡大小=市场存在感。
+    vendors=[(名, x 0–10, y 0–10, size 1–3, hi?)] 3–12 家；bands 默认（领导者, 强劲表现者, 竞争者）由外弧到内。
+    来源：版式结构对标 Forrester Wave（Forrester Research, 2002 年 7 月官方发布：Current offering=Y 轴、
+    Strategy=X 轴、Market presence=点大小——调研报告候选3）。**商标纪律**：Magic Quadrant / Forrester Wave
+    为注册商标，本函数仅实现通用"双轴+弧带+气泡"结构，禁用品牌名称/专有措辞/专有配色。
+    与 S-02 portfolio_matrix 分工：自有资产组合→S-02；外部竞品/供应商格局→本图。"""
+    if not 3 <= len(vendors) <= 12:
+        raise ValueError("S-17 厂商数限 3–12，收到 %d" % len(vendors))
+    for vd in vendors:
+        if not (0 <= vd[1] <= 10 and 0 <= vd[2] <= 10 and 1 <= vd[3] <= 3):
+            raise ValueError(f"S-17 「{vd[0]}」坐标须 0–10 / size 1–3")
+    bands = bands or ("领导者", "强劲表现者", "竞争者")
+    px, pw, ph = x + 44, w - 44, h - 36
+    cx0, cy0 = px + pw, y                     # 弧心=绘图区右上角
+    s = f'<rect x="{px}" y="{y}" width="{pw:.0f}" height="{ph:.0f}" fill="#FFFFFF" stroke="{INK3}" stroke-width="1.2"/>'
+    rmax = min(pw, ph) * 0.96
+    for k, bn in enumerate(bands):            # 同心 1/4 弧带（外→内），灰阶递浅
+        r = rmax * (1 - k * 0.30)
+        s += (f'<path d="M {cx0 - r:.1f} {cy0} A {r:.1f} {r:.1f} 0 0 0 {cx0} {cy0 + r:.1f}" '
+              f'fill="none" stroke="{INK4}" stroke-width="1" stroke-dasharray="5,4"/>')
+        s += T(cx0 - r + 10, cy0 + 20, bn, 11, INK3, 700, ls=1)
+    s += T(px + pw / 2, y + ph + 26, x_axis, 12, INK2, anchor="middle")
+    s += T(x + 10, y + 14, y_axis, 12, INK2)
+    for vd in vendors:
+        nm, vx, vy, sz, hi = (tuple(vd) + (False,))[:5]
+        cx = px + vx / 10 * (pw - 44) + 22
+        cy = y + ph - (vy / 10 * (ph - 44) + 22)
+        r = 6 + sz * 4
+        c = ACC if hi else INK2
+        s += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r}" fill="{c}" opacity="0.85"/>'
+        s += T(cx, cy + r + 15, nm, 11.5, INK1, 700 if hi else 400, anchor="middle")
+    s += T(px + pw - 8, y + ph - 10, "气泡大小 = 市场存在感（示意三档）", 10.5, INK3, anchor="end")
+    return s
+
+
+def decision_tree(x, y, w, h, decision, options):
+    """A-05 决策树（含概率与收益）：左侧方形决策节点 → 2–4 选项分支；选项可带概率子分支
+    （圆形机会节点 → ≤3 个 (情形, 概率, 收益)）或直接收益；期望值 EV 由**调用方传入**，
+    函数绝不计算（同 price_table 合计纪律：数字可复算性归内容层）。
+    options=[(选项名, payoff字符串 或 [(情形, 概率, 收益)], ev字符串 或 None, hi?)]。
+    来源：John F. Magee, "Decision Trees for Decision Making," HBR, 1964-07（调研报告候选8）。
+    与 A/B 选择直排页分工：静态两选一→直排；多阶段+概率+期望值→本图。"""
+    if not 2 <= len(options) <= 4:
+        raise ValueError("A-05 选项限 2–4 支，收到 %d" % len(options))
+    for op in options:
+        if isinstance(op[1], (list, tuple)) and len(op[1]) > 3:
+            raise ValueError(f"A-05 「{op[0]}」概率分支限 ≤3")
+    n = len(options)
+    dx, dy = x + 20, y + h / 2
+    s = f'<rect x="{dx}" y="{dy-30:.1f}" width="150" height="60" rx="3" fill="{INK1}"/>'
+    for i, ln in enumerate(decision if isinstance(decision, (list, tuple)) else [decision]):
+        s += T(dx + 75, dy + 5 + (i - (0 if isinstance(decision, str) else 0.5)) * 18, ln, 13, "#FFFFFF", 700, anchor="middle")
+    row_h = h / n
+    bx = dx + 150
+    for i, op in enumerate(options):
+        nm, payoff, ev, hi = (tuple(op) + (None, False))[:4]
+        oy = y + (i + 0.5) * row_h
+        mx = bx + 130
+        s += f'<path d="M {bx} {dy:.1f} L {bx+40} {dy:.1f} L {bx+70} {oy:.1f} L {mx} {oy:.1f}" fill="none" stroke="{INK2 if not hi else ACC}" stroke-width="1.6"/>'
+        s += T(bx + 76, oy - 10, nm, 12.5, INK1, 700)
+        if isinstance(payoff, (list, tuple)):         # 机会节点 + 概率分支
+            ccx = mx + 26
+            s += f'<circle cx="{ccx}" cy="{oy:.1f}" r="12" fill="none" stroke="{INK1}" stroke-width="1.6"/>'
+            m = len(payoff)
+            for j, (case, p, po) in enumerate(payoff):
+                jy = oy + (j - (m - 1) / 2) * min(52, row_h / m)
+                s += L(ccx + 12, oy, ccx + 64, jy, INK3, 1.1)
+                s += T(ccx + 70, jy + 4, f"{case} · p={p}", 11, INK2)
+                s += T(x + w - 16, jy + 4, po, 12.5, INK1, 700, fam=MONO, anchor="end")
+        else:
+            s += T(x + w - 16, oy + 4, payoff, 12.5, INK1, 700, fam=MONO, anchor="end")
+        if ev:
+            s += T(bx + 76, oy + 22, "EV " + ev + "（口径见脚注）", 11, "#6E6E6E", fam=MONO)
     return s

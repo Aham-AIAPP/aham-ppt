@@ -637,3 +637,46 @@ def horizon_curves(x, y, w, h, horizons=None, xlab="时间", ylab="价值", hi=2
         s.append(T(lx_ + 4, ly_ + 8, note, 9.5, INK2))
     s.append(T(px + 4, pyt + ph - 6, "概念示意 · 无刻度", 9, INK4))
     return "".join(s)
+
+
+def small_multiples(x, y, w, h, kind, datasets, cols=None, unit="", shared_max=None):
+    """V-05 小倍数网格（small multiples）：同图型、同坐标尺度的 4–12 个小图网格，
+    只让数据变、设计不变。kind="line"|"bar"；datasets=[(标题, [数值])]；
+    **全格共享同一 Y 尺度**（函数强制取全局最大值，Tufte 定义的核心纪律）。
+    来源：Edward Tufte, *The Visual Display of Quantitative Information*, Graphics Press, 1983
+    （调研报告候选10）。与 V-04 双图对比分工：2 图深对比→V-04；6+ 同构横扫→本图。"""
+    if kind not in ("line", "bar"):
+        raise ValueError("V-05 kind 仅支持 line / bar")
+    n = len(datasets)
+    if not 4 <= n <= 12:
+        raise ValueError("V-05 小图数限 4–12（少于 4 用 V-04/单图），收到 %d" % n)
+    L_ = max(len(vals) for _, vals in datasets)
+    if any(len(vals) != L_ for _, vals in datasets):
+        raise ValueError("V-05 各小图数据点数必须一致（同构才可比）")
+    cols = cols or (4 if n > 9 else 3 if n > 4 else 2)
+    rows = -(-n // cols)
+    gm = shared_max if shared_max is not None else max(max(vals) for _, vals in datasets)
+    if gm <= 0:
+        raise ValueError("V-05 全局最大值须 >0")
+    cw, ch = (w - (cols - 1) * 24) / cols, (h - (rows - 1) * 20) / rows
+    s = ""
+    for i, (tt, vals) in enumerate(datasets):
+        gx = x + (i % cols) * (cw + 24)
+        gy = y + (i // cols) * (ch + 20)
+        s += f'<rect x="{gx:.1f}" y="{gy:.1f}" width="{cw:.1f}" height="{ch:.1f}" fill="#FFFFFF" stroke="{LINE}" stroke-width="1"/>'
+        s += T(gx + 10, gy + 20, tt, 11.5, INK1, 700)
+        ax, ay = gx + 10, gy + 30
+        aw, ah = cw - 20, ch - 48
+        s += L(ax, ay + ah, ax + aw, ay + ah, INK3, 1)
+        if kind == "bar":
+            bw = aw / L_ * 0.62
+            for j, v in enumerate(vals):
+                bx = ax + (j + 0.19) * aw / L_
+                bh = v / gm * ah
+                s += f'<rect x="{bx:.1f}" y="{ay+ah-bh:.1f}" width="{bw:.1f}" height="{bh:.1f}" fill="{INK2}"{EDGE}/>'
+        else:
+            pts = " ".join(f"{ax + j*aw/(L_-1):.1f},{ay+ah - v/gm*ah:.1f}" for j, v in enumerate(vals))
+            s += f'<polyline points="{pts}" fill="none" stroke="{INK1}" stroke-width="1.8"/>'
+        s += T(gx + cw - 10, gy + 20, f"{vals[-1]:g}{unit}", 11, INK2, fam=MONO, anchor="end")
+    s += T(x, y + h + 18, f"全部小图共享同一纵轴尺度（0–{gm:g}{unit}）", 10.5, "#6E6E6E")
+    return s

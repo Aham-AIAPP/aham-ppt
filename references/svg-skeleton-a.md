@@ -4,25 +4,7 @@
 
 ---
 
-## A-01 下一步三步决策（参数化 · layouts.py）
 
-**用途**：三步行动卡并列，末步深色收束——把结论落成时间化的动作。
-**适用场景**：会后行动/近期计划；多步长排期 → A-90 / S-03。
-**用法**：`layouts.three_steps(steps)`——steps=[(时间标注, 行动, [细节 1–3 行])] **固定 3 步**（函数强制，版式语义即三步），末步自动深色+蓝条。
-**来源**：通用商务惯例（next steps 三步式），无单一可考原版。
-**纪律**：每步必须有时间标注与可执行动词。
-
----
-
-## A-02 是/否选择矩阵（参数化 · layouts.py）
-
-**用途**：A（推荐）/ B（备选）两选项对置 + 各自 pros/cons，请求单选决策。
-**适用场景**：二选一决策页；多方案对比 → S-08 / S-02。
-**用法**：`layouts.option_ab(a, b_, a_tag, b_tag)`——a / b_ = (标题, 描述×2, pros, cons)；B 选项自动降调（灰条+降墨）。pros/cons 语义色为骨架冻结值（绿/绛）。
-**来源**：通用商务惯例（option A/B 决策页），无单一可考原版。
-**纪律**：两选项必须互斥；推荐位固定 A（阅读起点）。
-
----
 
 ## A-03 责任清单
 
@@ -30,7 +12,7 @@
 **适用场景**：**简版三列清单（行动/责任方/截止）→ 轻量**；**标准 RACI（多角色权责矩阵）→ 高阶**。
 **用法**：轻量 `layouts.action_table(actions)`——actions=[(行动, 细节, 责任方, 截止)] **3–6 行**（函数强制）。
 高阶 `structures.raci_matrix(x, y, w, h, tasks, roles, cells)`——**每行恰好一个 A 由函数强制校验**（违反抛错）。
-**来源**：RACI 规范——每行唯一 Accountable（PMBOK 惯例/Wikipedia/康奈尔大学模板，对标评估）；轻量清单为通用简化。
+**来源**：RACI **无单一可考发明人**——可上溯 1950s 线性责任图、1970s「责任分配矩阵」命名、1980s 与 GDPM 关联（调研报告来源升级表）；「每行唯一 Accountable」为 PMBOK 惯例/康奈尔模板等通行规范。轻量清单为通用简化。
 **纪律**：截止时间必须具体到日；R 可多个、A 恰一个。
 
 ---
@@ -56,3 +38,23 @@ lanes=[(泳道名, [(块名, start, dur, status)])]，status ∈ committed/plann
 **用法**：`charts.fte_ramp(x, y, w, h, periods, waves, wave_names, gates, unit)`——**时间点 ≥10 自动切堆叠面积、<10 用堆叠柱**（调研纪律内置）；gates=[(期索引, 门名, 决策)]。
 **来源**：调研1——stacked area + wave 虚线 + stage-gate 三角；<10 期退化为 column 的纪律；Stage-Gate 概念源 Cooper 1988/1990。
 **纪律**：图例右上（图表底部 ≤2 层，chart-impl 硬性规定）；波次与门必须有口径来源或标注演示编排。
+
+---
+
+## A-04 Impact-Effort 优先级矩阵（参数化 · structures.py · v4.0）
+
+**用途**：举措按 影响×投入 落位的 2×2 快赢矩阵，回答"一堆举措先做哪些"。
+**适用场景**：行动方案优先级排序（转型举措/整改清单）。资产组合气泡落位 → S-02 高阶；利益相关者管理 → S-02 预设 Power-Interest。
+**用法**：`structures.impact_effort(x, y, w, h, items, quads, x_axis, y_axis)`——items=[(名, impact 0–10, effort 0–10, hi?)] 2–12 项（函数强制）；quads 默认（速赢/重大项目/填空任务/吃力不讨好）。
+**来源**：**无单一可考原版**——通用优先级工具族，灵感常上溯艾森豪威尔矩阵，1990s 经精益/敏捷进入战略咨询工作坊（调研报告候选2，如实标注）。
+**纪律**：落位分值必须给口径（评分依据或"团队工作坊共识"）；hi 唯一蓝 ≤2。
+
+---
+
+## A-05 决策树（参数化 · structures.py · v4.0）
+
+**用途**：方形决策节点 → 选项分支 → 圆形机会节点（概率）→ 收益叶 + 期望值的序贯决策图。
+**适用场景**：多阶段、带不确定性的投资/实施决策。静态两选一 → 直排 §A/B 选择。
+**用法**：`structures.decision_tree(x, y, w, h, decision, options)`——options=[(选项, payoff字符串 或 [(情形, 概率, 收益)≤3], ev, hi?)] 2–4 支（函数强制）；**EV 由调用方传入，函数绝不计算**（同 S-15 合计纪律）。
+**来源**：John F. Magee, "Decision Trees for Decision Making," *Harvard Business Review*, 1964-07（HBR #64410）；同年另有 "How to Use Decision Trees in Capital Investments"（调研报告候选8，一手 HBR）。
+**纪律**：概率之和=1 且页内可见；EV 可复算（口径入脚注带 footnote_band）；收益数字须有来源或标"演示编排"。

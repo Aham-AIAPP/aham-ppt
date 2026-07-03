@@ -64,7 +64,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 - toc → `toc`（A/B）/（C 沿用 toc 或封面同款深色）
 - section → `section`（A/B）/ `section_dark`（C）
 - exec_summary → S-09 KPI看板（内容版式）
-- end → A-01 下一步三步决策（内容版式）
+- end → 三步行动直排页（grid-composition §三步卡）
 
 内容页 Chrome 读 `svg-skeleton-common.md` 的 Chrome 骨架（坐标真源 `grid-system.md`）。
 替换所有 `[占位符]` 为实际内容。
@@ -99,7 +99,7 @@ Step 5  执行输出前自检（含PPTX兼容性5条负面约束）
 
 | narrative_purpose | Chrome 类型 |
 |---|---|
-| impact (I-01 / I-05) | 极简 Chrome |
+| impact（大数字/时间窗直排页） | 极简 Chrome |
 | transition | 极简 Chrome 或深色底 |
 | 其他 | 标准 Chrome |
 

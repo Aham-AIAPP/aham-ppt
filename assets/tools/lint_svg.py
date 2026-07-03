@@ -87,10 +87,10 @@ def lint_svg_dir(d):
     print("=== 页脚总页数 ===", end=" ")
     if not totals:
         print("一致：（未发现页脚）"); return
-    # 众数为总页数；少数派若 N≤20 且仅出现在 ≤2 页，判为 themes.section 章节进度（如 01/07），豁免
+    # 众数为总页数；少数派若 N≤20 且仅出现在 ≤8 页，判为 themes.section 章节进度（如 01/07），豁免（v4.0：2→8，多章 deck 章节页数可达 8）
     main = max(totals, key=lambda k: len(totals[k]))
     odd = {k: v for k, v in totals.items() if k != main}
-    exempt = {k: v for k, v in odd.items() if int(k) <= 20 and len(v) <= 2}
+    exempt = {k: v for k, v in odd.items() if int(k) <= 20 and len(v) <= 8}
     real = {k: v for k, v in odd.items() if k not in exempt}
     msg = f"一致：{main}"
     if exempt:

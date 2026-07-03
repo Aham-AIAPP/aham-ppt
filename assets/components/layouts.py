@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""layouts.py — 整页型手画版式的参数化层（坐标冻结，替代"照抄骨架"人工流程）。
+"""layouts.py — 版式库内容区型版式的参数化层（坐标冻结）。
 
-范围：I/T 系整页版式（自带极简页脚，返回完整 SVG）。
-内容区型版式（S/E/V/A/G 手画）见本模块后续批次；参数化结构版式见 structures.py。
-纪律：坐标一律取自各系骨架规范（svg-skeleton-*.md 历史冻结值），函数内为唯一真源；
-内容数量数据驱动，仅在有依据处硬校验（CONTRIBUTING §教训固化机制）。
+范围：S/E/A/G 系保留版式（hero/concept_curve/stage_flow/tri_layer/action_table/
+pyramid_light/team_grid/price_table）。整页型 I·T 系与纯栅格版式已于 v4.0 移出版式库，
+走 AI 通用能力直排，规范见 references/grid-composition.md。
+纪律：内容数量数据驱动，仅在有依据处硬校验（CONTRIBUTING §教训固化机制）。
 """
-from components import T, L, P, MONO, ACC, INK1, INK2, INK3, INK4, LINE, PANEL, placeholder
+from components import T, L, P, MONO, INK1, INK2, INK3, INK4, LINE, PANEL, placeholder
 
 _DK1, _DK2, _DK3 = "#FFFFFF", "#A8A8A8", "#787878"   # 深底三级字
 
@@ -17,165 +17,14 @@ def _as_lines(v, where):
         raise ValueError(f"{where} 需要行列表（list[str]），收到 str——请写成 [\"{v[:10]}…\"]")
     return v
 
-def _page(body, bg="#FFFFFF"):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720">'
-            f'<rect width="1280" height="720" fill="{bg}"/>{body}</svg>')
 
 
-def _secpath(text, dark=False):
-    return T(40, 40, text, 10, _DK3 if dark else INK3, ls=2)
 
 
-def _minifoot(source, page, dark=False):
-    c = _DK3 if dark else INK3
-    return (T(40, 708, "来源：" + source, 10, c) +
-            T(1240, 708, page, 10, c, fam=MONO, anchor="end"))
 
 
-# ============================================================ I-01 大数字页
-def bignumber(sec, big, assertion, source, page,
-              compare_anchor=None, support2=None, warning=None, evidence=None):
-    """I-01 大数字页（两变体）。
-    - 基础变体（evidence=None）：compare_anchor **必填**——大数字必须带对比锚点
-      （同比/目标/行业基准三选一），禁止数字悬空（对标评估 P2 纪律）。
-    - 带证据变体（evidence=(right_header, [(label, desc)×3])）：右列固定 3 条支撑；
-      compare_anchor/support2 变为可选补充行。
-    warning 可选（红色警示行，仅基础变体位）。"""
-    if evidence is None:
-        if not compare_anchor:
-            raise ValueError("I-01 基础变体 compare_anchor 必填（大数字禁止悬空）")
-        b = _secpath(sec)
-        b += T(140, 380, big, 180, INK1, 700)
-        b += L(140, 410, 420, 410, INK1, 1.2)
-        b += T(140, 456, assertion, 30, INK1, 700)
-        b += T(140, 506, compare_anchor, 14, INK2)
-        if support2:
-            b += T(140, 530, support2, 14, INK2)
-        if warning:
-            b += T(140, 610, warning, 13, "#9E3D31", ls=1)
-        return _page(b + _minifoot(source, page))
-    rh, items = evidence
-    if len(items) != 3:
-        raise ValueError("I-01 带证据变体固定 3 条支撑（右列三段栅格）")
-    b = _secpath(sec)
-    b += T(140, 380, big, 170, INK1, 700)
-    b += L(140, 400, 440, 400, INK1, 1.5)
-    b += T(140, 440, assertion, 28, INK1, 700)
-    b += L(800, 140, 800, 610, LINE, 1)
-    b += T(860, 170, rh, 13, "#9E3D31", ls=2)
-    b += L(860, 192, 1000, 192, "#9E3D31", 1.8)
-    for i, (la, de) in enumerate(items):
-        y = 234 + i * 98
-        b += T(860, y, la, 14, INK1, 700) + T(860, y + 24, de, 13, INK1)
-        if i < 2:
-            b += L(860, y + 56, 1200, y + 56, LINE, 0.5)
-    if compare_anchor:
-        b += T(140, 500, compare_anchor, 14, INK2)
-    if support2:
-        b += T(140, 526, support2, 14, INK2)
-    return _page(b + _minifoot(source, page))
 
 
-# ============================================================ I-05 时间窗警告
-def time_window(sec, past, now, now_tag, future, warning_title, warning_desc,
-                window, window_label, source, page):
-    """I-05 时间窗警告：过去/现在/未来三节点固定（版式语义即三态），
-    紧迫性靠红色"当前"节点 + 警示标题双通道，窗口数字保持墨色（brand 禁染红绿）。"""
-    b = _secpath(sec)
-    b += L(100, 200, 1180, 200, INK4, 1.5)
-    b += f'<circle cx="200" cy="200" r="8" fill="{INK3}"/>'
-    b += T(200, 234, past, 12, INK3, anchor="middle")
-    b += '<circle cx="640" cy="200" r="20" fill="#9E3D31"/>'
-    b += T(640, 207, now, 13, "#FFFFFF", 700, anchor="middle")
-    b += T(640, 250, now_tag, 13, "#9E3D31", 700, anchor="middle")
-    b += (f'<circle cx="1080" cy="200" r="8" fill="{INK4}" stroke="{INK3}"'
-          f' stroke-width="1" stroke-dasharray="3,3"/>')
-    b += T(1080, 234, future, 12, INK3, anchor="middle")
-    b += T(640, 360, warning_title, 34, INK1, 700, anchor="middle")
-    b += T(640, 404, warning_desc, 15, INK2, anchor="middle")
-    b += T(640, 510, window, 60, INK1, 700, anchor="middle")
-    b += T(640, 558, window_label, 14, INK3, anchor="middle")
-    return _page(b + _minifoot(source, page))
-
-
-# ============================================================ T-01 深色引言页
-def quote_page(line1, line2, sub, attribution, source, page):
-    """T-01 深色引言页（章节间过渡）。与 themes.quote_dark（C 档金句页，
-    大引号+居中）为两个不同页型，不互相替代。深底上唯一蓝点缀=顶部短线。
-    引语来源纪律：真实语录须可考；自撰声明句须在 attribution 注明"本演示自撰"。"""
-    b = f'<rect x="80" y="80" width="40" height="2" fill="{ACC}"/>'
-    b += T(120, 310, line1, 36, _DK1, 700)
-    if line2:
-        b += T(120, 360, line2, 36, _DK1, 700)
-    if sub:
-        b += T(120, 440, sub, 22, _DK2)
-    if attribution:
-        b += T(1200, 640, "—— " + attribution, 13, _DK2, anchor="end")
-    return _page(b + _minifoot(source, page, dark=True), bg="#1C1C1C")
-
-
-# ============================================================ T-02 白底大字宣言
-def declaration(sec, line1, line2, sub_note, source, page):
-    """T-02 白底大字宣言：居中双行 44px + 灰短线 + 副注。"""
-    b = _secpath(sec)
-    b += T(640, 310, line1, 44, INK1, 700, anchor="middle")
-    if line2:
-        b += T(640, 366, line2, 44, INK1, 700, anchor="middle")
-    b += L(580, 410, 700, 410, INK3, 2.5)
-    if sub_note:
-        b += T(640, 456, sub_note, 16, INK2, anchor="middle")
-    return _page(b + _minifoot(source, page))
-
-
-# ============================================================ T-03 章节承接页
-def bridge(sec, prev_title, prev_summary, next_title, next_intro, nav, source, page):
-    """T-03 章节承接：左"刚讲完"（灰）/ 右"即将进入"（墨），中竖分隔，底部导航。"""
-    b = _secpath(sec)
-    b += T(100, 200, "JUST COMPLETED", 11, INK3, ls=3) + L(100, 220, 220, 220, INK3, 1)
-    b += T(100, 270, prev_title, 22, INK3, 700) + T(100, 310, prev_summary, 14, INK2)
-    b += L(520, 160, 520, 560, LINE, 0.5)
-    b += T(580, 200, "NEXT PART", 11, INK1, ls=3) + L(580, 220, 700, 220, INK3, 1.5)
-    b += T(580, 320, next_title, 36, INK1, 700) + T(580, 380, next_intro, 16, INK2)
-    if nav:
-        b += T(640, 650, nav, 11, INK3, anchor="middle")
-    return _page(b + _minifoot(source, page))
-
-
-# ============================================================ S 系（内容区型：返回 body，由 themes.chrome 包裹）
-def quad_cards(quads):
-    """S-02 轻量 2×2 四格（定性）。quads=[(title, [bullets])×4] **固定 4 格**（版式语义）；
-    每格 bullets 1–4 条。带数据落位/气泡 → structures.portfolio_matrix（S-02 高阶）。"""
-    if len(quads) != 4:
-        raise ValueError("S-02 四格版式固定 4 格（象限语义），收到 %d" % len(quads))
-    POS = [(40, 100, 590), (646, 100, 594), (40, 398, 590), (646, 398, 594)]
-    b = ""
-    for (tt, bl), (x, y, w) in zip(quads, POS):
-        b += P(x, y, w, 282, PANEL, r=4)
-        b += T(x + 16, y + 28, tt, 14, INK1, 700)
-        b += L(x + 16, y + 36, x + w - 16, y + 36, INK3, 1.5)
-        for j, t_ in enumerate(bl[:4]):
-            b += f'<rect x="{x+16}" y="{y+50+j*24}" width="3" height="14" rx="1" fill="{INK3}"/>'
-            b += T(x + 26, y + 60 + j * 24, t_, 13, INK1)
-    return b
-
-
-def milestone_axis(nodes):
-    """S-03 轻量单轴时间线。nodes=[(编号, 日期, 标题, 描述1, 描述2)] **3–5 个**，
-    轴 y=240 等距分布（3 节点时精确复现骨架 cx=200/570/940）。多泳道 → A-90。"""
-    n = len(nodes)
-    if not 3 <= n <= 5:
-        raise ValueError("S-03 节点数限 3–5（少于 3 不成轴，多于 5 改 A-90 泳道），收到 %d" % n)
-    b = L(80, 240, 1200, 240, INK3, 2)
-    for i, (m, dt, tt, d1, d2) in enumerate(nodes):
-        cx = 200 + i * (740 / (n - 1))
-        b += f'<circle cx="{cx:.0f}" cy="240" r="20" fill="{INK1}"/>'
-        b += T(cx, 246, m, 13, "#FFFFFF", 700, anchor="middle")
-        b += T(cx, 210, dt, 12, INK3, anchor="middle")
-        b += P(cx - 60, 290, 120, 120, PANEL, r=3, stroke=LINE, sw=0.5)
-        b += T(cx, 318, tt, 13, INK1, 700, anchor="middle")
-        b += T(cx, 342, d1, 12, INK2, anchor="middle")
-        b += T(cx, 362, d2, 12, INK2, anchor="middle")
-    return b
 
 
 def hero(conclusion_lines, supports):
@@ -203,50 +52,7 @@ def hero(conclusion_lines, supports):
     return b
 
 
-def versus(left_header, right_header, left_rows, right_rows):
-    """S-08 VS 对照：左灰右墨、行行水平对齐、中缝虚线 + VS。行数 **3–5** 且左右等长。"""
-    if len(left_rows) != len(right_rows):
-        raise ValueError("S-08 左右行数必须相等（%d vs %d）" % (len(left_rows), len(right_rows)))
-    if not 3 <= len(left_rows) <= 5:
-        raise ValueError("S-08 对照行数限 3–5，收到 %d" % len(left_rows))
-    b = T(320, 160, left_header, 13, INK3, ls=4, anchor="middle")
-    b += T(960, 160, right_header, 13, INK1, ls=4, anchor="middle")
-    b += L(640, 180, 640, 650, LINE, 0.5, dash="4,4") + T(628, 410, "VS", 20, INK4)
-    for j, (lr, rr) in enumerate(zip(left_rows, right_rows)):
-        y = 200 + j * 80
-        b += P(60, y, 520, 60, PANEL, r=3) + T(80, y + 36, lr, 14, INK2)
-        b += P(660, y, 520, 60, PANEL, r=3) + T(680, y + 36, rr, 14, INK1, 700)
-    return b
 
-
-def kpi_six(cards):
-    """S-09 轻量数字速览（2×3 手排格）。cards=[(label, value, desc)] **≤6**，按行填充。
-    正式经营看板（值+基准+sparkline）→ charts.kpi_card（S-09 高阶）。"""
-    if not 1 <= len(cards) <= 6:
-        raise ValueError("S-09 轻量格限 1–6 张，收到 %d" % len(cards))
-    POS = [(40, 120, 373), (453, 120, 373), (866, 120, 374),
-           (40, 320, 373), (453, 320, 373), (866, 320, 374)]  # 等分 373/373/374·缝40·右缘1240（v3.1）
-    b = ""
-    for (la, v, de), (x, y, w) in zip(cards, POS):
-        b += P(x, y, w, 160, PANEL, r=4)
-        b += T(x + 16, y + 28, la, 12, INK3)
-        b += T(x + 16, y + 90, v, 44, INK1, 700, fam=MONO)
-        b += T(x + 16, y + 146, de, 12, INK2)
-    return b
-
-
-def full_panel(title, bullets=None, body=""):
-    """S-12 全版铺满容器：面板 + 标题 + 分隔线，内容二选一——
-    bullets（简易 1–12 条，y=162 起步 34）或 body（自由 SVG 片段，调用方负责 FULL 区内排布）。"""
-    if bullets and body:
-        raise ValueError("S-12 bullets 与 body 二选一")
-    b = P(40, 100, 1200, 580, PANEL, r=4)
-    b += T(56, 132, title, 14, INK1, 700)
-    b += L(56, 142, 1224, 142, INK3, 1.5)
-    for j, t_ in enumerate((bullets or [])[:12]):
-        b += f'<rect x="56" y="{162+j*34}" width="3" height="14" rx="1" fill="{INK3}"/>'
-        b += T(68, 172 + j * 34, t_, 14, INK1)
-    return b + body
 
 
 # ============================================================ E 系（内容区型）
@@ -321,47 +127,6 @@ def tri_layer(layers):
     return b
 
 
-# ============================================================ A·G 系（内容区型）
-def three_steps(steps):
-    """A-01 下一步三步决策：**固定 3 步**（版式语义），末步深色+蓝条收束。
-    steps=[(时间标注, 行动, [细节 1–3 行])×3]。"""
-    if len(steps) != 3:
-        raise ValueError("A-01 固定 3 步（多步排期改 A-90 / S-03），收到 %d" % len(steps))
-    b = ""
-    for i, (tm, ac, ds) in enumerate(steps):
-        x, dark = 40 + i * 410, (i == 2)
-        if dark:
-            b += f'<rect x="{x}" y="160" width="380" height="400" rx="4" fill="{INK1}"/>'
-            b += f'<rect x="{x}" y="160" width="4" height="400" fill="{ACC}"/>'
-            tc1, tc2, tc3 = "#C4C4C4", "#FFFFFF", "#FFFFFF"
-        else:
-            b += P(x, 160, 380, 400, PANEL, r=4) + f'<rect x="{x}" y="160" width="4" height="400" fill="{INK1}"/>'
-            tc1, tc2, tc3 = INK1, INK1, INK2
-        b += T(x + 20, 192, f"STEP 0{i+1} · {tm}", 11, tc1, ls=3)
-        b += T(x + 20, 236, ac, 22, tc2, 700)
-        for j, d in enumerate(_as_lines(ds, 'desc 行')[:3]):
-            b += T(x + 20, 268 + j * 24, d, 13, tc3)
-    return b
-
-
-def option_ab(a, b_, a_tag="OPTION A · 推荐", b_tag="OPTION B · 备选"):
-    """A-02 是/否选择矩阵：A（推荐，墨条）/ B（备选，灰条降调）两选项 + 各自 pros/cons。
-    a / b_ = (标题, 描述1, 描述2, pros, cons)。pros/cons 语义色为骨架冻结值。"""
-    at, ad1, ad2, ap, ac_ = a
-    bt, bd1, bd2, bp, bc = b_
-    s = P(40, 140, 1200, 220, PANEL, r=4) + f'<rect x="40" y="140" width="5" height="220" fill="{INK1}"/>'
-    s += T(62, 174, a_tag, 11, INK1, ls=3)
-    s += T(62, 222, at, 28, INK1, 700)
-    s += T(62, 260, ad1, 14, INK2) + T(62, 284, ad2, 14, INK2)
-    s += T(1180, 222, ap, 13, "#5A7A60", anchor="end") + T(1180, 252, ac_, 13, "#9E3D31", anchor="end")
-    s += T(640, 392, "或者", 13, INK3, anchor="middle")
-    s += L(100, 392, 500, 392, LINE, 0.5) + L(780, 392, 1180, 392, LINE, 0.5)
-    s += P(40, 410, 1200, 220, PANEL, r=4) + f'<rect x="40" y="410" width="5" height="220" fill="{INK3}"/>'
-    s += T(62, 444, b_tag, 11, INK3, ls=3)
-    s += T(62, 492, bt, 28, INK2, 700)
-    s += T(62, 530, bd1, 14, INK3) + T(62, 554, bd2, 14, INK3)
-    s += T(1180, 492, bp, 13, "#5A7A60", anchor="end") + T(1180, 522, bc, 13, "#9E3D31", anchor="end")
-    return s
 
 
 def action_table(actions):
@@ -379,28 +144,6 @@ def action_table(actions):
         s += T(680, y + 34, ow, 13, INK1) + T(980, y + 34, dl, 13, "#9E3D31", 700)
     return s
 
-
-def pillars(items):
-    """G-02 支柱并立：**2–4 柱**（默认语义 3），柱内 tag+大标题+要点 ≤4 + 底部深墨结论块。
-    items=[(标题, 眉标, [要点], 结论)]；3 柱时精确复现骨架坐标（x=40/455/870，w=370）。"""
-    n = len(items)
-    if not 2 <= n <= 4:
-        raise ValueError("G-02 支柱数限 2–4，收到 %d" % n)
-    w = {2: 577, 3: 370, 4: 277}[n]
-    b = ""
-    for i, (tt, tag, pts, con) in enumerate(items):
-        x = 40 + i * ((1200 - w) / (n - 1))
-        b += P(x, 130, w, 520, PANEL, r=4) + f'<rect x="{x:.0f}" y="130" width="5" height="520" fill="{INK1}"/>'
-        cx = x + w / 2
-        b += T(cx, 170, tag, 11, INK1, ls=2, anchor="middle")
-        b += T(cx, 230, tt, 34, INK1, 700, anchor="middle")
-        b += L(x + 25, 250, x + w - 25, 250, INK4, 0.5)
-        for j, p_ in enumerate(pts[:4]):
-            b += f'<rect x="{x+25:.0f}" y="{268+j*32}" width="3" height="14" rx="1" fill="{INK3}"/>'
-            b += T(x + 36, 279 + j * 32, p_, 13, INK1)
-        b += f'<rect x="{x+15:.0f}" y="570" width="{w-30:.0f}" height="60" rx="3" fill="{INK1}"/>'
-        b += T(cx, 606, con, 13, "#FFFFFF", 700, anchor="middle")
-    return b
 
 
 def pyramid_light(layers):

@@ -19,7 +19,7 @@ description: >
 
 > **当前能力概览**（演进史统一见 `CHANGELOG.md`，正文不再按版本叙事）：
 > 八阶段强制流程（防跳步 + 卡点等待）× 能力自适应教练机制 × A/B/C 三档视觉主题（含深色模板）。
-> 版式库 48 个 ID（7 系内容版式 + SPC 结构页；v3.2 增 S-14 团队页 / S-15 报价页），选择走 layout-library 单一决策表 + 首选核心集；
+> 版式库 39 个 ID（6 系 36 个内容版式 + 3 个 SPC 结构页；v4.0 起 16 个通用页型退库走栅格直排，见 grid-composition.md），选择走 layout-library 单一决策表 + 首选核心集；
 > 数据强制图表化三环硬门禁。组件层：`charts.py` 14 类数据图表 · `consulting.py` 咨询异形与标注层 ·
 > `structures.py` 咨询结构版式（矩阵/树/泳道/蓝图/金字塔等，含 RACI 每行一 A、Mekko ≤7 列等强校验）·
 > `themes.py` 结构页 · SVG→原生可编辑 PPTX 工具链 + `tools/lint_svg.py` 预检。
@@ -54,7 +54,7 @@ view references/theme-tiers.md     ← 三档主题：A 克制 / B 现代专业 
 ```
 （字宽修复 / 强调色语义 QC / 图标组件 / 内容方法论已并入 `designer-rules.md`、`phase-02.md` 与组件代码，不再单列文件。）
 图标与组件资产位于 `assets/components/`：`icons.py`（~40 线性图标 + icon_circle）、
-`layouts.py`（**整页/内容区型版式层：I·T 系整页 5 式 + S/E/A/G 版式 16 式的参数化实现（含 v3.2 新增 S-14 团队页/S-15 报价页），坐标冻结自骨架规范，含 S-07 支撑数 2/3/4、G-02 柱 2–4、G-03 层 3–5、S-14 成员 2–8、S-15 行 1–8 等硬校验**）、`components.py`（基础原子：文本 T / 线 L / 面板 P / 转义 esc / 箭头 arrow·carrow / 标签 chip / 六边形 / 状态点 status / 图占位框 placeholder / 色板与字体常量）、`charts.py`（**14 类数据图表：柱/横柱/折线/瀑布/漏斗/甘特/子弹/堆叠/坡度/sparkline/KPI卡/Marimekko/FTE爬坡/三地平线**，一行调用、brand §7.5 合规、转换实测可编辑）、`themes.py`（A/B 封面/目录/章节/页眉模板 + **C 档深色模板 `cover_dark/section_dark/quote_dark`**）、`consulting.py`（**咨询异形层：雪佛龙链/流向带/哑铃/点阵/驱动树+肘线+算子/链式递减 + 标注层（椭圆圈注/引线/水印/线画对勾/So-What）**，形体骨架在各系文件 90 段章节、标注层与纪律见 `references/svg-skeleton-common.md §咨询密集层 D`）、`structures.py`（**咨询结构层：网格/树对齐引擎 + 组合矩阵/RACI/issue tree/分层架构/泳道路线图（gantt·chevron·分桶三模式）/服务蓝图/剖面金字塔/论证阶梯/推算件/记号/降级同心弧**，含强校验：RACI 每行一 A、Mekko ≤7 列、蓝图固定 5 泳道）。
+`layouts.py`（**内容区型版式层 8 式：hero(S-07 支撑 2/3/4 硬拦)/concept_curve/stage_flow/tri_layer/action_table/pyramid_light/team_grid(2–8)/price_table(1–8 · 合计不求和)**；整页 I·T 系与纯栅格版式已 v4.0 移出走 grid-composition 直排）、`components.py`（基础原子：文本 T / 线 L / 面板 P / 转义 esc / 箭头 arrow·carrow / 标签 chip / 六边形 / 状态点 status / 图占位框 placeholder / 色板与字体常量）、`charts.py`（**15 类数据图表：柱/横柱/折线/瀑布/漏斗/甘特/子弹/堆叠/坡度/sparkline/KPI卡/Marimekko/FTE爬坡/三地平线/小倍数网格(V-05·共享尺度强制)**，一行调用、brand §7.5 合规、转换实测可编辑）、`themes.py`（A/B 封面/目录/章节/页眉模板 + **C 档深色模板 `cover_dark/section_dark/quote_dark`**）、`consulting.py`（**咨询异形层：雪佛龙链/流向带/哑铃/点阵/驱动树+肘线+算子/链式递减 + 标注层（椭圆圈注/引线/水印/线画对勾/So-What）**，形体骨架在各系文件 90 段章节、标注层与纪律见 `references/svg-skeleton-common.md §咨询密集层 D`）、`structures.py`（**咨询结构层：网格/树对齐引擎 + 组合矩阵/RACI/issue tree/分层架构/泳道路线图（gantt·chevron·分桶三模式）/服务蓝图/剖面金字塔/论证阶梯/推算件/记号/降级同心弧 + v4.0 新增 Harvey评估表/竞争弧带图/价值链/鱼骨/Impact-Effort/决策树**，含强校验：RACI 每行一 A、Mekko ≤7 列、蓝图固定 5 泳道、Harvey 0–4 五档、决策树 EV 不代算）。
 
 ---
 

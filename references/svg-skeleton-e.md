@@ -4,15 +4,6 @@
 
 ---
 
-## E-01 左图右文（栅格直排）
-
-**用途**：实拍图/示意图 + 右栏文字说明。
-**适用场景**：需要真实画面支撑的说明页；纯数据图表 → V 系。
-**用法**：grid §3.2 图文混排硬性比例（图 x=40,w=700 / 文 x=756,w=484，或 TWO-EQ）；图占位调 `components.placeholder(x, y, w, h, label)`（禁 AI 生成图/网图）；右栏用 common 构件层级。**禁止图形占比 <40% 或 >75%**。
-**来源**：栅格系统 + 通用图文页。
-**纪律**：图必须有授权来源或明确占位待替换。
-
----
 
 ## E-02 概念曲线（参数化 · layouts.py）
 
@@ -27,10 +18,10 @@
 ## E-03 流程示意（参数化 · layouts.py）
 
 **用途**：3–6 段线性流程框 + 箭头，末段深色收束。
-**适用场景**：单线流程；带量的阶段链 → E-90 雪佛龙；含判断分支 → A-02。
+**适用场景**：单线流程；带量的阶段链 → E-90 雪佛龙；两选一判断 → 直排 §A/B 选择；多阶段带概率 → A-05 决策树。
 **用法**：`layouts.stage_flow(stages, dark_last=True)`——stages=[(眉标, 名称)] **3–6 段**（函数强制）；4 段时精确复现骨架坐标；箭头 line+polygon（约束7 禁 marker）。
 **来源**：通用流程图惯例。
-**纪律**：段间必须是先后关系（并列 → S-01）。
+**纪律**：段间必须是先后关系（并列 → 直排三栏）。
 
 ---
 
@@ -60,5 +51,15 @@
 **用途**：3–4 条 S 曲线错峰叠加——并行管理的增长/接力叙事。
 **适用场景**：三地平线/技术接力/业务梯队；单条概念曲线 → E-02。
 **用法**：`charts.horizon_curves(x, y, w, h, horizons, hi)`——horizons=[(名, 注)] **3–4 条**（函数硬拦，标准形态依据）。**不带刻度**（概念图不假装量化）。
-**来源**：Three Horizons 框架——Baghai/Coley/White《The Alchemy of Growth》1999（调研2）；官方语义为三层**并行管理**而非先后接棒。
+**来源**：Three Horizons 框架——Mehrdad Baghai, Stephen Coley, David White, *The Alchemy of Growth*, Perseus, 1999（一手原书）；机构佐证 McKinsey 官方 "Enduring Ideas: The three horizons of growth"（McKinsey Quarterly, 2009——调研报告来源升级表）；官方语义为三层**并行管理**而非先后接棒。
 **纪律**：横轴不标年份刻度；每线配一句注。
+
+---
+
+## E-05 价值链条带图（参数化 · structures.py · v4.0）
+
+**用途**：Porter 价值链——顶部支持活动横条 + 底部主活动雪佛龙带 + 右端利润尖角。
+**适用场景**：企业内部价值活动分解、成本/差异化来源定位（制造业售前"我们切入哪些环节"）。分层系统架构 → E-04；纯流程 → E-03。
+**用法**：`structures.value_chain(x, y, w, h, primary, support, margin_label)`——primary=[(名, 注或 None)] 3–6 段、support=[名] 2–4 条（Porter 原型 5+4，函数强制区间）。
+**来源**：Michael E. Porter, *Competitive Advantage: Creating and Sustaining Superior Performance*, Free Press, 1985；另见 Porter & Millar, HBR 1985（调研报告候选5，一手书籍）。
+**纪律**：主活动必须按物流方向排序（入向→运营→出向→营销→服务的次序语义）；高亮段 ≤1。

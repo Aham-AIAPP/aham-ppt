@@ -218,6 +218,7 @@ def driver_op(cx, cy, op, r=11, c=INK1):
     纯线画（圆 + line/圆点），不用文字字形，规避 tofu。
     注意（对标评估实证）：真实咨询驱动树仅 ~4% 显式建模算子——默认不加，
     仅当页面主论点就是「公式分解」时使用。op ∈ 'x' '/' '+' '-'。"""
+    op = {"×": "x", "÷": "/", "−": "-"}.get(op, op)
     s = f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="#FFFFFF" stroke="{c}" stroke-width="1.6"/>'
     a = r * 0.48
     if op == "x":

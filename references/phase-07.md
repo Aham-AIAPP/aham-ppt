@@ -74,7 +74,7 @@
 
 读取以下文件，加载设计规则：
 - `svg-skeleton-common.md`：通用 Chrome/构件规范与咨询密集层纪律
-- `svg-skeleton-[当前版式系].md`：当前页版式的五栏章节（仅读对应 1 个）——**一律按「用法」栏调用参数化函数**（`layouts.py` 整页/内容区型、`consulting.py` 形体、`structures.py` / `charts.py` 结构与图表），坐标由函数冻结、不手画不自算；标注层纪律随 `svg-skeleton-common.md §咨询密集层 D` 一并加载。**系→文件例外**：封面/目录/章节用 `themes.py` 生成（不读 svg-skeleton），栅格直排版式（S-01/04/05/06、E-01）按 `grid-system.md §三` 坐标直排
+- `svg-skeleton-[当前版式系].md`：当前页版式的五栏章节（仅读对应 1 个）——**一律按「用法」栏调用参数化函数**（`layouts.py` 整页/内容区型、`consulting.py` 形体、`structures.py` / `charts.py` 结构与图表），坐标由函数冻结、不手画不自算；标注层纪律随 `svg-skeleton-common.md §咨询密集层 D` 一并加载。**系→文件例外**：封面/目录/章节用 `themes.py` 生成（不读 svg-skeleton）；直排页（Phase 5 规划卡标注「直排」的页面）读 `grid-composition.md` + `grid-system.md §三`，不读版式章节
 - `designer-rules.md`：设计原则+品牌纪律+PPTX约束
 - `chart-impl.md`：图表（有图表的页面才读）。**优先 `from charts import bar, hbar, line, waterfall, funnel, gantt, bullet, stacked, slope, sparkline, kpi_card, marimekko, fte_ramp, horizon_curves`（14 类全量）一行生成，不逐坐标手画**；charts 未覆盖的类型才用 chart-impl 手画模板
 
