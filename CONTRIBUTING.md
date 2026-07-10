@@ -3,7 +3,7 @@
 欢迎修改、重组、二次开发本技能（开放分发，MIT）。
 
 ## 改动约定
-- **视觉/规范以 `references/brand-spec/` 为权威**：色值、字体、版式只从 `brand.md` / `tokens.css` 查表，不在其它文件写死色值。取值同步自设计源 [aham-ui](https://github.com/li599198347-svg/aham-ui)。
+- **视觉/规范以 `references/brand-spec/` 为权威**：色值、字体、版式只从 `brand.md` / `tokens.css` 查表，不在其它文件写死色值。取值同步自设计源 [aham-ui](https://github.com/Aham-AIAPP/aham-ui)。
 - **方法论与视觉分离**：八阶段流程、Action Title、探测场景等是方法论；颜色/字体/卡片是视觉。改一类不应顺手改另一类。
 - 任何组件/骨架改动，按下方 §验证 与 §教训固化机制 执行。
 - 提交走分支 + PR，提交信息沿用仓库既有风格（`feat:` / `fix:` / `docs:` / `chore:`）。

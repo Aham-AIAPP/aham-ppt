@@ -1,8 +1,8 @@
 # Aham PPT — 克制的 AI PPT 制作技能
 
-[![Release](https://img.shields.io/github/v/release/li599198347-svg/aham-ppt?color=336EE8)](https://github.com/li599198347-svg/aham-ppt/releases)
+[![Release](https://img.shields.io/github/v/release/Aham-AIAPP/aham-ppt?color=336EE8)](https://github.com/Aham-AIAPP/aham-ppt/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-336EE8.svg)](LICENSE)
-[![Design](https://img.shields.io/badge/Design-Aham%20UI%20v6.1-336EE8.svg)](https://github.com/li599198347-svg/aham-ui)
+[![Design](https://img.shields.io/badge/Design-Aham%20UI%20v6.1-336EE8.svg)](https://github.com/Aham-AIAPP/aham-ui)
 [![Type](https://img.shields.io/badge/type-Claude%20Skill-336EE8.svg)](#)
 [![联系我](https://img.shields.io/badge/%E8%81%94%E7%B3%BB%E6%88%91-%E5%BE%AE%E4%BF%A1-336EE8.svg?logo=wechat&logoColor=white)](assets/wechat-qr.png)
 
@@ -59,7 +59,7 @@
 
 <img src="assets/shots/consulting-skin.png" alt="同一真源换肤对比" width="100%">
 
-> 历史样张与可编辑 PPTX（11 页示例 + 世界杯十页双配色）存档于 [v2.5.2 tag](https://github.com/li599198347-svg/aham-ppt/tree/v2.5.2/examples)；v3.0 起版式收敛为参数化函数，不再随仓库携带示例产物。
+> 历史样张与可编辑 PPTX（11 页示例 + 世界杯十页双配色）存档于 [v2.5.2 tag](https://github.com/Aham-AIAPP/aham-ppt/tree/v2.5.2/examples)；v3.0 起版式收敛为参数化函数，不再随仓库携带示例产物。
 
 ## 版式库
 
@@ -77,7 +77,7 @@
 
 ## 开始使用
 
-最简单：**把本仓库地址 `https://github.com/li599198347-svg/aham-ppt` 发给 Claude，让它把技能装好**；或下载本仓库后，把技能文件上传给 Claude。
+最简单：**把本仓库地址 `https://github.com/Aham-AIAPP/aham-ppt` 发给 Claude，让它把技能装好**；或下载本仓库后，把技能文件上传给 Claude。
 
 装好后对 Claude 说「帮我做 PPT / 做客户方案 PPT」即可——技能会自动按八步法推进，开场先问你选视觉档（默认 B）。
 
@@ -85,7 +85,7 @@
 
 ## 更新记录
 
-[Releases](https://github.com/li599198347-svg/aham-ppt/releases) · [CHANGELOG](CHANGELOG.md)（Keep a Changelog · SemVer） · [CONTRIBUTING](CONTRIBUTING.md) · [MIT](LICENSE)
+[Releases](https://github.com/Aham-AIAPP/aham-ppt/releases) · [CHANGELOG](CHANGELOG.md)（Keep a Changelog · SemVer） · [CONTRIBUTING](CONTRIBUTING.md) · [MIT](LICENSE)
 
 ## 关于 Aham
 
@@ -93,10 +93,10 @@
 
 | 应用 | 一句话 |
 |---|---|
-| [Aham UI](https://github.com/li599198347-svg/aham-ui) | 供 AI 消费的设计系统——写一次规范，AI 产出处处一致 |
-| [Aham Word](https://github.com/li599198347-svg/aham-word) | 供 AI 消费的 Word 规范——AI 据规范产出处处一致的 .docx |
-| [Aham Survey](https://github.com/li599198347-svg/aham-survey) | 现场调研工具（macOS）——本地优先，把现场对话做成结构化调研成果 |
-| [Aham Voice](https://github.com/li599198347-svg/aham-voice) | 录音转写与会议纪要（macOS）——本地离线转写，纪要走你自己的模型 |
+| [Aham UI](https://github.com/Aham-AIAPP/aham-ui) | 供 AI 消费的设计系统——写一次规范，AI 产出处处一致 |
+| [Aham Word](https://github.com/Aham-AIAPP/aham-word) | 供 AI 消费的 Word 规范——AI 据规范产出处处一致的 .docx |
+| [Aham Survey](https://github.com/Aham-AIAPP/aham-survey) | 现场调研工具（macOS）——本地优先，把现场对话做成结构化调研成果 |
+| [Aham Voice](https://github.com/Aham-AIAPP/aham-voice) | 录音转写与会议纪要（macOS）——本地离线转写，纪要走你自己的模型 |
 | **Aham PPT** | 克制的 AI PPT 制作技能——把素材做成方案级 PPT |
 
 来源与脱敏说明见 [`ORIGIN.md`](ORIGIN.md)。

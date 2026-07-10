@@ -375,21 +375,21 @@
 ### 修复
 - 修复版式命名冲突、品牌色硬编码等 8 项问题。
 
-[Unreleased]: https://github.com/li599198347-svg/aham-ppt/compare/v3.2.0...HEAD
-[3.2.0]: https://github.com/li599198347-svg/aham-ppt/compare/v3.1.0...v3.2.0
-[3.1.0]: https://github.com/li599198347-svg/aham-ppt/compare/v3.0.0...v3.1.0
-[3.0.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
-[2.8.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
-[2.7.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
-[2.6.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.2...v3.0.0
-[2.5.2]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.1...v2.5.2
-[2.5.1]: https://github.com/li599198347-svg/aham-ppt/compare/v2.5.0...v2.5.1
-[2.5.0]: https://github.com/li599198347-svg/aham-ppt/compare/v2.4.0...v2.5.0
-[2.4.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.4.0
-[2.3.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.3.0
-[2.2.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.2.0
-[2.1.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.1.0
-[2.0.1]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.0.1
-[2.0.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v2.0.0
-[1.1.0]: https://github.com/li599198347-svg/aham-ppt/releases/tag/v1.1.0
+[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.2.0...HEAD
+[3.2.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.1.0...v3.2.0
+[3.1.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.0.0...v3.1.0
+[3.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.2...v3.0.0
+[2.8.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.2...v3.0.0
+[2.7.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.2...v3.0.0
+[2.6.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.2...v3.0.0
+[2.5.2]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.1...v2.5.2
+[2.5.1]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.0...v2.5.1
+[2.5.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.4.0...v2.5.0
+[2.4.0]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v2.4.0
+[2.3.0]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v2.3.0
+[2.2.0]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v2.2.0
+[2.1.0]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v2.1.0
+[2.0.1]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v2.0.1
+[2.0.0]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v2.0.0
+[1.1.0]: https://github.com/Aham-AIAPP/aham-ppt/releases/tag/v1.1.0
 

@@ -72,7 +72,7 @@ def cover():
         e.append(L(bx + 24, ry + 10, bx + bw - 24, ry + 10, LINE, 0.75))
     e.append(L(80, 520, W - 80, 520))
     e.append(T(80, 552, "v2.0 · 视觉层换血 · 三层灰 · 蓝是点缀 · 告别 AI 味三卡片", 15, INK3))
-    e.append(M(W - 80, 552, "github.com/li599198347-svg/aham-ppt", 14, INK3, anchor="end"))
+    e.append(M(W - 80, 552, "github.com/Aham-AIAPP/aham-ppt", 14, INK3, anchor="end"))
     return svg(e, W, H), W, H
 figs["cover"] = cover()
 

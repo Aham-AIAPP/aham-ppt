@@ -21,9 +21,9 @@ SITES = {
                ("原生可编辑 PPTX", "每个元素都是 PPT 原生形状 / 文本框，双击即改"),
                ("39 版式参数化", "内容版式 36 + 结构页 3；纯栅格页型走通用直排规范 + 15 类图表 + 结构 / 标注组件，坐标由函数冻结"),
                ("换成你的品牌", "改 tokens 主色 + 字体 + 品牌名，四步适配")],
-        ctas=[("在 GitHub 查看", "https://github.com/li599198347-svg/aham-ppt", 1),
-              ("历史样张（v2.5.2）", "https://github.com/li599198347-svg/aham-ppt/tree/v2.5.2/examples", 0),
-              ("Releases", "https://github.com/li599198347-svg/aham-ppt/releases", 0)],
+        ctas=[("在 GitHub 查看", "https://github.com/Aham-AIAPP/aham-ppt", 1),
+              ("历史样张（v2.5.2）", "https://github.com/Aham-AIAPP/aham-ppt/tree/v2.5.2/examples", 0),
+              ("Releases", "https://github.com/Aham-AIAPP/aham-ppt/releases", 0)],
         shots=[("shots/consulting-tree.png", "驱动树 · 肘线分解 + 圈注 + 自洽校验"),
                ("shots/consulting-dots.png", "点阵去向 · 细分条 + 圈注"),
                ("shots/consulting-chain.png", "链式递减 · 节点链 + So-What 收口")],
@@ -34,16 +34,16 @@ SITES = {
                ("行业 + 部门模板", "按调研范围（ERP / MES / WMS / PLM…）自动匹配部门与题目"),
                ("本地语音", "录音 + 本地 ASR 转写 + 说话人识别，一键填入当前题"),
                ("AI 增强（自行配置 LLM Key）", "记录润色、追问建议、文档分析、AI 搜索；支持主流 LLM")],
-        ctas=[("在 GitHub 查看", "https://github.com/li599198347-svg/aham-survey", 1),
-              ("下载（Releases）", "https://github.com/li599198347-svg/aham-survey/releases", 0)]),
+        ctas=[("在 GitHub 查看", "https://github.com/Aham-AIAPP/aham-survey", 1),
+              ("下载（Releases）", "https://github.com/Aham-AIAPP/aham-survey/releases", 0)]),
     "aham-voice": dict(dir="aham-voice", name="Aham Voice", tag="录音转写与会议纪要（macOS）", type="macOS App",
         sub="把录音做成会议纪要，隐私留在本机。本地离线转写 · 说话人分离 · 纪要走你自己的模型。",
         feats=[("全本地离线转写", "FunASR + VAD + 标点 + 说话人分离（CAM++）+ 声学情绪"),
                ("AI 会议纪要", "云端大模型（OpenAI 兼容接口，比如 DeepSeek 等），Key 仅存本机"),
                ("单机开箱即用", "无登录、无多用户、无外部集成；DMG 内置全部模型"),
                ("热词与声纹", "热词手动 / txt 批量导入，声纹管理")],
-        ctas=[("在 GitHub 查看", "https://github.com/li599198347-svg/aham-voice", 1),
-              ("下载 DMG（Releases）", "https://github.com/li599198347-svg/aham-voice/releases", 0)]),
+        ctas=[("在 GitHub 查看", "https://github.com/Aham-AIAPP/aham-voice", 1),
+              ("下载 DMG（Releases）", "https://github.com/Aham-AIAPP/aham-voice/releases", 0)]),
 }
 
 def nav_html(cur):
@@ -52,7 +52,7 @@ def nav_html(cur):
         if repo == cur:
             parts.append(f'<b>{label}</b>')
         else:
-            parts.append(f'<a href="https://github.com/li599198347-svg/{repo}">{label}</a>')
+            parts.append(f'<a href="https://github.com/Aham-AIAPP/{repo}">{label}</a>')
     return ' <span class="sep">·</span> '.join(parts)
 
 def page(repo, c):
@@ -114,7 +114,7 @@ def page(repo, c):
   </div>
   {shots_html}<footer>
     <span>Aham · 把灵光一现，做成能用的 AI 工具</span>
-    <span><a href="https://github.com/li599198347-svg/{repo}">github.com/li599198347-svg/{repo}</a></span>
+    <span><a href="https://github.com/Aham-AIAPP/{repo}">github.com/Aham-AIAPP/{repo}</a></span>
   </footer>
 </div></body></html>
 """

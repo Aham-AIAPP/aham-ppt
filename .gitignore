@@ -34,3 +34,8 @@ tools/out/
 
 # Logs
 *.log
+
+# 内部工作文档，不入库
+AUDIT-REPORT-*.md
+IMPLEMENTATION-REPORT-*.md
+IMPROVEMENT-PLAN-*.md

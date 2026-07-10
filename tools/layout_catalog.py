@@ -137,7 +137,7 @@ y += 60
 e.append(f'<line x1="{MX}" y1="{y}" x2="{W-MX}" y2="{y}" stroke="{LINE}" stroke-width="1"/>')
 y += 26
 e.append(T(MX, y, "来源标注转录自各版式骨架文件「来源」栏 · 完整纪律见 references/", 11, INK3))
-e.append(T(W-MX, y, "github.com/li599198347-svg/aham-ppt", 11, INK3, fam=MONO, anchor="end"))
+e.append(T(W-MX, y, "github.com/Aham-AIAPP/aham-ppt", 11, INK3, fam=MONO, anchor="end"))
 y += 40
 
 H = y
