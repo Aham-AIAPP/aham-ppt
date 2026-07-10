@@ -68,9 +68,9 @@
 > 🆕 **v4.0（2026-07）· 库瘦身增肌**：16 个通用页型（大数字 / 宣言 / 两三栏并列等）**退库改走栅格直排**（[`grid-composition.md`](references/grid-composition.md)，版式退库、纪律不退）——依据是 AI 布局能力边界（纯栅格稳定、锚点咬合不可靠），不是来源有无；同时落地调研缺口七式：**Harvey 球表（S-16）· 竞争格局弧（S-17）· 价值链（E-05）· 鱼骨图（G-04）· Impact-Effort（A-04）· 决策树（A-05）· 小倍数网格（V-05）**，决策树期望值与报价合计一样由调用方传入、函数绝不代算。
 
 <details>
-<summary><b>点开查看全部 43 个版式</b>（ID · 用途 · 来源，长图）</summary>
+<summary><b>点开查看全部 39 个版式</b>（ID · 用途 · 来源，长图）</summary>
 <br>
-<img src="assets/shots/layout-catalog.png" alt="Aham PPT 版式总览：43 个版式的 ID、用途与来源" width="100%">
+<img src="assets/shots/layout-catalog.png" alt="Aham PPT 版式总览：39 个版式的 ID、用途与来源" width="100%">
 </details>
 
 > 权威清单与选版决策表见 [`references/layout-library.md`](references/layout-library.md)；图片由 [`tools/layout_catalog.py`](tools/layout_catalog.py) 生成，版式增减后重跑即可。
