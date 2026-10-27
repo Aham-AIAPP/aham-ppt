@@ -144,7 +144,7 @@ python assets/tools/check_deck.py <交付.pptx> --config <项目配置.json> --o
 ```
 
 - 脚本的 ERROR 必须改完；WARNING 逐条处理或在 QC 报告里写明保留理由。
-- 再按 `solution-deck.md` §6.2 的 20 条人工检查清单逐条对照页面。
+- 再按 `solution-deck.md` §6.2 的 21 条人工检查清单逐条对照页面。
 - 本版修改记录按 §6.3 的结构写，和交付物放在一起。
 
 ### 步骤1.5：渲染目检（LibreOffice 可用时；对标官方 pptx 技能的渲染 QA 闭环）
