@@ -14,7 +14,7 @@
 - `assets/examples/`：范例库。10 页合格页、5 页不合格页，附可学的手法、已知不足和改法。
 - `assets/html2pptx/extract.js`：在浏览器里读出每个元素的实际位置和计算样式，导出和检查共用。
 - `assets/html2pptx/design_checks.js`：设计检查，查文字越框、压线、对比度、箭头标签、单名称方框、大块空白和主图区占用率。
-- `check_deck.py` 新增 4 项：免费和赠送说法（ERROR）、金额（WARNING）、汉字数量词、结论式标题、语义色表外的强调色；强调色统计加上线条颜色，并列出每页图片数。
+- `check_deck.py` 新增 5 项：免费和赠送说法（ERROR）、金额（WARNING）、汉字数量词、结论式标题、语义色表外的强调色；强调色统计加上线条颜色，并列出每页图片数。
 - `references/design-principles.md`：七条版式设计原则和检验方法，附内容结构与图形举例表。全部文稿类型适用，取代版式库查表、栅格坐标冻结和节奏阈值。
 - `assets/html2pptx/`：网页幻灯片路线。`html2pptx.js` 把 1920×1080 绝对定位的 HTML 幻灯片导出为可编辑 PPTX（文字、形状、连线为原生对象，图标和内嵌 svg 为图片，`<aside>` 进备注）；`preview.js` 合成单文件预览页；`check_slides.js` 在浏览器里检查字号、溢出、越界和文字重叠，可出缩略图总览。写法见 `references/html-slides.md`。
 - `references/phase-common.md`：八个阶段共用的固定动作、完成卡格式、跳过后果和工作区文件。
