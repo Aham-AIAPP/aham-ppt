@@ -1,6 +1,6 @@
 // 幻灯片组件：固定数值和元素画法。每个函数返回一段 HTML，坐标单位 px，画布 1920×1080。
 // 数值与 references/style-tokens.md 一致，元素用法见 references/style-elements.md。
-// 组件只管零件长什么样，页面怎么构图由内容决定。
+// 组件只定元素画法，构图由本页内容决定。
 // 用法：const K = require('<仓库>/assets/html2pptx/components'); 写 build.js 拼页，K.writeDeck() 输出。
 const fs = require('fs'), path = require('path');
 

@@ -1,4 +1,5 @@
-// 排版检查：在浏览器里实际排版后，查文字溢出、文字互相重叠、超出画布和字号过小
+// 排版检查：在浏览器里实际排版后，查文字溢出、文字互相重叠、超出画布和字号过小；
+// 再按 design_checks.js 查文字越框、压线、对比度、箭头标签、单名称方框和大块空白
 // 用法：node check_slides.js <幻灯片目录或预览.html> [--png 截图目录] [--sheet 缩略图总览.png] [--min-font 18]
 // --sheet 把全册缩略图排成一张图，用来看相邻页的主图结构有没有重复
 // 输出 Markdown 报告；有 ERROR 时退出码为 1
@@ -22,7 +23,9 @@ const MIN = +(opt('min-font') || 18), PNG = opt('png'), SHEET = opt('sheet');
   if (tmp) fs.unlinkSync(tmp);
   await pg.evaluate(() => document.fonts.ready);
   await pg.addScriptTag({ path: path.join(__dirname, 'extract.js') });
-  const compat = await pg.evaluate(() => window.extractSlides().map(s => s.issues));
+  const data = await pg.evaluate(() => window.extractSlides());
+  const designChecks = require('./design_checks');
+  const compat = data.map(s => [...s.issues, ...designChecks(s, s.els.some(e => e.tag === 'p' && e.fs === 52))]);
   const res = await pg.evaluate(MIN => {
     const out = [];
     document.querySelectorAll('section.slide').forEach((s, i) => {
@@ -77,10 +80,12 @@ const MIN = +(opt('min-font') || 18), PNG = opt('png'), SHEET = opt('sheet');
     }
   }
   await br.close();
-  let e = 0, w = 0; const lines = ['# 排版检查', ''];
+  const cnt = { ERROR: 0, WARNING: 0, INFO: 0 }, lines = ['# 排版检查', ''];
   res.forEach((s, i) => s.issues.push(...compat[i]));
-  res.forEach(s => s.issues.forEach(([lv, m]) => { lv === 'ERROR' ? e++ : w++; lines.push(`- 第 ${s.no} 页（${s.id}）${lv}　${m}`); }));
-  lines.splice(1, 0, `ERROR ${e} 条　WARNING ${w} 条　共 ${res.length} 页`);
+  for (const lv of ['ERROR', 'WARNING', 'INFO'])
+    res.forEach(s => s.issues.filter(x => x[0] === lv).forEach(([, m]) => { cnt[lv]++; lines.push(`- 第 ${s.no} 页（${s.id}）${lv}　${m}`); }));
+  lines.splice(1, 0, `ERROR ${cnt.ERROR} 条　WARNING ${cnt.WARNING} 条　INFO ${cnt.INFO} 条　共 ${res.length} 页`);
+  const e = cnt.ERROR;
   console.log(lines.join('\n'));
   process.exit(e ? 1 : 0);
 })().catch(err => { console.error(err); process.exit(2); });

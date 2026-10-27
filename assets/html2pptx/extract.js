@@ -119,7 +119,10 @@
           issues.push([c.localName === 'svg' || c.localName === 'img' ? 'ERROR' : 'WARNING', `p 里的 <${c.localName}> 导出为普通文字：${el.textContent.trim().slice(0, 16)}`]); break;
         }
         const fs = px(cs.fontSize), lh = cs.lineHeight === 'normal' ? fs * 1.2 : px(cs.lineHeight);
-        els.push({ ...base, runs: runs(el, under), fs, lh, mono: /mono|consolas|courier/i.test(cs.fontFamily),
+        // 文字实际占的范围，供设计检查用
+        const rg = document.createRange(); rg.selectNodeContents(el); const tr = rg.getBoundingClientRect();
+        const text = tr.width ? { x: (tr.left - sr.left) / k, y: (tr.top - sr.top) / k, w: tr.width / k, h: tr.height / k } : null;
+        els.push({ ...base, text, runs: runs(el, under), fs, lh, mono: /mono|consolas|courier/i.test(cs.fontFamily),
           align: { center: 'center', right: 'right', end: 'right' }[cs.textAlign] || 'left',
           nowrap: cs.whiteSpace === 'nowrap' || !el.style.width,
           pad: ['Top', 'Right', 'Bottom', 'Left'].map(s => px(cs['padding' + s])),

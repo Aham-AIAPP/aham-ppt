@@ -11,7 +11,7 @@ ERROR 阻断交付；WARNING 由用户选修复、带注释交付或忽略；INF
 **1. 机器检查**
 
 ```bash
-node assets/html2pptx/check_slides.js deck/preview.html --png 交付/png      # 字号、溢出、越界、重叠
+node assets/html2pptx/check_slides.js deck/ --png 交付/png      # 字号、溢出、越界、重叠、导出兼容、设计检查
 python assets/tools/check_deck.py 交付/<文件名>.pptx --config 项目配置.json --out 交付/自查报告.md
 ```
 
@@ -32,9 +32,12 @@ python assets/tools/check_deck.py 交付/<文件名>.pptx --config 项目配置.
 **3. 渲染抽查**：LibreOffice 可用时把 PPTX 转 PDF，抽 3 页与网页截图对比换行和位置。
 没有 LibreOffice 时跳过并在交付说明里记一笔。
 
-**4. 质检报告**：按 ERROR、WARNING、INFO 分列，每条写页码、问题和修改建议，最后列已通过的项。
+**4. 修正记录升级**：列出基线里的修正记录，逐条问用户要不要升级为技能的通用规则。
+用户同意的条目，写明建议改动的技能文件和条文，交给用户决定是否提交到技能仓库。
 
-**5. 交付**
+**5. 质检报告**：按 ERROR、WARNING、INFO 分列，每条写页码、问题和修改建议，最后列已通过的项。
+
+**6. 交付**
 
 | 文件 | 说明 |
 | --- | --- |
