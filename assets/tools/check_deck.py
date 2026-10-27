@@ -67,7 +67,7 @@ DEFAULTS = {
 
 SNAKE = re.compile(r"\b[a-z]+(?:_[a-z0-9]+)+\b")          # search_knowledge
 PAGE_REF = re.compile(r"第\s*(\d+)\s*(?:[—–-]\s*(\d+)\s*)?页")
-QTY = re.compile(r"(\d+)\s*(项|个|类|条|页|步|层|组|台|人|款|种|批)")
+QTY = re.compile(r"(\d+)\s*(项|个|类|条|步|层|组|台|人|款|种|批)")
 SPLIT = re.compile(r"[，；,;]")
 SEQ = re.compile(r"^\s*0?(\d{1,2})\s*$")
 
