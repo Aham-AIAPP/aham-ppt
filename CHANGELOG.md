@@ -7,6 +7,33 @@
 
 ## [Unreleased]
 
+生成路线改为网页幻灯片，规则文件整体重写。不兼容 4.x，下一版按主版本 5.0.0 发布。
+
+### 新增
+- `assets/html2pptx/`：网页幻灯片路线。
+  - `components.js`：固定数值常量和元素画法；条形图、折线图、坡度图、甘特条画成可编辑形状；30 个线性图标。
+  - `html2pptx.js`、`extract.js`：在浏览器里排版后读取位置和样式，导出可编辑 PPTX，讲稿进备注。
+  - `preview.js`：单文件预览页。
+  - `check_slides.js`、`design_checks.js`：检查排版、导出兼容，以及文字越框、压线、对比度、箭头标签、单名称方框和空白。
+  - `demo/build.js`：五页示例，覆盖封面、分区图、双泳道、图表和甘特条。
+- `assets/examples/`：范例库，10 页合格页和 5 页不合格页，附手法和问题说明。
+- `assets/tools/extract_outline.py`：把材料转成提纲，阶段 2 只读相关章节。
+- `assets/tools/check_deck.py`：检查 PPTX 的字号、逗号分句、禁用词、页码引用、内部编号、术语、价格说法、标题形式、颜色和图例；`title_style` 区分方案类和汇报类的标题写法。
+- `references/style-tokens.md`、`style-elements.md`、`design-principles.md`：风格分固定数值、元素、构图三层。
+- `references/solution-deck.md`：方案类 PPT 的结构、版式、文字和 22 项检查清单。
+- `references/html-slides.md`、`phase-common.md`。
+
+### 变更
+- `SKILL.md`、八个阶段文件、`coach-engine.md`、`wording-rules.md` 整体重写，去掉历史说明和版本标注。
+- 阶段 6 选 4 至 5 页不同结构的样页，样页阶段就导出并检查；阶段 7 每页填七项自查表，每章确认一次；用户意见按原话、抽象规则、反例记进修正记录并查全册。
+- 社交封面和 GitHub Pages 改用新的说明和范例。
+
+### 移除
+- SVG 转 PPTX 工具链：`assets/svg_to_pptx/`、`svg_to_pptx_wrapper.py`。
+- Python 组件库 `assets/components/` 和 39 个版式：`layout-library.md`、`svg-skeleton-*.md`、`grid-composition.md`、`grid-system.md`、`theme-tiers.md`。
+- `designer-rules.md`、`chart-impl.md`、`pptx-native-rules.md`、`quality-audit-protocol.md`、`brand-spec/`。
+- `assets/tools/lint_svg.py`、`pageno_fill.py`、`icons_preview.py`；仓库物料脚本 `tools/`；旧样张 `assets/shots/`、`docs/shots/`。
+
 ## [4.0.0] - 2026-07-03 — 库瘦身增肌（通用页型退库直排 · 调研缺口七式落地）
 
 依据：全量对标评估（40 版式移出/替换/保留决策）+ 深度调研报告（Gap Analysis and Source Upgrade）+ 用户三项拍板（移出 16 认可 / AI 能力边界判据认可 / 决策树与小倍数加入）。
@@ -375,7 +402,8 @@
 ### 修复
 - 修复版式命名冲突、品牌色硬编码等 8 项问题。
 
-[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.2...v3.0.0

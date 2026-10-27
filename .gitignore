@@ -25,11 +25,10 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Workspace（技能运行时产生的工作目录）
+# 技能运行时产生的文件
 workspace/
-svg_final/
-deliverables/
-tools/out/
+deck/
+交付/
 *.pptx
 
 # Logs
