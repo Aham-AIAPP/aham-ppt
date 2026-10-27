@@ -1,0 +1,9 @@
+{
+  "name": "aham-html2pptx",
+  "private": true,
+  "description": "HTML 幻灯片预览、排版检查与导出可编辑 PPTX",
+  "dependencies": {
+    "pptxgenjs": "^3.12.0",
+    "playwright": "^1.40.0"
+  }
+}
