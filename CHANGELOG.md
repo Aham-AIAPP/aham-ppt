@@ -8,6 +8,13 @@
 ## [Unreleased]
 
 ### 新增
+- `references/style-tokens.md`：固定数值。字号 7 级、颜色 10 个加 3 个语义色（蓝＝AI、青绿＝我方服务、橙＝我方产品）、线宽 4 级、圆角、页面框架。
+- `references/style-elements.md`：元素词汇。每种元素表达的关系、用在哪、不用在哪、尺寸和对应函数；4 种圆形编号分开定义；行业视觉语言 3 组。
+- `assets/html2pptx/components.js`：与 style-tokens 一致的常量和元素画法，页面用生成脚本拼。示例在 `demo/build.js`。
+- `assets/examples/`：范例库。10 页合格页、5 页不合格页，附可学的手法、已知不足和改法。
+- `assets/html2pptx/extract.js`：在浏览器里读出每个元素的实际位置和计算样式，导出和检查共用。
+- `assets/html2pptx/design_checks.js`：设计检查，查文字越框、压线、对比度、箭头标签、单名称方框、大块空白和主图区占用率。
+- `check_deck.py` 新增 4 项：免费和赠送说法（ERROR）、金额（WARNING）、汉字数量词、结论式标题、语义色表外的强调色；强调色统计加上线条颜色，并列出每页图片数。
 - `references/design-principles.md`：七条版式设计原则和检验方法，附内容结构与图形举例表。全部文稿类型适用，取代版式库查表、栅格坐标冻结和节奏阈值。
 - `assets/html2pptx/`：网页幻灯片路线。`html2pptx.js` 把 1920×1080 绝对定位的 HTML 幻灯片导出为可编辑 PPTX（文字、形状、连线为原生对象，图标和内嵌 svg 为图片，`<aside>` 进备注）；`preview.js` 合成单文件预览页；`check_slides.js` 在浏览器里检查字号、溢出、越界和文字重叠，可出缩略图总览。写法见 `references/html-slides.md`。
 - `references/phase-common.md`：八个阶段共用的固定动作、完成卡格式、跳过后果和工作区文件。
@@ -16,6 +23,12 @@
 - `assets/tools/check_deck.py`：读 .pptx 自查字号、颜色、逗号分句、禁用词、「第 N 页」引用、内部编号、编号跳号、术语表和子标题格式；输出标题通读表、页码引用表和数量说法表。可用 JSON 配置项目色表、字号、术语表和观察词。
 
 ### 变更
+- 导出改为在浏览器里排版后取值，修复 11 处网页与 PPT 不一致（字符实体、半透明色、缺宽高、单边内边距、注释、多个讲稿、行高、命名色、百分比圆角、零长度线段等）。导出兼容问题在 `check_slides.js` 里报出，它也接受 deck 目录。
+- Phase 6 选 4 至 5 页不同结构的样页，样页阶段就导出 PPTX 并跑 `check_deck.py`；Phase 7 每页填七项自查表，每章确认一次，用户的修改意见按「原话、抽象规则、反例」记进基线并全册排查；Phase 8 询问是否把修正记录升级为通用规则。
+- Phase 1 读 style-tokens 并生成 `项目配置.json`；Phase 3 预期行动接 Phase 1 的回答；Phase 4 去掉复述灵魂句的停等，方案类默认 50 页并按 solution-deck 2.1 排页。
+- design-principles 第二节：每种结构给 2 至 3 种画法和选用条件；solution-deck 3.5 改为每类页两种常见结构。
+- 虚线只表示「非本期或未发生」和「边界、参考线」两种含义。
+- 颜色、线宽、字号规则统一到 style-tokens，brand.md 不再进主流程，SKILL.md 去掉降级基线。
 - 生成路线改为「AI 写 HTML 幻灯片 → 网页预览 → 导出 PPTX」。SVG 转 PPTX 工具链、版式库、栅格、SVG 骨架、三档主题、designer-rules 移出主流程，文件保留并加「参考素材」表头。
 - 八个阶段文件只留入场条件、停等点、步骤和完成卡字段；SKILL.md 从 18,209 字减到约 4,200 字，原「文案措辞」附录移入 `wording-rules.md` 第七节。
 - Phase 2：信息清单写进基线文件，后续阶段只引编号；搜索最多 3 次；不单独停等，清单与 Phase 3 的灵魂句一次确认。同一客户再做时读已有清单。

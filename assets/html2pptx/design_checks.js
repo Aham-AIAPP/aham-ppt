@@ -1,7 +1,7 @@
 // 设计检查：用 extract.js 读出的元素位置查版式问题。由 check_slides.js 调用。
 // 只查机器能判的部分，结果是 WARNING 或 INFO，由人判断改不改。
 // 1 文字越出所在方框  2 文字压在线上  3 文字与底色对比不足  4 箭头没有标签
-// 5 方框只写一个名称  6 主图区大块空白
+// 5 方框只写一个名称  6 主图区大块空白或占用率低
 const MAIN = { x: 96, y: 195, w: 1728, h: 700 };
 
 const isBox = e => (e.tag === 'div' || e.tag === 'x-shape' || (e.tag === 'p' && !(e.runs || []).length)) && (e.fill || e.border) && e.w >= 40 && e.h >= 30;
@@ -75,7 +75,8 @@ function largestEmpty(rects) {
       st.push([s, h]);
     }
   }
-  best.ratio = best.a / (rows * cols); return best;
+  best.ratio = best.a / (rows * cols);
+  best.fill = occ.flat().filter(Boolean).length / (rows * cols); return best;
 }
 
 module.exports = function designChecks(slide, isBody) {
@@ -136,6 +137,7 @@ module.exports = function designChecks(slide, isBody) {
       .map(e => e.tag === 'x-connector' ? { x: Math.min(e.x1, e.x2), y: Math.min(e.y1, e.y2), w: Math.abs(e.x2 - e.x1) + 1, h: Math.abs(e.y2 - e.y1) + 1 } : e);
     const g = largestEmpty(occ);
     if (g.ratio > 0.25) out.push(['WARNING', `主图区有大块空白：x ${g.x}–${g.x + g.w}，y ${g.y}–${g.y + g.h}，占主图区 ${Math.round(g.ratio * 100)}%`]);
+    else if (g.fill < 0.25) out.push(['INFO', `主图区只用了 ${Math.round(g.fill * 100)}%，与范例库同类页对比密度`]);
   }
   return out;
 };
