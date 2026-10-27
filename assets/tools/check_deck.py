@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-方案 PPT 成品自查（读 .pptx，不改文件）—— Phase 8 交付前跑一次。
+PPT 成品自查（读 .pptx，不改文件）。阶段 6 的样页和阶段 8 交付前各跑一次。
 用法：
     python check_deck.py <方案.pptx> [--config 项目配置.json] [--out 报告.md]
 
-规则出处：references/solution-deck.md §六。本脚本只做「机器能判的」那一半，
-输出的「人工核对」各节要逐条对照页面看，脚本不替人下结论。
+规则出处：references/wording-rules.md、references/solution-deck.md 第六节。脚本只查机器能判断的项，
+输出的「人工核对」各节要逐条对照页面看。
 
 机器检查（ERROR / WARNING）
   1. 字号小于下限（默认 9pt，ERROR）；全册字号超过 8 级（WARNING）
@@ -16,10 +16,11 @@
   6. 内部编号（如 C01、A20）、代码标识符（如 search_knowledge）出现在页面上
   7. 同一组编号跳号（01、03、04）
   8. 术语表里的非标准写法
-  9. 子标题不以句号结尾、超过 40 字；标题以句号结尾
+  9. 标题以句号结尾；title_style 为 noun 时查子标题不以句号结尾、超过 40 字
  10. 页面上出现免费、赠送、折扣说法（ERROR）；出现金额（WARNING，业务数据可保留）。讲稿不查
  11. 数量用汉字数字写（如「三项」「五个」），应写阿拉伯数字（WARNING）
- 12. 标题写成结论句（含「是」「能」「可以」「已」「将」等判断词，或长于 20 字）（WARNING）
+ 12. 标题形式（WARNING）。title_style 为 noun（方案类，默认）时查标题像结论句（含「是」「能」「可以」「已」「将」等判断词，
+     或长于 20 字）；为 conclusion（汇报类）时查标题超过 24 字或含数字
  13. 配了语义色表时，页面用了色表外的强调色（WARNING）
 
 人工核对清单（INFO，逐条看）
@@ -37,7 +38,8 @@
   "watch": ["免费", "打样", "<其他客户名>"],       // 观察词：出现即列出，由人判断
   "terms": {"MOM（含 MES、WMS）": ["MOM系统", "制造运营系统"]},  // 标准名: [非标准写法]
   "internal_code": "\\b[A-Z]{1,2}\\d{2}\\b",     // 内部编号正则，可改
-  "accents": {"336EE8": "AI", "17998A": "我方服务", "D4892A": "我方产品"}  // 语义色表：色值: 含义
+  "accents": {"336EE8": "AI", "17998A": "我方服务", "D4892A": "我方产品"},  // 语义色表：色值: 含义
+  "title_style": "noun"                           // noun：名词标题加结论子标题（方案类）；conclusion：结论式标题（汇报类）
 }
 """
 import sys, re, json, argparse, collections
@@ -56,7 +58,7 @@ DEFAULTS = {
         "承接 赋能 沉淀 落地 抓手 闭环 粒度 颗粒度 归集 收敛 下沉 对位 波次 地基 命脉 灰度 旁路 水位 卡位 "
         "落库 对齐 原生 前置 全域 打通 颠覆 一站式 全链路 最佳实践 "
         "值得注意的是 需要指出的是 事实上 坦白说 总而言之 简而言之 一句话总结 "
-        "撑不撑得住 对得起来 说不清 准不准 跟得上 划得来 值不值 一盘棋 一本账 全量检查"
+        "撑不撑得住 对得起来 说不清 准不准 记得住 跟得上 划得来 值不值 一条链 一盘棋 一本账 全量检查"
     ).split(),
     # 口语词：方案页面不用，客户原话除外
     "colloquial": "干活 坐下来 兜底 露馅 放水 做砸 硬推 松口 长什么样 小工具 聊天窗口".split(),
@@ -64,6 +66,7 @@ DEFAULTS = {
     "terms": {},
     "internal_code": r"(?<![A-Za-z0-9])[A-Z]{1,2}\d{2}(?![A-Za-z0-9])",
     "accents": {},
+    "title_style": "noun",
 }
 
 SNAKE = re.compile(r"\b[a-z]+(?:_[a-z0-9]+)+\b")          # search_knowledge
@@ -137,6 +140,9 @@ def read_slide(slide, h):
                 c = color_of(sh.line.color)
                 if c:
                     colors[("线条", c)] += 1
+                    # 描边色块和短线段也算图例：边长不超过 0.3 英寸
+                    if (sh.width or 0) <= Emu(274320) and (sh.height or 0) <= Emu(274320):
+                        swatches.add(c)
         except Exception:
             pass
         if sh.shape_type == 13:  # 图片：图内颜色读不到，单独计数
@@ -270,11 +276,14 @@ def main():
             if gaps and len(gaps) <= 2:
                 warn.append((idx, f"两位编号疑似跳号：有 {nums}，缺 {gaps}"))
 
-        if title and (VERDICT.search(title) or len(title) > 20):
-            warn.append((idx, f"标题像结论句（应为名词短语，结论写进子标题）：{title}"))
+        if cfg["title_style"] == "noun":
+            if title and (VERDICT.search(title) or len(title) > 20):
+                warn.append((idx, f"标题像结论句（应为名词短语，结论写进子标题）：{title}"))
+        elif title and (len(title) > 24 or re.search(r"\d", title)):
+            warn.append((idx, f"结论式标题超过 24 字或含数字：{title}"))
         if title and title.endswith("。"):
             warn.append((idx, f"标题以句号结尾：{title}"))
-        if sub:
+        if sub and cfg["title_style"] == "noun":
             if not sub.endswith("。"):
                 info.append((idx, f"子标题未以句号结尾：{sub[:40]}"))
             if len(sub) > 40:

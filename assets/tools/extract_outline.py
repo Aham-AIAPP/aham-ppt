@@ -1,4 +1,4 @@
-"""材料提纲：把 PDF、Word、PPT、Excel、Markdown 转成短提纲，供 Phase 2 先看提纲再读原文。
+"""材料提纲：把 PDF、Word、PPT、Excel、Markdown 转成短提纲，供阶段 2 先看提纲再读原文。
 
 用法：python extract_outline.py <文件...> --out 材料提纲/ [--nums 5]
 

@@ -1,4 +1,4 @@
-// 组件用法示例：三页虚构内容。运行：node build.js <输出目录>
+// 组件用法示例：五页虚构内容。运行：node build.js <输出目录>
 // 每页先判断内容结构，再用组件拼图形。坐标按本页内容定，不是固定版式。
 const K = require('../components');
 const { C, FS, LW } = K;
@@ -23,12 +23,13 @@ let b = '';
 b += K.box(96, 220, 1100, 640, { stroke: C.slate, sw: LW.heavy, dash: true, r: 0 });
 b += K.text(116, 232, '企业网络内', { color: C.slate, weight: 600 });
 b += K.text(1240, 232, '企业网络外', { color: C.ink3, weight: 600 });
-const sys = [['ERP（含 CRM）', '订单、客户、报价'], ['MES', '工单、报工'], ['知识库', '制度、工艺文件']];
-sys.forEach(([name, data], i) => {
+const sys = [['ERP（含 CRM）', '订单、客户、报价', 'database'], ['MES', '工单、报工', 'factory'], ['知识库', '制度、工艺文件', 'file']];
+sys.forEach(([name, data, ic], i) => {
   const y = 300 + i * 170;
   b += K.box(140, y, 300, 120, { fill: C.white, stroke: C.line2 });
-  b += K.text(164, y + 20, name, { size: FS.name, color: C.ink1, weight: 600 });
-  b += K.text(164, y + 58, data, { color: C.ink3 });
+  b += K.iconCircle(ic, 184, y + 34);
+  b += K.text(216, y + 20, name, { size: FS.name, color: C.ink1, weight: 600 });
+  b += K.text(164, y + 70, data, { color: C.ink3 });
   b += K.arrow(440, y + 60, 640, y + 60, { color: C.ai });
   b += K.text(470, y + 22, '读取', { color: C.ai });
 });
@@ -71,5 +72,35 @@ const p3 = K.page({ no: 3, chapter: '02　试点场景', title: '销售报价应
   provider: ['我方服务', C.svc], body: t, foot: '举例　时长为试点前的估算',
   attrs: [['输入', '客户询价单'], ['输出', '报价单草稿'], ['执行岗位', '业务员'], ['边界', '价格由人工确认']] });
 
-K.writeDeck(out, [{ id: 'p01', html: cover }, { id: 'p02', html: p2 }, { id: 'p03', html: p3 }]);
+// 第 4 页 趋势与分项：左侧折线看月度变化，右侧条形看各产品线
+let c = '';
+c += K.text(96, 220, '月度平均报价周期', { size: FS.section, color: C.ink1, weight: 700 });
+c += K.lineChart({ x: 96, y: 280, w: 900, h: 580, labels: ['1 月', '2 月', '3 月', '4 月', '5 月', '6 月'], unit: ' 天',
+  series: [{ name: '试点产品线', values: [4.6, 4.4, 3.1, 2.4, 2.1, 2.0], color: C.ai }, { name: '其他产品线', values: [4.5, 4.7, 4.4, 4.6, 4.5, 4.4], color: C.mute }] });
+c += K.text(1100, 220, '6 月各产品线报价周期', { size: FS.section, color: C.ink1, weight: 700 });
+c += K.bars({ x: 1100, y: 280, w: 724, h: 540, unit: ' 天', labelW: 200,
+  items: [{ label: '产品线 A', value: 2.0, hi: true }, { label: '产品线 B', value: 4.2 }, { label: '产品线 C', value: 4.4 }, { label: '产品线 D', value: 4.7 }] });
+c += K.text(1300, 846, '深色条是试点产品线', { color: C.ink3 });
+const p4 = K.page({ no: 4, chapter: '02　试点场景', title: '试点期间的报价周期', sub: '3 月试点上线后周期逐月缩短。',
+  provider: ['我方服务', C.svc], body: c, foot: '举例　数字为示例数据',
+  attrs: [['统计口径', '询价到报价单发出'], ['样本', '每月全部报价单'], ['数据来源', 'ERP 报价记录'], ['更新', '每月 5 日']] });
+
+// 第 5 页 阶段重叠：甘特条加评审点
+let g = '';
+g += K.gantt({ x: 96, y: 220, w: 1728, labelW: 260, rowH: 136, periods: ['第 1 月', '第 2 月', '第 3 月', '第 4 月', '第 5 月', '第 6 月'],
+  rows: [
+    { name: '平台部署', start: 0, end: 1.5, fill: C.prodBg, stroke: C.prod, label: '我方产品', note: '服务器就绪、账号开通' },
+    { name: '系统接入', start: 1, end: 3, fill: C.svcBg, stroke: C.svc, label: '我方服务', note: 'ERP、MES、知识库共 3 套' },
+    { name: '试点场景', start: 2.5, end: 5, fill: C.svcBg, stroke: C.svc, label: '我方服务', note: '报价场景' },
+    { name: '推广准备', start: 4.5, end: 6, fill: C.white, stroke: C.ink3, label: '企业主导', note: '选定二期场景' },
+  ] });
+const gx = m => 96 + 260 + (1728 - 260) / 6 * m;
+g += K.reviewPoint(gx(3), 830, '接入验收', { toY: 256 });
+g += K.reviewPoint(gx(5), 830, '试点验收', { toY: 256 });
+g += K.legend([['我方产品', 'stroke', C.prod], ['我方服务', 'stroke', C.svc], ['评审点', 'diamond', C.ink1]], 1824, 146, { align: 'right' });
+const p5 = K.page({ no: 5, chapter: '03　实施计划', title: '一期实施计划', sub: '4 条工作线重叠推进。',
+  body: g, foot: '举例',
+  attrs: [['周期', '6 个月'], ['评审点', '2 个'], ['企业投入', '每周 1 次例会'], ['交付物', '详见第 3 章']] });
+
+K.writeDeck(out, [{ id: 'p01', html: cover }, { id: 'p02', html: p2 }, { id: 'p03', html: p3 }, { id: 'p04', html: p4 }, { id: 'p05', html: p5 }]);
 console.log('已写出', out);
