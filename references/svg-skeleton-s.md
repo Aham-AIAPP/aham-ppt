@@ -1,5 +1,9 @@
 # SVG Skeleton · S系版式骨架（结构（Structure））
 
+> **参考素材（2026-10-27 起移出主流程）**：本文件属于旧的 SVG 路线，主流程不再加载。
+> 文中「唯一权威」「必须」「不可改动」「坐标冻结」「节奏约束」一类要求不再约束版式设计。
+> 版式按 `design-principles.md` 设计，页面按 `html-slides.md` 写。需要某种结构的画法时可查本文件。
+
 > Phase 7 按版式 ID 读取本文件。S 系两类实现路径：**参数化**（调 `layouts.py` / `structures.py` / `charts.py`，返回内容区 body，由 `themes.chrome` 包裹）与**栅格直排**（按 `grid-system.md §三` 坐标 + `svg-skeleton-common.md` 构件直排）。均不逐坐标手画。
 
 ---

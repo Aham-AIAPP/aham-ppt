@@ -18,6 +18,8 @@ Why one library: mixing libraries is the #1 way that AI-generated work starts lo
 
 Rationale: the content layer reads as a quiet white-paper. Icons there add visual noise and a second "color language"; a leading `•` + label carries the same meaning with less ink.
 
+> **网页路线（2026-10-27）**：图标写成内嵌 `<svg>` 的 Lucide 线性单色图标，导出 PPTX 时为图片；不再分 A/B/C 档，下面的档位例外留作参考。
+
 > **v2.1 例外（B / C 档）**：自 v2.1 起，**B 现代专业档 / C 高表现力档**允许在内容区使用 **Lucide 线性、单色**图标（如 `assets/components/icons.py` 的 `icon_circle` / 流程节点 / 关系图标识），用于结构化表达（流程、关系图、KPI 标识）；仍**禁多色 / 填充 / emoji**，单色随墨色或单蓝。**A 克制档**维持本铁规——内容区只用 `•` + 文字。落地判定见 `designer-rules.md`。
 
 ## CDN (recommended for prototypes)

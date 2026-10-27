@@ -1,5 +1,8 @@
 # Aham Design System（v6.1 · PPT/Office 轨）
 
+> **用于 PPT 时（2026-10-27）**：本文件提供色值和字体。颜色数量、强调色用法、PPT 字号和版式
+> 以 `references/design-principles.md` 为准：一色一义并配图例，颜色数量不设上限，最小字号 9pt。
+
 > **北极星**：极简、克制、留白、内容优先的桌面 AI 气质。性格：**冷色的纸、克制的金属感、对话式**。
 > 取值唯一事实源：`tokens.css`。本技能只产出 PPT，属 **Office 轨 · PPT 子模型**，PPT 落地取值见本文件 **§7** + `tokens.css` **§10**。
 

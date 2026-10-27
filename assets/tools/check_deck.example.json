@@ -1,5 +1,6 @@
 {
-  "font_sizes": [9, 10, 11, 12, 13, 26, 32, 40, 48, 60],
+  "min_font": 9,
+  "max_levels": 8,
   "palette": ["FFFFFF", "F6F7F9", "EEF1F5", "E3E6EB", "C9CED6", "AEB5C0", "7D8695", "5B6B82", "4A5363", "1F2633",
               "336EE8", "EAF0FD", "17998A", "E1F3F0", "D4892A", "FBF0DF"],
   "watch": ["〈其他客户简称〉"],

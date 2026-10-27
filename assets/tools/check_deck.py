@@ -8,8 +8,8 @@
 输出的「人工核对」各节要逐条对照页面看，脚本不替人下结论。
 
 机器检查（ERROR / WARNING）
-  1. 字号不在阶梯内（默认 9/10/11/12/13 + 标题与封面档）
-  2. 文字色、填充色不在项目色表内
+  1. 字号小于下限（默认 9pt，ERROR）；全册字号超过 8 级（WARNING）
+  2. 页面用了 2 种以上强调色却找不到图例色块（WARNING，启发式）；配了色表时列出色表外的颜色（INFO）
   3. 页面文字一段里用逗号或分号连了两个分句
   4. 禁用词、口语词、观察词（页面与讲稿分开统计）
   5. 「第 N 页」引用超出总页数
@@ -22,11 +22,13 @@
   - 标题与子标题一列（通读用）
   - 每处「第 N 页」引用及其指向页的标题
   - 全册带数量词的说法（N 项、N 个、N 类……），用于前后页数量对照
+  - 每页用到的强调色，用于对照项目色表检查一色一义
 
 配置文件（JSON，全部可选，缺省用下方 DEFAULTS）：
 {
-  "font_sizes": [9, 10, 11, 12, 13, 26, 32, 40, 48, 60],
-  "palette": ["1F2633", "4A5363", ...],          // 文字色与填充色允许值，大写 6 位
+  "min_font": 9,                                  // 最小字号（pt）
+  "max_levels": 8,                                // 全册字号层级上限，默认 8
+  "palette": ["1F2633", "4A5363", ...],          // 可选：项目色表，色表外的颜色列为 INFO
   "banned": ["赋能", ...],                        // 追加到默认禁用词
   "watch": ["免费", "打样", "<其他客户名>"],       // 观察词：出现即列出，由人判断
   "terms": {"MOM（含 MES、WMS）": ["MOM系统", "制造运营系统"]},  // 标准名: [非标准写法]
@@ -42,16 +44,9 @@ except ImportError:  # pragma: no cover
     sys.exit("缺少 python-pptx：pip install python-pptx")
 
 DEFAULTS = {
-    # 方案页字号阶梯（pt）。正文 9–13 五档；页标题 26；封面与章节页 32 以上。
-    "font_sizes": [9, 10, 11, 12, 13, 26, 30, 32, 36, 40, 48, 60],
-    # 默认色表 = 中性灰与灰蓝 + 三个语义色。项目色表在配置里覆盖。
-    "palette": [
-        "FFFFFF", "F6F7F9", "EEF1F5", "E3E6EB", "C9CED6", "AEB5C0",
-        "7D8695", "5B6B82", "4A5363", "1F2633",
-        "336EE8", "EAF0FD",          # 语义色一：蓝及其浅底
-        "17998A", "E1F3F0",          # 语义色二：青绿及其浅底
-        "D4892A", "FBF0DF",          # 语义色三：橙及其浅底
-    ],
+    "min_font": 9,
+    "max_levels": 8,
+    "palette": [],
     "banned": (
         "承接 赋能 沉淀 落地 抓手 闭环 粒度 颗粒度 归集 收敛 下沉 对位 波次 地基 命脉 灰度 旁路 水位 卡位 "
         "落库 对齐 原生 前置 全域 打通 颠覆 一站式 全链路 最佳实践 "
@@ -85,8 +80,14 @@ def load_cfg(path):
             else:
                 cfg[k] = v
     cfg["palette"] = {c.upper().lstrip("#") for c in cfg["palette"]}
-    cfg["font_sizes"] = {float(x) for x in cfg["font_sizes"]}
     return cfg
+
+
+def is_accent(c):
+    """饱和度和明度都够的颜色算强调色；灰、灰蓝、浅底不算。"""
+    r, g, b = (int(c[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    mx, mn = max(r, g, b), min(r, g, b)
+    return mx > 0.35 and (mx - mn) / mx > 0.45 if mx else False
 
 
 def iter_shapes(shapes):
@@ -109,12 +110,16 @@ def color_of(obj):
 def read_slide(slide, h):
     """返回 段落列表[(text, max_pt, top_ratio)]、字号计数、颜色计数、讲稿。"""
     paras, sizes, colors = [], collections.Counter(), collections.Counter()
+    swatches = set()
     for sh in iter_shapes(slide.shapes):
         try:
             if sh.fill.type == 1:
                 c = color_of(sh.fill.fore_color)
                 if c:
                     colors[("填充", c)] += 1
+                    # 图例色块：边长不超过 0.3 英寸的小方块或圆点
+                    if c and (sh.width or 0) <= Emu(274320) and (sh.height or 0) <= Emu(274320):
+                        swatches.add(c)
         except Exception:
             pass
         top = (sh.top or 0) / h if h else 0
@@ -145,7 +150,7 @@ def read_slide(slide, h):
     notes = ""
     if slide.has_notes_slide:
         notes = slide.notes_slide.notes_text_frame.text
-    return paras, sizes, colors, notes
+    return paras, sizes, colors, notes, swatches
 
 
 def guess_title(paras):
@@ -178,19 +183,23 @@ def main():
     err, warn, info = [], [], []
     titles, refs, qtys = [], [], collections.defaultdict(list)
     size_hits, color_hits = collections.defaultdict(set), collections.defaultdict(set)
+    accents = []
     slides = []
     for idx, s in enumerate(prs.slides, 1):
-        paras, sizes, colors, notes = read_slide(s, H)
+        paras, sizes, colors, notes, swatches = read_slide(s, H)
         slides.append((paras, notes))
         title, sub = guess_title(paras)
         titles.append((idx, title, sub))
 
         for pt in sizes:
-            if pt not in cfg["font_sizes"]:
-                size_hits[pt].add(idx)
+            size_hits[pt].add(idx)
         for (kind, c) in colors:
-            if c not in cfg["palette"]:
+            if cfg["palette"] and c not in cfg["palette"]:
                 color_hits[(kind, c)].add(idx)
+        acc = sorted({c for (_, c) in colors if is_accent(c)})
+        accents.append((idx, acc))
+        if len(acc) >= 2 and not any(is_accent(c) for c in swatches):
+            warn.append((idx, f"用了 {len(acc)} 种强调色，未找到图例色块（启发式；子标题已写明含义时可忽略）"))
 
         page_text = "\n".join(p[0] for p in paras)
         for where, txt in (("页面", page_text), ("讲稿", notes)):
@@ -238,10 +247,12 @@ def main():
                 warn.append((idx, f"子标题超过 40 字（{len(sub)}）：{sub[:40]}…"))
 
     for pt, pages in sorted(size_hits.items()):
-        lvl = err if pt < min(cfg["font_sizes"]) else warn
-        lvl.append((min(pages), f"字号 {pt}pt 不在阶梯内，出现在第 {fmt(pages)} 页"))
+        if pt < cfg["min_font"]:
+            err.append((min(pages), f"字号 {pt}pt 小于下限 {cfg['min_font']}pt，出现在第 {fmt(pages)} 页"))
+    if len(size_hits) > cfg["max_levels"]:
+        warn.append((1, f"全册用了 {len(size_hits)} 级字号（上限 {cfg['max_levels']}）：{', '.join(str(x) for x in sorted(size_hits))} pt"))
     for (kind, c), pages in sorted(color_hits.items()):
-        warn.append((min(pages), f"{kind}色 #{c} 不在色表内，出现在第 {fmt(pages)} 页"))
+        info.append((min(pages), f"{kind}色 #{c} 不在色表内，出现在第 {fmt(pages)} 页"))
 
     out = []
     out.append(f"# 方案 PPT 自查报告\n\n文件：{a.pptx}　共 {N} 页\n")
@@ -266,6 +277,10 @@ def main():
         out.append(f"\n**「{unit}」**")
         for i, where, ctx in lst:
             out.append(f"- 第 {i} 页 {where}：…{ctx}…")
+    out.append("\n\n## 人工核对四　每页强调色（对照项目色表，一色一义）\n")
+    out.append("| 页 | 强调色 |\n| --- | --- |")
+    for i, acc in accents:
+        out.append(f"| {i} | {' '.join('#' + c for c in acc) or '无'} |")
     report = "\n".join(out) + "\n"
     if a.out:
         open(a.out, "w", encoding="utf-8").write(report)
