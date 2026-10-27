@@ -8,7 +8,7 @@
 
 **1. 选 3 页**：封面、信息层级最多的内容页、图表页（没有图表页时选图形最复杂的一页）。
 
-**2. 写样页**：按 `html-slides.md` 写 HTML，按 `design-principles.md` 设计，色值和字体取自 BRAND_RULES。
+**2. 写样页**：按 `html-slides.md` 写 HTML，按 `design-principles.md` 设计，数值取自 `style-tokens.md` 和项目色表。
 运行预览和排版检查，ERROR 改完再给用户看。
 
 **3. 给用户看**：把预览页发布为可分享的网页（如 Artifact），附三项自检结果：

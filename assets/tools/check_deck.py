@@ -17,6 +17,10 @@
   7. 同一组编号跳号（01、03、04）
   8. 术语表里的非标准写法
   9. 子标题不以句号结尾、超过 40 字；标题以句号结尾
+ 10. 页面上出现免费、赠送、折扣说法（ERROR）；出现金额（WARNING，业务数据可保留）。讲稿不查
+ 11. 数量用汉字数字写（如「三项」「五个」），应写阿拉伯数字（WARNING）
+ 12. 标题写成结论句（含「是」「能」「可以」「已」「将」等判断词，或长于 20 字）（WARNING）
+ 13. 配了语义色表时，页面用了色表外的强调色（WARNING）
 
 人工核对清单（INFO，逐条看）
   - 标题与子标题一列（通读用）
@@ -32,7 +36,8 @@
   "banned": ["赋能", ...],                        // 追加到默认禁用词
   "watch": ["免费", "打样", "<其他客户名>"],       // 观察词：出现即列出，由人判断
   "terms": {"MOM（含 MES、WMS）": ["MOM系统", "制造运营系统"]},  // 标准名: [非标准写法]
-  "internal_code": "\\b[A-Z]{1,2}\\d{2}\\b"      // 内部编号正则，可改
+  "internal_code": "\\b[A-Z]{1,2}\\d{2}\\b",     // 内部编号正则，可改
+  "accents": {"336EE8": "AI", "17998A": "我方服务", "D4892A": "我方产品"}  // 语义色表：色值: 含义
 }
 """
 import sys, re, json, argparse, collections
@@ -58,6 +63,7 @@ DEFAULTS = {
     "watch": ["免费", "打样", "赠送", "价格", "待定", "待补充", "待现场确认"],
     "terms": {},
     "internal_code": r"(?<![A-Za-z0-9])[A-Z]{1,2}\d{2}(?![A-Za-z0-9])",
+    "accents": {},
 }
 
 SNAKE = re.compile(r"\b[a-z]+(?:_[a-z0-9]+)+\b")          # search_knowledge
@@ -65,6 +71,10 @@ PAGE_REF = re.compile(r"第\s*(\d+)\s*(?:[—–-]\s*(\d+)\s*)?页")
 QTY = re.compile(r"(\d+)\s*(项|个|类|条|步|层|组|台|人|款|种|批)")
 SPLIT = re.compile(r"[，；;]|,(?!\d{3})")
 SEQ = re.compile(r"^\s*0?(\d{1,2})\s*$")
+PRICE = re.compile(r"(?:不|免)收费|免费|赠送|折扣|优惠价|报价\s*\d")
+MONEY = re.compile(r"\d+(?:\.\d+)?\s*[万千百]?元|[¥￥]\s*\d|RMB")
+CN_QTY = re.compile(r"(?<![第之一])([二三四五六七八九十两]|十[一二三四五六七八九])\s*(项|个|类|条|步|层|组|台|款|种|批|页|次|套)")
+VERDICT = re.compile(r"是|(?<![功智性技])能(?!力)|可以|已经|已(?!有)|将|必须|应当|实现|提升|降低")
 
 
 def load_cfg(path):
@@ -122,6 +132,16 @@ def read_slide(slide, h):
                         swatches.add(c)
         except Exception:
             pass
+        try:
+            if sh.line.fill.type == 1:
+                c = color_of(sh.line.color)
+                if c:
+                    colors[("线条", c)] += 1
+        except Exception:
+            pass
+        if sh.shape_type == 13:  # 图片：图内颜色读不到，单独计数
+            colors[("图片", "")] += 1
+            continue
         top = (sh.top or 0) / h if h else 0
         frames = []
         if sh.has_text_frame:
@@ -193,15 +213,27 @@ def main():
 
         for pt in sizes:
             size_hits[pt].add(idx)
+        npic = colors.pop(("图片", ""), 0)
         for (kind, c) in colors:
             if cfg["palette"] and c not in cfg["palette"]:
                 color_hits[(kind, c)].add(idx)
         acc = sorted({c for (_, c) in colors if is_accent(c)})
-        accents.append((idx, acc))
+        accents.append((idx, acc, npic))
         if len(acc) >= 2 and not any(is_accent(c) for c in swatches):
             warn.append((idx, f"用了 {len(acc)} 种强调色，未找到图例色块（启发式；子标题已写明含义时可忽略）"))
 
         page_text = "\n".join(p[0] for p in paras)
+        for m in PRICE.finditer(page_text):
+            err.append((idx, f"页面出现价格或免费说法「{m.group(0)}」，商务条款不写在页面上"))
+        for m in MONEY.finditer(page_text):
+            warn.append((idx, f"页面出现金额「{m.group(0)}」：业务数据可保留，我方价格不写在页面上"))
+        for m in CN_QTY.finditer(page_text):
+            warn.append((idx, f"数量用汉字数字「{m.group(0)}」，改为阿拉伯数字"))
+        if cfg["accents"]:
+            known = {c.upper().lstrip("#") for c in cfg["accents"]}
+            extra = [c for c in acc if c not in known]
+            if extra:
+                warn.append((idx, f"用了语义色表外的强调色 {' '.join('#' + c for c in extra)}"))
         for where, txt in (("页面", page_text), ("讲稿", notes)):
             for w in cfg["banned"]:
                 if w in txt:
@@ -238,6 +270,8 @@ def main():
             if gaps and len(gaps) <= 2:
                 warn.append((idx, f"两位编号疑似跳号：有 {nums}，缺 {gaps}"))
 
+        if title and (VERDICT.search(title) or len(title) > 20):
+            warn.append((idx, f"标题像结论句（应为名词短语，结论写进子标题）：{title}"))
         if title and title.endswith("。"):
             warn.append((idx, f"标题以句号结尾：{title}"))
         if sub:
@@ -278,9 +312,10 @@ def main():
         for i, where, ctx in lst:
             out.append(f"- 第 {i} 页 {where}：…{ctx}…")
     out.append("\n\n## 人工核对四　每页强调色（对照项目色表，一色一义）\n")
-    out.append("| 页 | 强调色 |\n| --- | --- |")
-    for i, acc in accents:
-        out.append(f"| {i} | {' '.join('#' + c for c in acc) or '无'} |")
+    out.append("图片和图标内的颜色读不到，有图片的页要打开对照。\n")
+    out.append("| 页 | 强调色（文字、填充、线条） | 图片和图标数 |\n| --- | --- | --- |")
+    for i, acc, npic in accents:
+        out.append(f"| {i} | {' '.join('#' + c for c in acc) or '无'} | {npic or ''} |")
     report = "\n".join(out) + "\n"
     if a.out:
         open(a.out, "w", encoding="utf-8").write(report)

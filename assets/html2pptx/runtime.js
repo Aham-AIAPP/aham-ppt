@@ -4,8 +4,8 @@
   const NS = 'http://www.w3.org/2000/svg';
   const css = `
 section.slide{position:relative;width:1920px;height:1080px;overflow:hidden;box-sizing:border-box}
-section.slide p{margin:0;position:absolute;box-sizing:border-box}
-section.slide div,section.slide x-shape{position:absolute;box-sizing:border-box;display:block}
+section.slide > p{margin:0;position:absolute;box-sizing:border-box}
+section.slide > div,section.slide > x-shape,section.slide > svg,section.slide > img{position:absolute;box-sizing:border-box;display:block}
 section.slide x-shape[kind=ellipse]{border-radius:50%}
 section.slide x-shape[kind=diamond]{background:none!important;border:none!important}
 section.slide x-connector{position:absolute;left:0;top:0;width:0;height:0;display:block;overflow:visible}
@@ -43,6 +43,10 @@ section.slide aside{display:none}`;
       if (h === 'end' || h === 'both') head(svg, P[P.length - 2], P[P.length - 1], color, w);
       if (h === 'start' || h === 'both') head(svg, P[1], P[0], color, w);
       c.appendChild(svg);
+    });
+    // 圆角矩形按 PPT 默认圆角（短边的 1/6）显示，与导出一致
+    root.querySelectorAll('x-shape[kind=rounded]').forEach(d => {
+      d.style.borderRadius = Math.min(parseFloat(d.style.width) || 0, parseFloat(d.style.height) || 0) / 6 + 'px';
     });
     root.querySelectorAll('x-shape[kind=diamond]').forEach(d => {
       if (d.dataset.done) return; d.dataset.done = 1;

@@ -24,16 +24,16 @@ description: >
 
 | # | 阶段 | 文件 | 同时加载 |
 | --- | --- | --- | --- |
-| 1 | 规范与受众 | `phase-01.md` | `phase-common.md`、`brand-spec/brand.md`（配色、字体、PPT 三节） |
+| 1 | 规范与受众 | `phase-01.md` | `phase-common.md`、`style-tokens.md` |
 | 2 | 材料解析 | `phase-02.md` | — |
 | 3 | 论点提炼 | `phase-03.md` | — |
 | 4 | 叙事骨架 | `phase-04.md` | `wording-rules.md` |
-| 5 | 大纲与版式 | `phase-05.md` | `design-principles.md` |
-| 6 | 样页确认 | `phase-06.md` | `html-slides.md` |
-| 7 | 逐页设计 | `phase-07.md` | — |
+| 5 | 大纲与版式 | `phase-05.md` | `design-principles.md`、`style-elements.md` |
+| 6 | 样页确认 | `phase-06.md` | `html-slides.md`、`assets/examples/README.md`（范例库） |
+| 7 | 逐页设计 | `phase-07.md` | 每章开工前重读 `design-principles.md` 第一节和范例库说明 |
 | 8 | 质检交付 | `phase-08.md` | — |
 
-文件都在 `references/` 下。已读过的文件后续阶段不重读。
+除注明路径的以外，文件都在 `references/` 下。表中写明重读的文件按要求重读，其他已读文件后续阶段不重读。
 
 ## 按条件加载
 
@@ -56,22 +56,23 @@ description: >
 | `assets/components/` | Python 图表、图标、结构图函数（输出 SVG） |
 | `brand-spec/track-rules.md` | 轨道分流规则 |
 
+## 风格的三层定义
+
+| 层 | 文件 | 约束程度 |
+| --- | --- | --- |
+| 固定数值 | `style-tokens.md`，代码常量在 `assets/html2pptx/components.js` | 字号、颜色、线宽、圆角、页面框架全册不变 |
+| 元素词汇 | `style-elements.md`，画法在 `components.js` | 每种元素表达一种关系，按适用条件选用 |
+| 构图 | `design-principles.md`、范例库 | 由本页内容决定，同类页不抄同一构图 |
+
 ## 规则优先级
 
 - 文字：`wording-rules.md`；方案类的标题和页面短句以 `solution-deck.md` 为准。
-- 版式、颜色数量、字号层级：`design-principles.md`。`brand.md` 只提供色值和字体，
-  其中「单一强调色」「图表只用一个高亮」和 PPT 字号表不再约束版式设计。
-
-## 降级基线（读不到 brand.md 时）
-
-- 白底；墨色 `#1F2633` `#4A5363` `#7D8695`；线 `#E3E6EB` `#C9CED6`；浅底 `#F6F7F9`。
-- 强调色从 `#336EE8` 蓝、`#17998A` 青绿、`#D4892A` 橙取，一色一义并配图例。
-- 字体：微软雅黑或 PingFang SC；数字可用 Consolas。禁衬线和纯黑 `#000`。
-- 不用渐变、阴影、半透明、3D 和饼图。最小字号 9pt。
+- 数值：`style-tokens.md`。版式：`design-principles.md`。
+- `brand-spec/brand.md` 是品牌总规范，主流程不加载；与 `style-tokens.md` 不一致处以后者为准。
 
 ## 防坑
 
 1. 序号不用 ①②③，对错号用 √ ×。PPT 字体缺字时会显示方框。
 2. 软件界面没有截图时画占位框并标「示意」，不画假界面。
 3. 开工建术语表，同一事物只用一个名称；客户评审过的架构图作为定稿，其他页与它一致。
-4. 先建基线（`phase-common.md` 第四节），数字不编造，缺的写「待确认」。
+4. 先建基线（`phase-common.md` 第四节），数字不编造。缺的数字记进基线的待确认清单，页面不写「待确认」；方案类集中列在待确认事项页。
