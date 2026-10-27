@@ -40,6 +40,7 @@ view references/brand-spec/track-rules.md
 ```
 view references/phase-01.md      ← 规范加载阶段
 view references/wording-rules.md ← 用词风格规则，Phase 4 之前必须已加载
+view references/solution-deck.md ← 仅当 Phase 1 文稿类型为「方案」时加载
 （按执行阶段依次读取对应 phase-XX.md）
 ```
 （`designer-rules.md` 473 行，由 Phase 6/7 按需加载——启动时不预载，见下方索引表。）
@@ -110,6 +111,7 @@ phase-05（版式）/ phase-07（出片）按 `theme` 取用 `themes.py` 对应�
 | 文件 | 何时读 | 用途 |
 |---|---|---|
 | `brand-spec/brand.md` + `tokens.css` | Step 1 | 品牌规范 + 取值唯一事实源 |
+| `solution-deck.md` | Phase 1 定为方案类时 | 方案类 PPT 的结构、版式、语义色、字号与交付前自查；标题、强调色、字号三处覆盖通用规则 |
 | `brand-spec/track-rules.md` | Step 1 | 轨道分流与铁规 |
 | `brand-spec/iconography.md` | Phase 6/7（用图标时） | 图标规范（含 icons.py 自绘例外登记） |
 | `theme-tiers.md` | Step 1（务必） | A/B/C 三档主题对照 |
@@ -198,7 +200,7 @@ phase-05（版式）/ phase-07（出片）按 `theme` 取用 `themes.py` 对应�
 
 ## 附 · 工程预检与防坑（实战复盘沉淀）
 
-> 大体量册子（数十页、含信息图）批量生成时，以下几类坑会反复出现。**渲染前后各跑一次 `assets/tools/lint_svg.py`**。
+> 大体量册子（数十页、含信息图）批量生成时，以下几类坑会反复出现。**渲染前后各跑一次 `assets/tools/lint_svg.py`**；方案类 PPT 出 PPTX 后再跑 `assets/tools/check_deck.py`。
 
 1. **字符安全（防 tofu □）**：序号用「圆圈 + 阿拉伯数字」，不要用 ①②③；对错用 √(U+221A) / ×(U+00D7) 或画 path，不要用 ✓✕；MONO/等宽文本只放 ASCII。**源码文案一律用「」，不要用中文双引号 “”（会截断字符串、触发 SyntaxError）**。
 2. **图标**：一物一图标、命名即语义；新增或修改图标后先跑 `assets/tools/icons_preview.py` 出缩略表肉眼核对。具象制造业图标库见 `assets/components/mes_icons.py`（worker/conveyor/andon/gearmold/injection… 共 25+）。
