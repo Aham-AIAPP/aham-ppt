@@ -7,7 +7,9 @@
 
 ## [Unreleased]
 
-生成路线改为网页幻灯片，规则文件整体重写。不兼容 4.x，下一版按主版本 5.0.0 发布。
+## [5.0.0] - 2026-10-27
+
+生成路线改为网页幻灯片，规则文件整体重写。不兼容 4.x。
 
 ### 新增
 - `assets/html2pptx/`：网页幻灯片路线。
@@ -402,7 +404,8 @@
 ### 修复
 - 修复版式命名冲突、品牌色硬编码等 8 项问题。
 
-[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v4.0.0...HEAD
+[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v4.0.0...v5.0.0
 [4.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.0.0...v3.1.0
