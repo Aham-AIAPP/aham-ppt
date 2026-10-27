@@ -7,38 +7,32 @@
 
 ## [Unreleased]
 
+生成路线改为网页幻灯片，规则文件整体重写。不兼容 4.x，下一版按主版本 5.0.0 发布。
+
 ### 新增
-- `references/style-tokens.md`：固定数值。字号 7 级、颜色 10 个加 3 个语义色（蓝＝AI、青绿＝我方服务、橙＝我方产品）、线宽 4 级、圆角、页面框架。
-- `references/style-elements.md`：元素词汇。每种元素表达的关系、用在哪、不用在哪、尺寸和对应函数；4 种圆形编号分开定义；行业视觉语言 3 组。
-- `assets/html2pptx/components.js`：与 style-tokens 一致的常量和元素画法，页面用生成脚本拼。示例在 `demo/build.js`。
-- `assets/examples/`：范例库。10 页合格页、5 页不合格页，附可学的手法、已知不足和改法。
-- `assets/html2pptx/extract.js`：在浏览器里读出每个元素的实际位置和计算样式，导出和检查共用。
-- `assets/html2pptx/design_checks.js`：设计检查，查文字越框、压线、对比度、箭头标签、单名称方框、大块空白和主图区占用率。
-- `check_deck.py` 新增 5 项：免费和赠送说法（ERROR）、金额（WARNING）、汉字数量词、结论式标题、语义色表外的强调色；强调色统计加上线条颜色，并列出每页图片数。
-- `references/design-principles.md`：七条版式设计原则和检验方法，附内容结构与图形举例表。全部文稿类型适用，取代版式库查表、栅格坐标冻结和节奏阈值。
-- `assets/html2pptx/`：网页幻灯片路线。`html2pptx.js` 把 1920×1080 绝对定位的 HTML 幻灯片导出为可编辑 PPTX（文字、形状、连线为原生对象，图标和内嵌 svg 为图片，`<aside>` 进备注）；`preview.js` 合成单文件预览页；`check_slides.js` 在浏览器里检查字号、溢出、越界和文字重叠，可出缩略图总览。写法见 `references/html-slides.md`。
-- `references/phase-common.md`：八个阶段共用的固定动作、完成卡格式、跳过后果和工作区文件。
-- `assets/tools/extract_outline.py`：把 PDF、Word、PPT、Excel、Markdown 转成提纲（章节、位置、字数、含数字的句子），Phase 2 先看提纲再读命中章节。
-- `references/solution-deck.md`：方案类 PPT 规范。覆盖三种形态（通用方案、项目方案、整体规划方案）的章节骨架、固定页组（模块三页组、场景两页组、建设内容详解页）、全景与详解的对应、页面分区、字号阶梯、语义色表与图例、方案专用文字规则，按内容结构设计版式的对照表，以及 22 条交付前人工检查清单。规则提炼自三份真实方案及其逐版修改记录，文件内全部用占位符。
-- `assets/tools/check_deck.py`：读 .pptx 自查字号、颜色、逗号分句、禁用词、「第 N 页」引用、内部编号、编号跳号、术语表和子标题格式；输出标题通读表、页码引用表和数量说法表。可用 JSON 配置项目色表、字号、术语表和观察词。
+- `assets/html2pptx/`：网页幻灯片路线。
+  - `components.js`：固定数值常量和元素画法；条形图、折线图、坡度图、甘特条画成可编辑形状；30 个线性图标。
+  - `html2pptx.js`、`extract.js`：在浏览器里排版后读取位置和样式，导出可编辑 PPTX，讲稿进备注。
+  - `preview.js`：单文件预览页。
+  - `check_slides.js`、`design_checks.js`：检查排版、导出兼容，以及文字越框、压线、对比度、箭头标签、单名称方框和空白。
+  - `demo/build.js`：五页示例，覆盖封面、分区图、双泳道、图表和甘特条。
+- `assets/examples/`：范例库，10 页合格页和 5 页不合格页，附手法和问题说明。
+- `assets/tools/extract_outline.py`：把材料转成提纲，阶段 2 只读相关章节。
+- `assets/tools/check_deck.py`：检查 PPTX 的字号、逗号分句、禁用词、页码引用、内部编号、术语、价格说法、标题形式、颜色和图例；`title_style` 区分方案类和汇报类的标题写法。
+- `references/style-tokens.md`、`style-elements.md`、`design-principles.md`：风格分固定数值、元素、构图三层。
+- `references/solution-deck.md`：方案类 PPT 的结构、版式、文字和 22 项检查清单。
+- `references/html-slides.md`、`phase-common.md`。
 
 ### 变更
-- 导出改为在浏览器里排版后取值，修复 11 处网页与 PPT 不一致（字符实体、半透明色、缺宽高、单边内边距、注释、多个讲稿、行高、命名色、百分比圆角、零长度线段等）。导出兼容问题在 `check_slides.js` 里报出，它也接受 deck 目录。
-- Phase 6 选 4 至 5 页不同结构的样页，样页阶段就导出 PPTX 并跑 `check_deck.py`；Phase 7 每页填七项自查表，每章确认一次，用户的修改意见按「原话、抽象规则、反例」记进基线并全册排查；Phase 8 询问是否把修正记录升级为通用规则。
-- Phase 1 读 style-tokens 并生成 `项目配置.json`；Phase 3 预期行动接 Phase 1 的回答；Phase 4 去掉复述灵魂句的停等，方案类默认 50 页并按 solution-deck 2.1 排页。
-- design-principles 第二节：每种结构给 2 至 3 种画法和选用条件；solution-deck 3.5 改为每类页两种常见结构。
-- 虚线只表示「非本期或未发生」和「边界、参考线」两种含义。
-- 颜色、线宽、字号规则统一到 style-tokens，brand.md 不再进主流程，SKILL.md 去掉降级基线。
-- 生成路线改为「AI 写 HTML 幻灯片 → 网页预览 → 导出 PPTX」。SVG 转 PPTX 工具链、版式库、栅格、SVG 骨架、三档主题、designer-rules 移出主流程，文件保留并加「参考素材」表头。
-- 八个阶段文件只留入场条件、停等点、步骤和完成卡字段；SKILL.md 从 18,209 字减到约 4,200 字，原「文案措辞」附录移入 `wording-rules.md` 第七节。
-- Phase 2：信息清单写进基线文件，后续阶段只引编号；搜索最多 3 次；不单独停等，清单与 Phase 3 的灵魂句一次确认。同一客户再做时读已有清单。
-- Phase 5 规划卡改填「内容结构、图形设计、参考（可空）」；Phase 6 样页加遮标题检验；Phase 7 坐标按内容自定。
-- 颜色：保留一色一义并配图例，去掉「至多 3 个语义色」的上限。字号：去掉阶梯，改为最小 9pt、全册不超过 8 级。
-- `check_deck.py`：去掉字号阶梯和色表比对，改查最小字号、字号级数、多强调色页的图例色块，并列出每页强调色。
-- `solution-deck.md` v1.3：删去字号阶梯、四种页的参考构成和版式库对照表，版式改按 design-principles。
-- Phase 1 受众卡增加「文稿类型」，选「方案」时加载 solution-deck.md，并要项目色表和术语表。
-- 方案类 PPT 的标题改为名词短语加结论子标题，强调色放宽为至多 3 个语义色，正文字号改为 9–13 pt；只对方案类生效，wording-rules、phase-04、theme-tiers、brand.md 各加一处指针。
-- Phase 8 增加步骤 1.2「方案类自查」。
+- `SKILL.md`、八个阶段文件、`coach-engine.md`、`wording-rules.md` 整体重写，去掉历史说明和版本标注。
+- 阶段 6 选 4 至 5 页不同结构的样页，样页阶段就导出并检查；阶段 7 每页填七项自查表，每章确认一次；用户意见按原话、抽象规则、反例记进修正记录并查全册。
+- 社交封面和 GitHub Pages 改用新的说明和范例。
+
+### 移除
+- SVG 转 PPTX 工具链：`assets/svg_to_pptx/`、`svg_to_pptx_wrapper.py`。
+- Python 组件库 `assets/components/` 和 39 个版式：`layout-library.md`、`svg-skeleton-*.md`、`grid-composition.md`、`grid-system.md`、`theme-tiers.md`。
+- `designer-rules.md`、`chart-impl.md`、`pptx-native-rules.md`、`quality-audit-protocol.md`、`brand-spec/`。
+- `assets/tools/lint_svg.py`、`pageno_fill.py`、`icons_preview.py`；仓库物料脚本 `tools/`；旧样张 `assets/shots/`、`docs/shots/`。
 
 ## [4.0.0] - 2026-07-03 — 库瘦身增肌（通用页型退库直排 · 调研缺口七式落地）
 
@@ -408,7 +402,8 @@
 ### 修复
 - 修复版式命名冲突、品牌色硬编码等 8 项问题。
 
-[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.2.0...HEAD
+[Unreleased]: https://github.com/Aham-AIAPP/aham-ppt/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.2.0...v4.0.0
 [3.2.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.1.0...v3.2.0
 [3.1.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v3.0.0...v3.1.0
 [3.0.0]: https://github.com/Aham-AIAPP/aham-ppt/compare/v2.5.2...v3.0.0

@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aham PPT — 克制的 AI PPT 制作技能</title>
-<meta name="description" content="把零散素材做成方案级 / 报告级的专业 PPT。八步法 · 三档风格 · 原生可编辑 PPTX。">
+<title>Aham PPT</title>
+<meta name="description" content="把零散材料做成方案级、汇报级 PPT 的 Claude 技能。八个阶段，网页预览，导出可编辑 PPTX。">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
   :root{--w:#fff;--p:#F3F3F3;--line:#E7E7E7;--i1:#262626;--i2:#6E6E6E;--i3:#9B9B9B;--acc:#336EE8;--accp:#164EC3;
@@ -23,7 +23,7 @@
   .feat{background:var(--p);border-radius:12px;padding:18px 20px}
   .feat .ft{font-weight:600;font-size:16px} .feat .fd{color:var(--i2);font-size:14px;margin-top:6px}
   .sh{font-size:20px;font-weight:700;margin:0 0 16px}
-  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px}
+  .shots{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:48px}
   .shot{margin:0} .shot.wide{grid-column:1/-1}
   .shot img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:10px}
   .shot figcaption{font-size:12px;color:var(--i3);margin-top:6px}
@@ -32,29 +32,29 @@
   @media(max-width:680px){.feats{grid-template-columns:1fr}.shots{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
   <nav><span class="d"></span><a href="https://github.com/Aham-AIAPP/aham-ui">Aham UI</a> <span class="sep">·</span> <a href="https://github.com/Aham-AIAPP/aham-survey">Aham Survey</a> <span class="sep">·</span> <a href="https://github.com/Aham-AIAPP/aham-voice">Aham Voice</a> <span class="sep">·</span> <b>Aham PPT</b></nav>
-  <img class="hero" src="banner.png" alt="Aham PPT — 克制的 AI PPT 制作技能">
+  <img class="hero" src="banner.png" alt="Aham PPT">
   <h1>Aham PPT</h1>
-  <p class="sub">把零散素材做成方案级 / 报告级的专业 PPT。八步法 · 三档风格 · 原生可编辑 PPTX。</p>
+  <p class="sub">把零散材料做成方案级、汇报级 PPT 的 Claude 技能。页面写成 HTML 幻灯片，网页预览确认后导出可编辑 PPTX。</p>
   <div class="cta">
 <a class="btn pri" href="https://github.com/Aham-AIAPP/aham-ppt">在 GitHub 查看</a>
-<a class="btn sec" href="https://github.com/Aham-AIAPP/aham-ppt/tree/v2.5.2/examples">历史样张（v2.5.2） ↗</a>
+<a class="btn sec" href="https://github.com/Aham-AIAPP/aham-ppt/tree/main/assets/examples">范例库 ↗</a>
 <a class="btn sec" href="https://github.com/Aham-AIAPP/aham-ppt/releases">Releases ↗</a>
   </div>
   <div class="feats">
-<div class="feat"><div class="ft">八阶段流水线</div><div class="fd">规范加载 → 材料解析 → 论点提炼 → … → 质检交付，不是排版美化</div></div>
-<div class="feat"><div class="ft">原生可编辑 PPTX</div><div class="fd">每个元素都是 PPT 原生形状 / 文本框，双击即改</div></div>
-<div class="feat"><div class="ft">39 版式参数化</div><div class="fd">内容版式 36 + 结构页 3；纯栅格页型走通用直排规范 + 15 类图表 + 结构 / 标注组件，坐标由函数冻结</div></div>
-<div class="feat"><div class="ft">换成你的品牌</div><div class="fd">改 tokens 主色 + 字体 + 品牌名，四步适配</div></div>
+<div class="feat"><div class="ft">八个阶段</div><div class="fd">受众、材料、论点、骨架、页面规划、样页、逐页设计、质检，每个阶段由用户确认</div></div>
+<div class="feat"><div class="ft">按内容结构设计页面</div><div class="fd">先判断边界、装配、等级、时间压缩等结构，再选对应的画法</div></div>
+<div class="feat"><div class="ft">可编辑 PPTX</div><div class="fd">文字、方框、连线和图表导出为 PPT 里可编辑的对象，讲稿进备注</div></div>
+<div class="feat"><div class="ft">两层自动检查</div><div class="fd">网页幻灯片查排版和设计问题，PPTX 查字号、用词、术语和图例</div></div>
   </div>
-  <h2 class="sh">样张</h2>
+  <h2 class="sh">范例</h2>
   <div class="shots">
-<figure class="shot"><img src="shots/consulting-tree.png" alt="驱动树 · 肘线分解 + 圈注 + 自洽校验" loading="lazy"><figcaption>驱动树 · 肘线分解 + 圈注 + 自洽校验</figcaption></figure>
-<figure class="shot"><img src="shots/consulting-dots.png" alt="点阵去向 · 细分条 + 圈注" loading="lazy"><figcaption>点阵去向 · 细分条 + 圈注</figcaption></figure>
-<figure class="shot"><img src="shots/consulting-chain.png" alt="链式递减 · 节点链 + So-What 收口" loading="lazy"><figcaption>链式递减 · 节点链 + So-What 收口</figcaption></figure>
-<figure class="shot wide"><img src="shots/consulting-skin.png" alt="同一真源一键换肤 · Aham 蓝 ⇄ 黑·白·金三国色（v2.5 世界杯样张）" loading="lazy"><figcaption>同一真源一键换肤 · Aham 蓝 ⇄ 黑·白·金三国色（v2.5 世界杯样张）</figcaption></figure>
+<figure class="shot"><img src="https://raw.githubusercontent.com/Aham-AIAPP/aham-ppt/main/assets/examples/good/p03.png" alt="边界与穿越：分区图加拦截叉" loading="lazy"><figcaption>边界与穿越：分区图加拦截叉</figcaption></figure>
+<figure class="shot"><img src="https://raw.githubusercontent.com/Aham-AIAPP/aham-ppt/main/assets/examples/good/p04.png" alt="部件与装配：叠板图加件号明细" loading="lazy"><figcaption>部件与装配：叠板图加件号明细</figcaption></figure>
+<figure class="shot"><img src="https://raw.githubusercontent.com/Aham-AIAPP/aham-ppt/main/assets/examples/good/p07.png" alt="时间压缩：双泳道加尺寸线" loading="lazy"><figcaption>时间压缩：双泳道加尺寸线</figcaption></figure>
+<figure class="shot"><img src="https://raw.githubusercontent.com/Aham-AIAPP/aham-ppt/main/assets/examples/good/p09.png" alt="主导方交接：矩阵加评审点" loading="lazy"><figcaption>主导方交接：矩阵加评审点</figcaption></figure>
   </div>
   <footer>
-    <span>Aham · 把灵光一现，做成能用的 AI 工具</span>
+    <span>Aham · 每个工具只做好一件事</span>
     <span><a href="https://github.com/Aham-AIAPP/aham-ppt">github.com/Aham-AIAPP/aham-ppt</a></span>
   </footer>
 </div></body></html>

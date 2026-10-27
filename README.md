@@ -1,129 +1,118 @@
-# Aham PPT — 克制的 AI PPT 制作技能
+# Aham PPT
 
 [![Release](https://img.shields.io/github/v/release/Aham-AIAPP/aham-ppt?color=336EE8)](https://github.com/Aham-AIAPP/aham-ppt/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-336EE8.svg)](LICENSE)
-[![Design](https://img.shields.io/badge/Design-Aham%20UI%20v6.1-336EE8.svg)](https://github.com/Aham-AIAPP/aham-ui)
 [![Type](https://img.shields.io/badge/type-Claude%20Skill-336EE8.svg)](#)
 [![联系我](https://img.shields.io/badge/%E8%81%94%E7%B3%BB%E6%88%91-%E5%BE%AE%E4%BF%A1-336EE8.svg?logo=wechat&logoColor=white)](assets/wechat-qr.png)
 
-![Aham PPT — 克制的 AI PPT 制作技能](assets/social-preview.png)
+![Aham PPT](assets/social-preview.png)
 
-## 为什么做
+Aham PPT 是一个 Claude 技能，把零散材料做成方案级、汇报级的 PPT。
+技能按八个阶段推进：先定受众和论点，再定页面结构，最后写页面并检查。
+页面写成 HTML 幻灯片，网页预览确认后导出可编辑 PPTX。
 
-市面上的 AI 做 PPT，大多是「一句话出一份能看的 PPT」——快，但只到「能看」。而要拿去给客户、给领导的**方案、汇报、报告**，需要的是逻辑站得住、论证有依据、版面专业克制、能直接交付的水准——这不是一键速成能给的。
+## 适用文稿
 
-这个技能为此而做：它不追求秒出，而是按资深顾问的成稿流程一步步推进，把零散素材做成**方案级 / 报告级**的专业 PPT。
+- 给客户看的售前方案、项目方案和整体规划方案。
+- 给管理层看的汇报和报告。
+- 需要逐页论证、数字有出处、版面统一的其他文稿。
 
-## 定位
+## 八个阶段
 
-产出的不是「好看的模板 PPT」，而是一份经得起审视的专业交付物：
+| # | 阶段 | 产出 |
+| --- | --- | --- |
+| 1 | 受众与规范 | 受众卡、色表、术语表、检查配置 |
+| 2 | 材料解析 | 带出处的信息清单。脚本先把材料转成提纲，只读相关章节 |
+| 3 | 论点提炼 | SCQA 和一句话核心结论 |
+| 4 | 叙事骨架 | 标题序列，经过五项测试 |
+| 5 | 页面规划 | 每页的内容结构和图形设计 |
+| 6 | 样页确认 | 4 至 5 页不同结构的样页，导出并检查后请用户确认 |
+| 7 | 逐页设计 | 全册页面，每页填七项自查表，每章确认一次 |
+| 8 | 质检交付 | 机器检查、人工检查、PPTX 和预览页 |
 
-- **专业** — 像资深顾问写的白皮书：逻辑、数据、措辞都站得住，经得起客户和领导推敲。
-- **简洁克制** — 一页一个核心结论，留白优先；不堆字、不花哨、不靠装饰撑场面。
-- **内容优先** — 视觉只为内容服务，该上图表上图表、该留白留白，不喧宾夺主。
-- **通篇一致** — 全册一套规范，没有东拼西凑的模板拼贴感。
+每个阶段输出完成卡，用户确认后进入下一阶段。
 
-> 简言之：做的是「方案 / 报告」，不是「标准模板速成片」。
-
-## 能做什么
-
-技能的核心是一条八步流水线，每一步都为「最后那份 PPT 够不够专业」负责：
-
-- **1 · 规范加载** — 装入固定数值（字号、颜色、线宽、圆角、页面框架），建项目色表和术语表。
-- **2 · 材料解析** — 先用脚本把材料转成提纲，只读命中的章节；写成带出处的信息清单，不编数字。
-- **3 · 论点提炼** — 金字塔原理逼出一句话核心结论（灵魂句），让全篇有立场。
-- **4 · 叙事骨架** — 先把每页标题排成论证链（Ghost Deck），定逻辑再填内容。
-- **5 · 大纲版式** — 每页先判断内容结构（边界、装配、等级、来源去向、交接……），再设计专用图形。
-- **6 · 样页确认** — 先做 4 至 5 页不同结构的样页，导出 PPTX 并跑完检查，再请用户确认。
-- **7 · 逐页设计** — 用组件库写 HTML 幻灯片，每页填七项自查表；网页预览确认后导出原生可编辑 PPTX。
-- **8 · 质检交付** — 脚本查字号、溢出、重叠、压线、对比度、颜色图例和用词，再按清单人工检查。
-
-## 风格定义
-
-风格分三层定义，越往下越由内容决定：
+## 风格的三层
 
 | 层 | 文件 | 约束 |
 | --- | --- | --- |
-| 固定数值 | [`style-tokens.md`](references/style-tokens.md)、[`components.js`](assets/html2pptx/components.js) | 全册不变 |
-| 元素词汇 | [`style-elements.md`](references/style-elements.md) | 每种元素表达一种关系 |
-| 构图 | [`design-principles.md`](references/design-principles.md)、[范例库](assets/examples/README.md) | 按本页内容设计，同类页不抄构图 |
+| 固定数值 | [`style-tokens.md`](references/style-tokens.md)、[`components.js`](assets/html2pptx/components.js) | 字号、颜色、线宽、圆角、页面框架全册不变 |
+| 元素 | [`style-elements.md`](references/style-elements.md) | 每种元素表达一种关系：件号气泡、流程序号、尺寸线、评审点、图表、图标等 |
+| 构图 | [`design-principles.md`](references/design-principles.md)、[范例库](assets/examples/README.md) | 先判断本页内容的结构，再为这个结构设计图形 |
 
-范例库收了 10 页合格页和 5 页不合格页，各附手法和问题说明。
+颜色只用灰阶和三个语义色：蓝表示 AI，青绿表示我方服务，橙表示我方产品。
 
-<table>
-<tr>
-<td width="50%"><img src="assets/examples/good/p04.png" alt="部件与装配"><br><sub>部件与装配 · 叠板图加件号明细</sub></td>
-<td width="50%"><img src="assets/examples/good/p07.png" alt="时间压缩"><br><sub>时间压缩 · 双泳道加尺寸线</sub></td>
-</tr>
-</table>
+## 范例
 
-## 预览（旧版）
-
-> 2026-10-27 起版式按 [`design-principles.md`](references/design-principles.md) 的七条原则设计，下面的三档主题和版式库移出主流程，留作参考素材。
-
-三档视觉风格**共用同一套内容与组件，只切视觉层**：A 克制档（白皮书）· B 现代专业档（默认）· C 高表现力档（深色重音 / 竞标）。
+范例库收了 10 页合格页和 5 页不合格页，各附手法说明或问题说明。
 
 <table>
 <tr>
-<td width="33%"><img src="assets/shots/theme-a-cover.png" alt="A 克制档"><br><sub><b>A · 克制档</b> · 极简白皮书</sub></td>
-<td width="33%"><img src="assets/shots/theme-b-cover.png" alt="B 现代专业档"><br><sub><b>B · 现代专业档（默认）</b> · Hero + 章节块</sub></td>
-<td width="33%"><img src="assets/shots/theme-c-cover.png" alt="C 高表现力档"><br><sub><b>C · 高表现力档</b> · 深色重音</sub></td>
+<td width="50%"><img src="assets/examples/good/p04.png" alt="部件与装配"><br><sub>部件与装配：叠板图加件号明细</sub></td>
+<td width="50%"><img src="assets/examples/good/p07.png" alt="时间压缩"><br><sub>时间压缩：双泳道加尺寸线</sub></td>
 </tr>
 <tr>
-<td width="33%"><img src="assets/shots/consulting-tree.png" alt="驱动树"><br><sub><b>驱动树</b> · 肘线分解 + 圈注 + 自洽校验</sub></td>
-<td width="33%"><img src="assets/shots/consulting-dots.png" alt="点阵去向"><br><sub><b>点阵去向</b> · 48 队去向 + 细分条 + 圈注</sub></td>
-<td width="33%"><img src="assets/shots/consulting-chain.png" alt="链式递减"><br><sub><b>链式递减</b> · 节点链 + 终点拆解 + So-What</sub></td>
+<td width="50%"><img src="assets/examples/good/p03.png" alt="边界与穿越"><br><sub>边界与穿越：分区图加拦截叉</sub></td>
+<td width="50%"><img src="assets/examples/good/p09.png" alt="主导方交接"><br><sub>主导方交接：矩阵加评审点</sub></td>
 </tr>
 </table>
 
-同一份真源一键换肤（Aham 蓝 ⇄ 黑·白·金三国色，v2.5 世界杯样张）：
+## 检查
 
-<img src="assets/shots/consulting-skin.png" alt="同一真源换肤对比" width="100%">
+| 脚本 | 对象 | 查什么 |
+| --- | --- | --- |
+| `check_slides.js` | 网页幻灯片 | 字号、溢出、越界、重叠、导出兼容；文字越框、压线、对比度、箭头标签、单名称方框、空白 |
+| `check_deck.py` | 导出的 PPTX | 最小字号、逗号分句、禁用词、页码引用、内部编号、术语、价格说法、标题形式、颜色和图例 |
 
-> 历史样张与可编辑 PPTX（11 页示例 + 世界杯十页双配色）存档于 [v2.5.2 tag](https://github.com/Aham-AIAPP/aham-ppt/tree/v2.5.2/examples)；v3.0 起版式收敛为参数化函数，不再随仓库携带示例产物。
-
-## 版式库
-
-**36 个内容版式（6 个叙事系）+ 3 个特殊页，共 39 个版式 ID**，全部参数化——坐标由函数冻结，不再手画；数据图表 15 类、标注/异形 API 14 个。来源两档如实标注：可考原型注明出处（BCG / Minto / Porter / Ishikawa / Tufte / Shostack…），查不到的明确标「通用惯例 / 本库自设计」，不虚构。
-
-> 🆕 **v4.0（2026-07）· 库瘦身增肌**：16 个通用页型（大数字 / 宣言 / 两三栏并列等）**退库改走栅格直排**（[`grid-composition.md`](references/grid-composition.md)，版式退库、纪律不退）——依据是 AI 布局能力边界（纯栅格稳定、锚点咬合不可靠），不是来源有无；同时落地调研缺口七式：**Harvey 球表（S-16）· 竞争格局弧（S-17）· 价值链（E-05）· 鱼骨图（G-04）· Impact-Effort（A-04）· 决策树（A-05）· 小倍数网格（V-05）**，决策树期望值与报价合计一样由调用方传入、函数绝不代算。
-
-<details>
-<summary><b>点开查看全部 39 个版式</b>（ID · 用途 · 来源，长图）</summary>
-<br>
-<img src="assets/shots/layout-catalog.png" alt="Aham PPT 版式总览：39 个版式的 ID、用途与来源" width="100%">
-</details>
-
-> 权威清单与选版决策表见 [`references/layout-library.md`](references/layout-library.md)；图片由 [`tools/layout_catalog.py`](tools/layout_catalog.py) 生成，版式增减后重跑即可。
+机器检查之外，阶段 8 按叙事、文字、版式、交付四层做人工检查。方案类另有 22 项检查清单，每项附实际出过的错误。
 
 ## 开始使用
 
-最简单：**把本仓库地址 `https://github.com/Aham-AIAPP/aham-ppt` 发给 Claude，让它把技能装好**；或下载本仓库后，把技能文件上传给 Claude。
+把仓库地址 `https://github.com/Aham-AIAPP/aham-ppt` 发给 Claude，请它安装技能；或下载仓库后把技能文件上传给 Claude。
+安装后对 Claude 说「帮我做 PPT」或「做客户方案 PPT」。
 
-装好后对 Claude 说「帮我做 PPT / 做客户方案 PPT」即可，技能按八步法推进。导出 PPTX 需要 Node.js，首次使用在 `assets/html2pptx/` 运行 `npm install`。
+导出 PPTX 需要 Node.js，首次使用时在 `assets/html2pptx/` 运行 `npm install`。检查脚本需要 Python，运行 `pip install -r requirements.txt`。
 
----
+## 文件结构
+
+```
+SKILL.md                    技能入口：阶段与文件、按条件读的文件、规则优先级
+references/
+  phase-common.md           阶段共用的动作、完成卡、工作区文件
+  phase-01.md … phase-08.md 八个阶段
+  coach-engine.md           档位检测和引导序列
+  wording-rules.md          用词规则
+  solution-deck.md          方案类 PPT 的结构、版式和检查清单
+  design-principles.md      七条版式原则、内容结构与画法
+  style-tokens.md           固定数值
+  style-elements.md         元素、图表、图标
+  html-slides.md            网页幻灯片写法、组件、命令
+assets/
+  html2pptx/                组件库、预览、检查、导出；demo/build.js 是五页示例
+  tools/                    材料提纲脚本、PPTX 检查脚本
+  examples/                 范例库
+```
 
 ## 更新记录
 
-[Releases](https://github.com/Aham-AIAPP/aham-ppt/releases) · [CHANGELOG](CHANGELOG.md)（Keep a Changelog · SemVer） · [CONTRIBUTING](CONTRIBUTING.md) · [MIT](LICENSE)
+[Releases](https://github.com/Aham-AIAPP/aham-ppt/releases) · [CHANGELOG](CHANGELOG.md) · [CONTRIBUTING](CONTRIBUTING.md) · [MIT](LICENSE)
 
 ## 关于 Aham
 
-> 把灵光一现，做成能用的 AI 工具。Aham 来自 *aha moment*，每个工具只把一件事做利落。
+Aham 来自 *aha moment*。每个工具只做好一件事。
 
-| 应用 | 一句话 |
-|---|---|
-| [Aham UI](https://github.com/Aham-AIAPP/aham-ui) | 供 AI 消费的设计系统——写一次规范，AI 产出处处一致 |
-| [Aham Word](https://github.com/Aham-AIAPP/aham-word) | 供 AI 消费的 Word 规范——AI 据规范产出处处一致的 .docx |
-| [Aham Survey](https://github.com/Aham-AIAPP/aham-survey) | 现场调研工具（macOS）——本地优先，把现场对话做成结构化调研成果 |
-| [Aham Voice](https://github.com/Aham-AIAPP/aham-voice) | 录音转写与会议纪要（macOS）——本地离线转写，纪要走你自己的模型 |
-| **Aham PPT** | 克制的 AI PPT 制作技能——把素材做成方案级 PPT |
+| 应用 | 用途 |
+| --- | --- |
+| [Aham UI](https://github.com/Aham-AIAPP/aham-ui) | 供 AI 使用的设计系统 |
+| [Aham Word](https://github.com/Aham-AIAPP/aham-word) | 供 AI 使用的 Word 规范 |
+| [Aham Survey](https://github.com/Aham-AIAPP/aham-survey) | 现场调研工具（macOS） |
+| [Aham Voice](https://github.com/Aham-AIAPP/aham-voice) | 录音转写与会议纪要（macOS） |
+| **Aham PPT** | 把材料做成方案级 PPT 的技能 |
 
 来源与脱敏说明见 [`ORIGIN.md`](ORIGIN.md)。
 
-### 关注 · 交流
+### 关注与交流
 
-公众号看更多 AI 工具实践与更新；也欢迎扫码加我，交流与反馈。
+公众号发布 AI 工具的实践和更新，也欢迎扫码加作者微信交流。
 
-<p><img src="assets/wechat-qr.png" width="640" alt="关注 Aham 公众号 / 加作者微信"></p>
+<p><img src="assets/wechat-qr.png" width="640" alt="Aham 公众号和作者微信"></p>
