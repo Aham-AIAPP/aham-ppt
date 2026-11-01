@@ -1,7 +1,8 @@
 # 固定数值
 
 全部文稿类型适用，全册不变。本文件定字号、颜色、线宽、圆角和页面框架。
-`assets/html2pptx/components.js` 里的同名常量与本文件一致，改一处时同步改另一处。
+代码读取的数值只在 `assets/html2pptx/tokens.json` 定义，组件、预览、检查和导出都从它读取。
+本文件的表格与它一致，由 `tests/test_tokens.py` 检查；改数值时两处同改。
 构图按 `design-principles.md`，元素按 `style-elements.md`。画布 1920 × 1080 像素，1px 等于 0.5pt。
 
 ## 一、字号

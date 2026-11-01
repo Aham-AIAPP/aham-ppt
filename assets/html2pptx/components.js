@@ -1,20 +1,11 @@
 // 幻灯片组件：固定数值、元素画法、图表和图标。每个函数返回一段 HTML，坐标单位 px，画布 1920×1080。
-// 数值与 references/style-tokens.md 一致，元素的含义和用法见 references/style-elements.md。
+// 数值取自 tokens.json（与 references/style-tokens.md 一致），元素的含义和用法见 references/style-elements.md。
 // 组件只定元素画法，构图由本页内容决定。
 // 用法：const K = require('<仓库>/assets/html2pptx/components'); 在 build.js 里拼页，最后 K.writeDeck(目录, 页列表)。
 const fs = require('fs'), path = require('path');
 
-// —— 固定数值 ——
-const C = {
-  ink1: '#1F2633', ink2: '#4A5363', ink3: '#7D8695', slate: '#5B6B82', mute: '#AEB5C0',
-  line1: '#E3E6EB', line2: '#C9CED6', bg1: '#F6F7F9', bg2: '#EEF1F5', white: '#FFFFFF',
-  ai: '#336EE8', aiBg: '#EAF0FD', svc: '#17998A', svcBg: '#E1F3F0', prod: '#D4892A', prodBg: '#FBF0DF',
-};
-const FS = { body: 18, name: 20, section: 22, sub: 26, big: 40, title: 52, cover: 72 };
-const LW = { struct: 1.5, stroke: 1.8, flow: 2.4, heavy: 3.6 };
-const RAD = { box: 6, card: 8 };
-const MARGIN = 96, RIGHT = 1824, MAIN = { y0: 195, y1: 895 };
-const MONO = 'Consolas,monospace';
+// —— 固定数值：只在 tokens.json 定义，这里引出 ——
+const { C, FS, LW, RAD, CANVAS, MARGIN, RIGHT, MAIN, MONO, FRAME } = require('./tokens');
 
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const n = v => +(+v).toFixed(1);
@@ -98,7 +89,7 @@ function labelValue(x, y, label, value, o = {}) {
 
 // 属性带：主图下方一行属性，items = [[标签, 值], ...]
 function attrBand(items, o = {}) {
-  const x = o.x || MARGIN, y = o.y || 906, w = o.w || RIGHT - MARGIN, h = o.h || 84, cw = w / items.length;
+  const x = o.x || MARGIN, y = o.y || FRAME.attr.y0, w = o.w || RIGHT - MARGIN, h = o.h || FRAME.attr.y1 - FRAME.attr.y0, cw = w / items.length;
   let s = box(x, y, w, h, { fill: C.bg1 });
   items.forEach(([l, v], i) => {
     s += labelValue(x + 24 + i * cw, y + 12, l, v);
@@ -113,8 +104,8 @@ function legend(items, x, y, o = {}) {
   let cx = o.align === 'right' ? x - total : x, s = '';
   items.forEach(([l, kind, col], i) => {
     if (kind === 'fill') s += box(cx, y + 5, 14, 12, { fill: col, r: 3 });
-    else if (kind === 'stroke') s += box(cx, y + 5, 14, 12, { fill: C.white, stroke: col, sw: 1.5, r: 3 });
-    else if (kind === 'dash') s += box(cx, y + 5, 14, 12, { fill: C.white, stroke: col, sw: 1.5, r: 3, dash: true });
+    else if (kind === 'stroke') s += box(cx, y + 5, 14, 12, { fill: C.white, stroke: col, sw: LW.struct, r: 3 });
+    else if (kind === 'dash') s += box(cx, y + 5, 14, 12, { fill: C.white, stroke: col, sw: LW.struct, r: 3, dash: true });
     else if (kind === 'line') s += line(cx, y + 11, cx + 16, y + 11, { color: col, sw: LW.flow });
     else if (kind === 'diamond') s += diamond(cx + 7, y + 11, 12, 12, { fill: col });
     else s += circle(cx + 7, y + 11, 6, { fill: col });
@@ -186,13 +177,13 @@ function plate(x, y, w, d, o = {}) {
   const front = [P(0, dy), P(w, dy), P(w, dy + t), P(0, dy + t)].join(' ');
   const right = [P(w, dy), P(dx + w, 0), P(dx + w, t), P(w, dy + t)].join(' ');
   return `<svg style="left:${n(x - 2)}px;top:${n(y - 2)}px;width:${n(W)}px;height:${n(dy + t + 4)}px" viewBox="0 0 ${n(W)} ${n(dy + t + 4)}" aria-label="${esc(o.label || '叠板')}">` +
-    `<polygon points="${front}" fill="${fillSide}" stroke="${stroke}" stroke-width="1.5"${dash}/>` +
-    `<polygon points="${right}" fill="${fillSide}" stroke="${stroke}" stroke-width="1.5"${dash}/>` +
-    `<polygon points="${topPoly}" fill="${o.dash && !o.top ? C.white : top}" stroke="${stroke}" stroke-width="1.5"${dash}/></svg>`;
+    `<polygon points="${front}" fill="${fillSide}" stroke="${stroke}" stroke-width="${LW.struct}"${dash}/>` +
+    `<polygon points="${right}" fill="${fillSide}" stroke="${stroke}" stroke-width="${LW.struct}"${dash}/>` +
+    `<polygon points="${topPoly}" fill="${o.dash && !o.top ? C.white : top}" stroke="${stroke}" stroke-width="${LW.struct}"${dash}/></svg>`;
 }
-// 图框：外框加等分刻度，只用于封面
+// 图框：外框加等分刻度，只用于封面。外框距画布四边 48px
 function frame(o = {}) {
-  const x = 48, y = 48, w = 1824, h = 984, col = o.color || C.slate, nx = o.nx || 12, ny = o.ny || 7;
+  const x = 48, y = 48, w = CANVAS.w - 2 * x, h = CANVAS.h - 2 * y, col = o.color || C.slate, nx = o.nx || 12, ny = o.ny || 7;
   let s = box(x, y, w, h, { stroke: col, sw: LW.struct, r: 0 });
   for (let i = 1; i < nx; i++) { const xx = x + w * i / nx; s += line(xx, y, xx, y + 12, { color: col }) + line(xx, y + h - 12, xx, y + h, { color: col }); }
   for (let i = 1; i < ny; i++) { const yy = y + h * i / ny; s += line(x, yy, x + 12, yy, { color: col }) + line(x + w - 12, yy, x + w, yy, { color: col }); }
@@ -235,7 +226,7 @@ const ICONS = {
 const ICON_NAMES = Object.keys(ICONS);
 
 // 图标。x, y 是左上角；名称不在表里时报错，避免静默换成别的图标
-function icon(name, x, y, size = 28, color = C.ink2, sw = 1.8) {
+function icon(name, x, y, size = 28, color = C.ink2, sw = LW.stroke) {
   if (!ICONS[name]) throw new Error(`图标 ${name} 不存在，可用：${ICON_NAMES.join(' ')}`);
   return `<svg style="left:${n(x)}px;top:${n(y)}px;width:${size}px;height:${size}px" viewBox="0 0 24 24" aria-label="${name}" fill="none" stroke="${color}" stroke-width="${n(sw * 24 / size)}" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]}</svg>`;
 }
@@ -349,16 +340,16 @@ function gantt(o) {
 
 // 正文页框架：页眉章名、页眉右侧引用、标题、子标题、提供方胶囊、属性带、页脚线、页脚标注、页码
 function page(o) {
-  let s = text(MARGIN, 39, o.chapter || '', { color: C.ink3 }) +
-    text(MARGIN, 70, o.title, { size: FS.title, color: C.ink1, weight: 700 }) +
-    text(MARGIN, 141, o.sub || '', { size: FS.sub, color: C.ink2 });
-  if (o.right) s += text(RIGHT, 39, o.right, { color: C.ink3, align: 'right' });
-  if (o.provider) s += chip(RIGHT, 142, o.provider[0], { color: o.provider[1], align: 'right' }).html;
+  let s = text(MARGIN, FRAME.headerTop, o.chapter || '', { color: C.ink3 }) +
+    text(MARGIN, FRAME.titleTop, o.title, { size: FS.title, color: C.ink1, weight: 700 }) +
+    text(MARGIN, FRAME.subTop, o.sub || '', { size: FS.sub, color: C.ink2 });
+  if (o.right) s += text(RIGHT, FRAME.headerTop, o.right, { color: C.ink3, align: 'right' });
+  if (o.provider) s += chip(RIGHT, FRAME.providerTop, o.provider[0], { color: o.provider[1], align: 'right' }).html;
   s += o.body || '';
   if (o.attrs) s += attrBand(o.attrs);
-  s += line(MARGIN, 1017, RIGHT, 1017, { color: C.line1 });
-  if (o.foot) s += text(MARGIN, 1030, o.foot, { color: C.ink3 });
-  if (o.no) s += text(RIGHT, 1030, String(o.no), { color: C.ink3, mono: true, align: 'right' });
+  s += line(MARGIN, FRAME.footLine, RIGHT, FRAME.footLine, { color: C.line1 });
+  if (o.foot) s += text(MARGIN, FRAME.footTop, o.foot, { color: C.ink3 });
+  if (o.no) s += text(RIGHT, FRAME.footTop, String(o.no), { color: C.ink3, mono: true, align: 'right' });
   return slide(s, o.bg, o.notes);
 }
 // 无框架页：封面、目录、章节页
@@ -373,7 +364,7 @@ function writeDeck(dir, pages) {
 }
 
 module.exports = {
-  C, FS, LW, RAD, MARGIN, RIGHT, MAIN, esc, tw,
+  C, FS, LW, RAD, MARGIN, RIGHT, MAIN, CANVAS, FRAME, MONO, esc, tw,
   text, para, box, line, arrow, circle, diamond, chip, labelValue, attrBand, legend,
   balloon, stepNo, noteNo, node, crossMark, dimLine, reviewPoint, leader, bigNumber, plate, frame,
   icon, iconCircle, ICON_NAMES, bars, lineChart, slope, gantt,

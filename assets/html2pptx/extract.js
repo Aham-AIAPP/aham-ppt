@@ -68,9 +68,10 @@
     }
   }
 
-  window.extractSlides = function () {
+  // canvasW 是画布宽度（tokens.json 的 canvas.w），由调用方传入；本文件在浏览器里运行，读不到 tokens.json
+  window.extractSlides = function (canvasW) {
     return [...document.querySelectorAll('section.slide')].map(sec => {
-      const sr = sec.getBoundingClientRect(), k = sr.width / 1920;
+      const sr = sec.getBoundingClientRect(), k = sr.width / canvasW;
       const scs = getComputedStyle(sec), bgc = rgba(scs.backgroundColor);
       const under = bgc && bgc.a > 0 ? bgc : { r: 255, g: 255, b: 255 };
       const issues = [], els = [];

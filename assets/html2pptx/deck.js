@@ -1,8 +1,7 @@
 // 读幻灯片目录、合成网页。preview.js、check_slides.js、html2pptx.js 共用，保证三者看到的是同一份排版。
 const fs = require('fs'), path = require('path');
-
-// 预览与导出用同一字体栈。导出时 PPT 里写第一项；网页按顺序找本机已装的字体。
-const FONT_STACK = "'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif";
+// 预览与导出用同一字体栈（tokens.json 的 font.stack）。导出时 PPT 里写第一项；网页按顺序找本机已装的字体。
+const { C, CANVAS, FONT_STACK, MONO } = require('./tokens');
 
 function loadDeck(dir) {
   const slidesDir = fs.existsSync(path.join(dir, 'slides')) ? path.join(dir, 'slides') : dir;
@@ -40,7 +39,7 @@ function buildPage(slides, dir, title) {
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap">
 <style>
-:root{--bg:#EEF1F5;--fg:#1F2633;--muted:#7D8695}
+:root{--bg:${C.bg2};--fg:${C.ink1};--muted:${C.ink3}}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#14181F;--fg:#E6E9EE;--muted:#9AA6B8}}
 :root[data-theme="dark"]{--bg:#14181F;--fg:#E6E9EE;--muted:#9AA6B8}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:${FONT_STACK}}
@@ -48,9 +47,9 @@ section.slide{font-family:${FONT_STACK}}
 main{max-width:1280px;margin:0 auto;padding:24px 16px 48px;display:grid;gap:24px}
 h1{font-size:20px;margin:0}
 .pg{margin:0}.box{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#fff;border-radius:6px;box-shadow:0 0 0 1px rgba(0,0,0,.08)}
-.scale{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
-figcaption{font-size:13px;color:var(--muted);padding-top:6px;font-family:Consolas,monospace}
-body.raw main{max-width:none;padding:0;gap:0;display:block}body.raw .box{width:1920px;height:1080px;aspect-ratio:auto;border-radius:0;box-shadow:none}
+.scale{position:absolute;left:0;top:0;width:${CANVAS.w}px;height:${CANVAS.h}px;transform-origin:0 0}
+figcaption{font-size:13px;color:var(--muted);padding-top:6px;font-family:${MONO}}
+body.raw main{max-width:none;padding:0;gap:0;display:block}body.raw .box{width:${CANVAS.w}px;height:${CANVAS.h}px;aspect-ratio:auto;border-radius:0;box-shadow:none}
 body.raw figcaption,body.raw h1{display:none}
 </style><script>${runtime}</script></head>
 <body><main><h1>${title}</h1>
@@ -59,7 +58,7 @@ ${slideBlocks(slides, dir)}
 <script>
 if (new URLSearchParams(location.search).get('raw')) document.body.classList.add('raw');
 function fit(){ if (document.body.classList.contains('raw')) return;
-  document.querySelectorAll('.box').forEach(b => { b.querySelector('.scale').style.transform = 'scale(' + (b.clientWidth / 1920) + ')'; }); }
+  document.querySelectorAll('.box').forEach(b => { b.querySelector('.scale').style.transform = 'scale(' + (b.clientWidth / ${CANVAS.w}) + ')'; }); }
 addEventListener('resize', fit); fit();
 </script></body></html>`;
 }

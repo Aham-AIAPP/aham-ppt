@@ -36,7 +36,7 @@ Aham PPT 是一个 Claude 技能，把零散材料做成方案级、汇报级的
 
 | 层 | 文件 | 约束 |
 | --- | --- | --- |
-| 固定数值 | [`style-tokens.md`](references/style-tokens.md)、[`components.js`](assets/html2pptx/components.js) | 字号、颜色、线宽、圆角、页面框架全册不变 |
+| 固定数值 | [`style-tokens.md`](references/style-tokens.md)、[`tokens.json`](assets/html2pptx/tokens.json) | 字号、颜色、线宽、圆角、页面框架全册不变 |
 | 元素 | [`style-elements.md`](references/style-elements.md) | 每种元素表达一种关系：件号气泡、流程序号、尺寸线、评审点、图表、图标等 |
 | 构图 | [`design-principles.md`](references/design-principles.md)、[范例库](assets/examples/README.md) | 先判断本页内容的结构，再为这个结构设计图形 |
 
@@ -88,7 +88,7 @@ references/
   style-elements.md         元素、图表、图标
   html-slides.md            网页幻灯片写法、组件、命令
 assets/
-  html2pptx/                组件库、预览、检查、导出；demo/build.js 是五页示例
+  html2pptx/                组件库、预览、检查、导出；tokens.json 是代码读取的固定数值；demo/build.js 是五页示例
   tools/                    材料提纲脚本、PPTX 检查脚本
   examples/                 范例库
 ```

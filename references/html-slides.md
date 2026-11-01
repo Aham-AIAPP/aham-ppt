@@ -74,11 +74,11 @@
 
 ## 三、组件
 
-页面用 `assets/html2pptx/components.js` 拼。常量与 `style-tokens.md` 一致，元素的含义见 `style-elements.md`。
+页面用 `assets/html2pptx/components.js` 拼。常量取自 `assets/html2pptx/tokens.json`，与 `style-tokens.md` 一致，元素的含义见 `style-elements.md`。
 
 | 类别 | 函数和常量 |
 | --- | --- |
-| 常量 | `C` 颜色、`FS` 字号、`LW` 线宽、`RAD` 圆角、`MARGIN` 左边距、`RIGHT` 右边线、`MAIN` 主图区上下界 |
+| 常量 | `C` 颜色、`FS` 字号、`LW` 线宽、`RAD` 圆角、`MARGIN` 左边距、`RIGHT` 右边线、`MAIN` 主图区上下界、`FRAME` 页面框架、`CANVAS` 画布、`MONO` 等宽字体栈 |
 | 基础 | `text` 单行文字、`para` 段落、`box` 方框、`line` 连线、`arrow` 箭头、`circle` 圆、`diamond` 菱形、`chip` 胶囊、`labelValue` 标签与值、`attrBand` 属性带、`legend` 图例 |
 | 编号与标记 | `balloon` `stepNo` `noteNo` `node` `crossMark` `dimLine` `reviewPoint` `leader` `bigNumber` `plate` `frame` |
 | 图表 | `bars` 条形图、`lineChart` 折线图、`slope` 坡度图、`gantt` 甘特条 |

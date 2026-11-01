@@ -44,7 +44,7 @@ description: >
 
 | 层 | 文件 | 约束 |
 | --- | --- | --- |
-| 固定数值 | `style-tokens.md`，常量在 `assets/html2pptx/components.js` | 字号、颜色、线宽、圆角和页面框架全册不变 |
+| 固定数值 | `style-tokens.md`，代码读取的数值在 `assets/html2pptx/tokens.json` | 字号、颜色、线宽、圆角和页面框架全册不变 |
 | 元素 | `style-elements.md`，画法在 `components.js` | 每种元素表达一种关系，按适用条件选用 |
 | 构图 | `design-principles.md`、范例库 `assets/examples/` | 按本页内容设计，同类页不照抄构图 |
 

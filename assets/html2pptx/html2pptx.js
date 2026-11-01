@@ -3,19 +3,20 @@
 //   幻灯片目录下有 deck.json（order 数组给出页序）和 slides/<id>.html；没有 deck.json 时按文件名排序。
 //   本地图片按幻灯片目录解析；网络图片要在图片映射里给出本地文件。
 // 做法：先在浏览器里按预览页同样的方式排版，再读出每个元素的实际位置和样式写进 PPT，网页和 PPT 用同一套数值。
-// 换算：1px = 1/144 英寸 = 0.5 磅；文字、形状、线条可编辑，svg 和图片为图片。写法规则见 references/html-slides.md
+// 换算：1px = 1/144 英寸 = 0.5 磅（tokens.json 的 canvas.pxPerPt）；文字、形状、线条可编辑，svg 和图片为图片。写法规则见 references/html-slides.md
 const fs = require('fs'), path = require('path'), os = require('os');
 const PptxGenJS = require('pptxgenjs');
 const { chromium } = require('playwright');
 const { loadDeck, buildPage } = require('./deck');
+const { C, CANVAS, FONT_FACE, MONO_FACE, PX_PER_IN, PX_PER_PT } = require('./tokens');
 
 const argv = process.argv.slice(2);
 const opt = k => { const i = argv.indexOf('--' + k); return i >= 0 ? argv[i + 1] : undefined; };
 const [DECK, OUT] = argv.filter((a, i) => !a.startsWith('--') && !(i > 0 && argv[i - 1].startsWith('--')));
 if (!DECK || !OUT) { console.error('用法：node html2pptx.js <幻灯片目录> <输出.pptx> [--images map.json] [--font 字体] [--title 标题] [--author 作者]'); process.exit(2); }
-const FONT = opt('font') || 'Microsoft YaHei';
+const FONT = opt('font') || FONT_FACE;
 const imgMap = opt('images') ? JSON.parse(fs.readFileSync(opt('images'), 'utf8')) : {};
-const IN = v => v / 144, PT = v => v / 2;
+const IN = v => v / PX_PER_IN, PT = v => v / PX_PER_PT;
 
 // 连线的折点，与 runtime.js 一致；去掉长度为 0 的段
 function points(c) {
@@ -34,11 +35,11 @@ async function render(slides) {
   const tmp = path.join(os.tmpdir(), `h2p-${process.pid}.html`);
   fs.writeFileSync(tmp, buildPage(slides, DECK, 'export'));
   const br = await chromium.launch();
-  const pg = await br.newPage({ viewport: { width: 1920, height: 1080 } });
+  const pg = await br.newPage({ viewport: { width: CANVAS.w, height: CANVAS.h } });
   await pg.goto('file://' + tmp + '?raw=1');
   await pg.evaluate(() => document.fonts.ready);
   await pg.addScriptTag({ path: path.join(__dirname, 'extract.js') });
-  const data = await pg.evaluate(() => window.extractSlides());
+  const data = await pg.evaluate(w => window.extractSlides(w), CANVAS.w);
   // svg 单独渲染成 4 倍图
   const icons = new Map(), ip = await br.newPage({ deviceScaleFactor: 4 });
   for (const s of data) for (const e of s.els) if (e.tag === 'svg' && !icons.has(e.svg)) {
@@ -113,13 +114,13 @@ async function render(slides) {
       const rs = [];
       e.runs.forEach(r => {
         if (r.br) { if (rs.length && !rs[rs.length - 1].options.breakLine) rs[rs.length - 1].options.breakLine = true; else rs.push({ text: '', options: { breakLine: true } }); return; }
-        rs.push({ text: r.text, options: { color: r.color || '1F2633', bold: r.bold, italic: r.italic } });
+        rs.push({ text: r.text, options: { color: r.color || C.ink1.slice(1), bold: r.bold, italic: r.italic } });
       });
       const [pt, pr, pb, pl] = e.pad, [bt, brr, bb, bl] = e.bw;
       const inner = e.h - pt - pb - bt - bb, single = Math.abs(inner - e.lh) < 3;
       const o = {
         x: IN(e.x), y: IN(e.y), w: IN(e.w), h: IN(e.h),
-        fontFace: e.mono ? 'Consolas' : FONT, fontSize: PT(e.fs), align: e.align,
+        fontFace: e.mono ? MONO_FACE : FONT, fontSize: PT(e.fs), align: e.align,
         valign: single ? 'middle' : 'top', margin: [PT(pl + bl), PT(pr + brr), PT(pb + bb), PT(pt + bt)],
         wrap: !e.nowrap, fit: 'none', objectName: name('text'),
       };

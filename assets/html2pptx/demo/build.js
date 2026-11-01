@@ -1,7 +1,7 @@
 // 组件用法示例：五页虚构内容。运行：node build.js <输出目录>
 // 每页先判断内容结构，再用组件拼图形。坐标按本页内容定，不是固定版式。
 const K = require('../components');
-const { C, FS, LW } = K;
+const { C, FS, LW, MARGIN, RIGHT } = K;
 const out = process.argv[2] || 'demo-deck';
 
 // 第 1 页 封面：深色底、图框刻度、叠板线稿
@@ -20,7 +20,7 @@ const cover = K.slide(
 
 // 第 2 页 边界与穿越：数据在企业网络边界内外停在哪里
 let b = '';
-b += K.box(96, 220, 1100, 640, { stroke: C.slate, sw: LW.heavy, dash: true, r: 0 });
+b += K.box(MARGIN, 220, 1100, 640, { stroke: C.slate, sw: LW.heavy, dash: true, r: 0 });
 b += K.text(116, 232, '企业网络内', { color: C.slate, weight: 600 });
 b += K.text(1240, 232, '企业网络外', { color: C.ink3, weight: 600 });
 const sys = [['ERP（含 CRM）', '订单、客户、报价', 'database'], ['MES', '工单、报工', 'factory'], ['知识库', '制度、工艺文件', 'file']];
@@ -45,7 +45,7 @@ b += K.text(1060, 640, '原始单据不出网', { color: C.ink1, weight: 600 });
 b += K.box(1420, 440, 380, 160, { fill: C.white, stroke: C.line2 });
 b += K.text(1444, 460, '公共大模型', { size: FS.name, color: C.ink1, weight: 600 });
 b += K.text(1444, 500, '按调用量计费', { color: C.ink3 });
-b += K.legend([['AI 组件', 'stroke', C.ai], ['网络边界', 'dash', C.slate]], 1824, 830, { align: 'right' });
+b += K.legend([['AI 组件', 'stroke', C.ai], ['网络边界', 'dash', C.slate]], RIGHT, 830, { align: 'right' });
 const p2 = K.page({ no: 2, chapter: '01　平台架构', title: 'AI 平台架构', sub: '原始单据停在企业网络内。', right: '件号 8–11',
   provider: ['我方产品', C.prod], body: b, foot: '示意',
   attrs: [['部署', '企业服务器'], ['接入系统', '3 套'], ['出网内容', '脱敏问题'], ['留存', '调用记录']],
@@ -54,28 +54,28 @@ const p2 = K.page({ no: 2, chapter: '01　平台架构', title: 'AI 平台架构
 // 第 3 页 时间压缩：同一时间轴上的前后两组泳道
 let t = '';
 const x0 = 360, unit = 220; // 1 天 = 220px
-t += K.text(96, 230, '现状', { size: FS.section, color: C.ink1, weight: 700 });
+t += K.text(MARGIN, 230, '现状', { size: FS.section, color: C.ink1, weight: 700 });
 [['收集需求', 0, 1], ['核对历史报价', 1, 2.5], ['审批', 2.5, 4.5]].forEach(([s, a, z], i) => {
   t += K.box(x0 + a * unit, 280 + i * 56, (z - a) * unit - 8, 40, { fill: C.bg2 });
   t += K.text(x0 + a * unit + 12, 288 + i * 56, s, { color: C.ink2 });
 });
 t += K.dimLine(x0, x0 + 4.5 * unit, 470, '4.5 天');
-t += K.text(96, 560, '上线后', { size: FS.section, color: C.ink1, weight: 700 });
+t += K.text(MARGIN, 560, '上线后', { size: FS.section, color: C.ink1, weight: 700 });
 [['AI 预填报价单', 0, 0.5, true], ['业务员核对缺项', 0.5, 1, false], ['审批', 1, 2, false]].forEach(([s, a, z, ai], i) => {
   t += K.box(x0 + a * unit, 610 + i * 56, (z - a) * unit - 8, 40, ai ? { fill: C.aiBg, stroke: C.ai } : { fill: C.bg2 });
   t += K.text(x0 + z * unit + 8, 618 + i * 56, s, { color: ai ? C.ai : C.ink2 });
 });
 t += K.dimLine(x0, x0 + 2 * unit, 800, '2 天');
 t += K.bigNumber(1440, 600, 384, '−2.5', '天', '单张报价周期');
-t += K.legend([['AI 步骤', 'stroke', C.ai], ['人工步骤', 'fill', C.bg2]], 1824, 830, { align: 'right' });
+t += K.legend([['AI 步骤', 'stroke', C.ai], ['人工步骤', 'fill', C.bg2]], RIGHT, 830, { align: 'right' });
 const p3 = K.page({ no: 3, chapter: '02　试点场景', title: '销售报价应用前后的流程', sub: '业务员只核对 AI 标出的缺项。',
   provider: ['我方服务', C.svc], body: t, foot: '举例　时长为试点前的估算',
   attrs: [['输入', '客户询价单'], ['输出', '报价单草稿'], ['执行岗位', '业务员'], ['边界', '价格由人工确认']] });
 
 // 第 4 页 趋势与分项：左侧折线看月度变化，右侧条形看各产品线
 let c = '';
-c += K.text(96, 220, '月度平均报价周期', { size: FS.section, color: C.ink1, weight: 700 });
-c += K.lineChart({ x: 96, y: 280, w: 900, h: 580, labels: ['1 月', '2 月', '3 月', '4 月', '5 月', '6 月'], unit: ' 天',
+c += K.text(MARGIN, 220, '月度平均报价周期', { size: FS.section, color: C.ink1, weight: 700 });
+c += K.lineChart({ x: MARGIN, y: 280, w: 900, h: 580, labels: ['1 月', '2 月', '3 月', '4 月', '5 月', '6 月'], unit: ' 天',
   series: [{ name: '试点产品线', values: [4.6, 4.4, 3.1, 2.4, 2.1, 2.0], color: C.ai }, { name: '其他产品线', values: [4.5, 4.7, 4.4, 4.6, 4.5, 4.4], color: C.mute }] });
 c += K.text(1100, 220, '6 月各产品线报价周期', { size: FS.section, color: C.ink1, weight: 700 });
 c += K.bars({ x: 1100, y: 280, w: 724, h: 540, unit: ' 天', labelW: 200,
@@ -87,17 +87,17 @@ const p4 = K.page({ no: 4, chapter: '02　试点场景', title: '试点期间的
 
 // 第 5 页 阶段重叠：甘特条加评审点
 let g = '';
-g += K.gantt({ x: 96, y: 220, w: 1728, labelW: 260, rowH: 136, periods: ['第 1 月', '第 2 月', '第 3 月', '第 4 月', '第 5 月', '第 6 月'],
+g += K.gantt({ x: MARGIN, y: 220, w: RIGHT - MARGIN, labelW: 260, rowH: 136, periods: ['第 1 月', '第 2 月', '第 3 月', '第 4 月', '第 5 月', '第 6 月'],
   rows: [
     { name: '平台部署', start: 0, end: 1.5, fill: C.prodBg, stroke: C.prod, label: '我方产品', note: '服务器就绪、账号开通' },
     { name: '系统接入', start: 1, end: 3, fill: C.svcBg, stroke: C.svc, label: '我方服务', note: 'ERP、MES、知识库共 3 套' },
     { name: '试点场景', start: 2.5, end: 5, fill: C.svcBg, stroke: C.svc, label: '我方服务', note: '报价场景' },
     { name: '推广准备', start: 4.5, end: 6, fill: C.white, stroke: C.ink3, label: '企业主导', note: '选定二期场景' },
   ] });
-const gx = m => 96 + 260 + (1728 - 260) / 6 * m;
+const gx = m => MARGIN + 260 + (RIGHT - MARGIN - 260) / 6 * m;
 g += K.reviewPoint(gx(3), 830, '接入验收', { toY: 256 });
 g += K.reviewPoint(gx(5), 830, '试点验收', { toY: 256 });
-g += K.legend([['我方产品', 'stroke', C.prod], ['我方服务', 'stroke', C.svc], ['评审点', 'diamond', C.ink1]], 1824, 146, { align: 'right' });
+g += K.legend([['我方产品', 'stroke', C.prod], ['我方服务', 'stroke', C.svc], ['评审点', 'diamond', C.ink1]], RIGHT, 146, { align: 'right' });
 const p5 = K.page({ no: 5, chapter: '03　实施计划', title: '一期实施计划', sub: '4 条工作线重叠推进。',
   body: g, foot: '举例',
   attrs: [['周期', '6 个月'], ['评审点', '2 个'], ['企业投入', '每周 1 次例会'], ['交付物', '详见第 3 章']] });

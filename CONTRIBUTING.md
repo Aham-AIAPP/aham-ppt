@@ -4,7 +4,7 @@
 
 ## 改动约定
 
-- 数值只在两处定义：`references/style-tokens.md` 和 `assets/html2pptx/components.js` 的常量。改一处时同步改另一处。
+- 数值只在两处写：给人读的 `references/style-tokens.md`，给代码读的 `assets/html2pptx/tokens.json`。脚本里不另写数值，从 `tokens.json` 读取（`assets/html2pptx/tokens.js` 做换算）。改数值时两处同改，`tests/test_tokens.py` 检查两处一致。
 - 流程和文字规则与视觉规则分开。改一类时不顺手改另一类。
 - 仓库公开，例子只用占位符，例如〈客户〉〈我方〉〈主系统〉。不写真实客户名、产品名、项目场景和数据。
 - 提交走分支和 PR，提交信息写明改了什么。
