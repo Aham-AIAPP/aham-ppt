@@ -1,5 +1,7 @@
 # Aham PPT
 
+> 本仓库已停止更新。PPT 规范和排版引擎已并入 [aham-plugins](https://github.com/Aham-AIAPP/aham-plugins) 的 aham-design 插件，安装和更新请到那里。这里保留历史版本供查阅。
+
 [![Release](https://img.shields.io/github/v/release/Aham-AIAPP/aham-ppt?color=336EE8)](https://github.com/Aham-AIAPP/aham-ppt/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-336EE8.svg)](LICENSE)
 [![Type](https://img.shields.io/badge/type-Claude%20Skill-336EE8.svg)](#)
