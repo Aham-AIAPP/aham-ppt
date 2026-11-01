@@ -1,0 +1,89 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # 比对脚本的自测和脚本语法检查，不需要浏览器
+  scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 比对脚本自测
+        run: python -m unittest discover -s tests -v
+      - name: Python 与 JavaScript 语法检查
+        run: |
+          python -m py_compile scripts/*.py assets/tools/*.py
+          for f in assets/html2pptx/*.js assets/html2pptx/demo/*.js; do node --check "$f"; done
+
+  # 用 demo 的五页示例生成样张。导出依赖浏览器排版，所以只在同一个 runner 里比对，不存校验值清单
+  samples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 安装依赖和 chromium
+        run: |
+          pip install -r requirements.txt
+          cd assets/html2pptx
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          node -e "console.log('pptxgenjs', require('pptxgenjs/package.json').version, 'playwright', require('playwright/package.json').version)"
+
+      - name: 生成样张并按仓库约定检查
+        run: python scripts/build_samples.py "$RUNNER_TEMP/samples/head" --check
+
+      - name: 再生成一次，确认两次结果一致
+        run: |
+          python scripts/build_samples.py "$RUNNER_TEMP/samples/head-again"
+          python scripts/compare_outputs.py diff "$RUNNER_TEMP/samples/head" "$RUNNER_TEMP/samples/head-again" --limit 200
+
+      - name: 检出基础分支
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base-src
+
+      # 后续改动会有意改变产出，这一步只报告差异，不阻断
+      - name: 基础分支与 PR 的样张差异（只报告）
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: |
+          (cd base-src/assets/html2pptx && npm install --no-audit --no-fund)
+          # 用本 PR 的生成脚本驱动基础分支的引擎，两边走同一套步骤
+          python scripts/build_samples.py "$RUNNER_TEMP/samples/base" --repo base-src
+          set +e
+          python scripts/compare_outputs.py diff "$RUNNER_TEMP/samples/base" "$RUNNER_TEMP/samples/head" --limit 400 | tee "$RUNNER_TEMP/diff.txt"
+          status=${PIPESTATUS[0]}
+          set -e
+          {
+            echo "## 基础分支与 PR 的样张差异"
+            if [ "$status" -eq 0 ]; then echo "样张一致，本 PR 没有改变产出。"; else echo "本 PR 改变了产出，差异如下（只报告，不阻断）："; fi
+            echo '```diff'
+            head -n 400 "$RUNNER_TEMP/diff.txt"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 上传样张
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: samples-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/samples/head
+            ${{ runner.temp }}/samples/base
+          if-no-files-found: warn
