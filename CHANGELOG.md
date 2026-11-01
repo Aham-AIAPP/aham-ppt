@@ -7,6 +7,10 @@
 
 ## [Unreleased]
 
+### 维护
+- 新增产出比对：`scripts/build_samples.py` 用 `demo/build.js` 的五页示例生成网页幻灯片、预览页、逐页截图、PPTX 和两份检查报告；`scripts/compare_outputs.py` 按部件比对两份样张，忽略压缩包时间戳和 `docProps` 里的时间。
+- 新增 GitHub Actions 工作流 `.github/workflows/ci.yml`：同一个 runner 里生成两次样张，确认结果一致；检查 `check_slides.js` 为 0 个 ERROR、0 个 WARNING，`check_deck.py` 为 0 个 ERROR；PR 上再用基础分支生成一份，把差异写进日志和运行摘要，两份样张作为 artifact 上传，这一步只报告，不阻断合并。
+
 ## [5.0.0] - 2026-10-27
 
 生成路线改为网页幻灯片，规则文件整体重写。不兼容 4.x。

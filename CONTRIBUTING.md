@@ -21,6 +21,16 @@ node html2pptx.js /tmp/demo /tmp/demo.pptx          # 导出
 python ../tools/check_deck.py /tmp/demo.pptx --config ../tools/check_deck.example.json
 ```
 
+CI 会用同样的步骤生成样张（`scripts/build_samples.py`），并在 PR 上把基础分支和 PR 的样张差异写进运行摘要。本地有浏览器时也可以自己比对：
+
+```bash
+python scripts/build_samples.py /tmp/after --check                       # 改后
+python scripts/build_samples.py /tmp/before --repo <改前的仓库副本>       # 改前
+python scripts/compare_outputs.py diff /tmp/before /tmp/after             # 列出改变的文件和部件
+```
+
+导出依赖浏览器排版，样张只在同一台机器上比对，仓库里不存校验值清单。
+
 - 新增或修改组件函数时，在 `demo/build.js` 里用到它，并看截图确认画法。
 - 新增检查项时，先构造一页会触发它的页面，确认报出；再用示例确认没有误报。
 - 改导出程序时，比较网页截图和 PPTX 渲染结果，位置和换行一致。
