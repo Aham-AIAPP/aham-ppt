@@ -10,6 +10,7 @@
 ### 维护
 - 新增产出比对：`scripts/build_samples.py` 用 `demo/build.js` 的五页示例生成网页幻灯片、预览页、逐页截图、PPTX 和两份检查报告；`scripts/compare_outputs.py` 按部件比对两份样张，忽略压缩包时间戳和 `docProps` 里的时间。
 - 新增 GitHub Actions 工作流 `.github/workflows/ci.yml`：同一个 runner 里生成两次样张，确认结果一致；检查 `check_slides.js` 为 0 个 ERROR、0 个 WARNING，`check_deck.py` 为 0 个 ERROR；PR 上再用基础分支生成一份，把差异写进日志和运行摘要，两份样张作为 artifact 上传，这一步只报告，不阻断合并。
+- 固定数值改为单一来源 `assets/html2pptx/tokens.json`：字号、颜色、线宽、圆角、页面框架、画布尺寸和字体栈只在这里定义，`components.js`、`deck.js`、`html2pptx.js`、`check_slides.js`、`design_checks.js`、`extract.js`、`demo/build.js` 和 `check_deck.py` 都从它读取，`tokens.js` 只做换算。新增 `tests/test_tokens.py`，检查 `style-tokens.md`、`html-slides.md`、`runtime.js` 和 `check_deck.example.json` 与 `tokens.json` 一致，并检查引擎脚本里不再写死色值、画布尺寸和字体。数值全部保持原值，产出不变。
 
 ## [5.0.0] - 2026-10-27
 

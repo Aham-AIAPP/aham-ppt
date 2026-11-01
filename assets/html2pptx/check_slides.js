@@ -1,18 +1,20 @@
 // 排版检查：在浏览器里实际排版后，查文字溢出、文字互相重叠、超出画布和字号过小；
 // 再按 design_checks.js 查文字越框、压线、对比度、箭头标签、单名称方框和大块空白
 // 用法：node check_slides.js <幻灯片目录或预览.html> [--png 截图目录] [--sheet 缩略图总览.png] [--min-font 18]
+// --min-font 默认取 tokens.json 的 FS.body（全册最小字号）
 // --sheet 把全册缩略图排成一张图，用来看相邻页的主图结构有没有重复
 // 输出 Markdown 报告；有 ERROR 时退出码为 1
 const path = require('path'), fs = require('fs');
 const { chromium } = require('playwright');
+const { C, FS, CANVAS } = require('./tokens');
 const argv = process.argv.slice(2);
 const opt = k => { const i = argv.indexOf('--' + k); return i >= 0 ? argv[i + 1] : undefined; };
 const FILE = argv.find((a, i) => !a.startsWith('--') && !(i > 0 && argv[i - 1].startsWith('--')));
-const MIN = +(opt('min-font') || 18), PNG = opt('png'), SHEET = opt('sheet');
+const MIN = +(opt('min-font') || FS.body), PNG = opt('png'), SHEET = opt('sheet');
 
 (async () => {
   const br = await chromium.launch();
-  const pg = await br.newPage({ viewport: { width: 1920, height: 1080 } });
+  const pg = await br.newPage({ viewport: { width: CANVAS.w, height: CANVAS.h } });
   let file = path.resolve(FILE), tmp;
   if (fs.statSync(file).isDirectory()) {
     const { loadDeck, buildPage } = require('./deck');
@@ -23,9 +25,9 @@ const MIN = +(opt('min-font') || 18), PNG = opt('png'), SHEET = opt('sheet');
   if (tmp) fs.unlinkSync(tmp);
   await pg.evaluate(() => document.fonts.ready);
   await pg.addScriptTag({ path: path.join(__dirname, 'extract.js') });
-  const data = await pg.evaluate(() => window.extractSlides());
+  const data = await pg.evaluate(w => window.extractSlides(w), CANVAS.w);
   const designChecks = require('./design_checks');
-  const compat = data.map(s => [...s.issues, ...designChecks(s, s.els.some(e => e.tag === 'p' && e.fs === 52))]);
+  const compat = data.map(s => [...s.issues, ...designChecks(s, s.els.some(e => e.tag === 'p' && e.fs === FS.title))]);
   const res = await pg.evaluate(MIN => {
     const out = [];
     document.querySelectorAll('section.slide').forEach((s, i) => {
@@ -74,8 +76,8 @@ const MIN = +(opt('min-font') || 18), PNG = opt('png'), SHEET = opt('sheet');
       // 每行 5 张，每张 384×216，下方写页码
       const cols = 5, w = 384, h = 216, rows = Math.ceil(shots.length / cols);
       const sp = await br.newPage({ viewport: { width: cols * (w + 16) + 16, height: rows * (h + 40) + 16 } });
-      await sp.setContent(`<body style="margin:0;padding:8px;background:#EEF1F5;font:14px monospace">${shots.map((b, i) =>
-        `<div style="display:inline-block;margin:8px;vertical-align:top"><img src="data:image/png;base64,${b}" style="width:${w}px;height:${h}px;display:block;box-shadow:0 0 0 1px #C9CED6"><div style="color:#4A5363;padding-top:4px">${String(i + 1).padStart(2, '0')}</div></div>`).join('')}</body>`);
+      await sp.setContent(`<body style="margin:0;padding:8px;background:${C.bg2};font:14px monospace">${shots.map((b, i) =>
+        `<div style="display:inline-block;margin:8px;vertical-align:top"><img src="data:image/png;base64,${b}" style="width:${w}px;height:${h}px;display:block;box-shadow:0 0 0 1px ${C.line2}"><div style="color:${C.ink2};padding-top:4px">${String(i + 1).padStart(2, '0')}</div></div>`).join('')}</body>`);
       await sp.screenshot({ path: SHEET, fullPage: true });
     }
   }

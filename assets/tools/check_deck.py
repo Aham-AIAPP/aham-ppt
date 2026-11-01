@@ -8,7 +8,7 @@ PPT 成品自查（读 .pptx，不改文件）。阶段 6 的样页和阶段 8 �
 输出的「人工核对」各节要逐条对照页面看。
 
 机器检查（ERROR / WARNING）
-  1. 字号小于下限（默认 9pt，ERROR）；全册字号超过 8 级（WARNING）
+  1. 字号小于下限（默认取 assets/html2pptx/tokens.json 的 FS.body 换算成磅，即 9pt，ERROR）；全册字号超过 8 级（WARNING）
   2. 页面用了 2 种以上强调色却找不到图例色块（WARNING，启发式）；配了色表时列出色表外的颜色（INFO）
   3. 页面文字一段里用逗号或分号连了两个分句
   4. 禁用词、口语词、观察词（页面与讲稿分开统计）
@@ -31,7 +31,7 @@ PPT 成品自查（读 .pptx，不改文件）。阶段 6 的样页和阶段 8 �
 
 配置文件（JSON，全部可选，缺省用下方 DEFAULTS）：
 {
-  "min_font": 9,                                  // 最小字号（pt）
+  "min_font": 9,                                  // 最小字号（pt），缺省按 tokens.json 换算
   "max_levels": 8,                                // 全册字号层级上限，默认 8
   "palette": ["1F2633", "4A5363", ...],          // 可选：项目色表，色表外的颜色列为 INFO
   "banned": ["赋能", ...],                        // 追加到默认禁用词
@@ -43,6 +43,7 @@ PPT 成品自查（读 .pptx，不改文件）。阶段 6 的样页和阶段 8 �
 }
 """
 import sys, re, json, argparse, collections
+from pathlib import Path
 
 try:
     from pptx import Presentation
@@ -50,8 +51,12 @@ try:
 except ImportError:  # pragma: no cover
     sys.exit("缺少 python-pptx：pip install python-pptx")
 
+# 固定数值只在 assets/html2pptx/tokens.json 定义。最小字号 = 正文字号（px）换算成磅
+TOKENS = json.loads((Path(__file__).resolve().parents[1] / "html2pptx" / "tokens.json").read_text(encoding="utf-8"))
+_MIN_PT = TOKENS["FS"]["body"] / TOKENS["canvas"]["pxPerPt"]
+
 DEFAULTS = {
-    "min_font": 9,
+    "min_font": int(_MIN_PT) if _MIN_PT.is_integer() else _MIN_PT,
     "max_levels": 8,
     "palette": [],
     "banned": (

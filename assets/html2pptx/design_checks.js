@@ -2,7 +2,8 @@
 // 只查机器能判的部分，结果是 WARNING 或 INFO，由人判断改不改。
 // 1 文字越出所在方框  2 文字压在线上  3 文字与底色对比不足  4 箭头没有标签
 // 5 方框只写一个名称  6 主图区大块空白或占用率低
-const MAIN = { x: 96, y: 195, w: 1728, h: 700 };
+// 主图区矩形取自 tokens.json 的页面框架
+const MAIN = require('./tokens').MAIN_RECT;
 
 const isBox = e => (e.tag === 'div' || e.tag === 'x-shape' || (e.tag === 'p' && !(e.runs || []).length)) && (e.fill || e.border) && e.w >= 40 && e.h >= 30;
 const isFilled = e => (e.tag === 'div' || e.tag === 'x-shape' || (e.tag === 'p' && !(e.runs || []).some(r => r.text && r.text.trim()))) && e.fill;

@@ -18,7 +18,7 @@
 ## 品牌
 
 Aham 是本系列工具的名称。`references/style-tokens.md` 里的颜色和字体是本技能的默认配置，可以换成你自己的品牌色。
-替换时保留每种颜色的含义和用法，同步修改 `assets/html2pptx/components.js` 的常量。
+替换时保留每种颜色的含义和用法，同步修改 `assets/html2pptx/tokens.json`。
 
 ## 许可
 
